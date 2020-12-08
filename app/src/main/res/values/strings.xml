@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">FingerprintTEST</string>
+    <string name="show_text">show text !!!</string>
+    <string name="register">ลงทะเบียน</string>
+    <string name="fingerprint">สแกนลายนิ้วมือ</string>
+    <string name="text_fingerprint">กดปุ่ม สแกนลายนิ้วมือเพื่อเชื่อมต่อกับอุปกรณ์</string>
+
+</resources>

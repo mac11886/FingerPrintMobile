@@ -11,8 +11,6 @@ import android.os.Bundle;
 
 import android.util.Base64;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -79,14 +77,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        textView = (TextView)findViewById(R.id.textView);
+        textView = (TextView)findViewById(R.id.statusText);
         imageView = (ImageView)findViewById(R.id.imageView);
 
         Button regisBtn = (Button) findViewById(R.id.registerBtn);
         regisBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,RegisterActivity.class);
+                Intent intent = new Intent(MainActivity.this,RegisActivity.class);
                 startActivity(intent);
             }
         });
@@ -229,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
                                     byte[] regTemp = new byte[2048];
                                     if (0 < (ret = ZKFingerService.merge(regtemparray[0], regtemparray[1], regtemparray[2], regTemp))) {
                                         // save id
-                                        ZKFingerService.save(regTemp, "test" + uid++);
+                                        ZKFingerService.save(regTemp, "test  " + uid++);
                                         System.arraycopy(regTemp, 0, lastRegTemp, 0, ret);
                                         //Base64 Template
                                         // register success
@@ -251,6 +249,7 @@ public class MainActivity extends AppCompatActivity {
                                     String strRes[] = new String(bufids).split("\t");
                                     textView.setText("identify succ, userid:" + strRes[0] + ", score:" + strRes[1]);
                                 } else {
+                                    //ยังไม่เคยสแกนลายนิ้วมือ
                                     textView.setText("identify fail");
                                 }
                                 //Base64 Template

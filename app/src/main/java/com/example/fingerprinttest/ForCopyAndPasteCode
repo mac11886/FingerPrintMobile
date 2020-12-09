@@ -1,0 +1,26 @@
+
+
+        imageUser = (ImageView) findViewById(R.id.imageButtonUser);
+        imageUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                try {
+                    startActivityForResult(cameraIntent,REQUEST_IMAGE_CAPTURE);
+                }catch (ActivityNotFoundException e ){
+                    Toast toast = Toast.makeText(getApplicationContext(),"NOT TAKE A PHOTO ",Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+        });
+
+//get Image to ImageView
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode,  Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imageUser.setImageBitmap(imageBitmap);
+        }
+    }

@@ -2,6 +2,7 @@ package com.example.fingerprinttest;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
@@ -11,6 +12,7 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
@@ -24,6 +26,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.zkteco.android.biometric.core.device.ParameterHelper;
 import com.zkteco.android.biometric.core.device.TransportType;
 import com.zkteco.android.biometric.core.utils.LogHelper;
@@ -67,6 +75,28 @@ public class RegisActivity extends AppCompatActivity  {
     private FingerprintSensor fingerprintSensor = null;
     private final String ACTION_USB_PERMISSION = "com.zkteco.silkiddemo.USB_PERMISSION";
 
+
+
+
+    public void connectApi(){
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "www.google.com";
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                textDropdown.setText("Respone is :" + response.substring(0, 500));
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                textDropdown.setText("not work");
+            }
+
+        });
+        queue.add(stringRequest);
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,7 +132,7 @@ public class RegisActivity extends AppCompatActivity  {
         //fingerprint
         initDevice();
         startFingerprintSensor();
-
+        connectApi();
 
 
 
@@ -291,10 +321,12 @@ public class RegisActivity extends AppCompatActivity  {
                                 enrollidx++;
                                 if (enrollidx == 3) {
                                     byte[] regTemp = new byte[2048];
+                                    //merge check finger 3 time and check newest
                                     if (0 < (ret = ZKFingerService.merge(regtemparray[0], regtemparray[1], regtemparray[2], regTemp))) {
                                         // save id
                                         String name = nameText.getText().toString();
                                         ZKFingerService.save(regTemp, "" + nameText.getText().toString() + uid);
+                                        Log.e(String.valueOf(REQUEST_IMAGE_CAPTURE),"run: "+regTemp.toString());
                                         System.arraycopy(regTemp, 0, lastRegTemp, 0, ret);
                                         //Base64 Template
                                         // register success
@@ -352,7 +384,7 @@ public class RegisActivity extends AppCompatActivity  {
             }
             else
             {
-                statusText.setText("การสแกนได้ถูกปิดแล้ว");
+                statusText.setText("เครื่องยังไม่ถูกเปิดใช้งาน");
             }
         } catch (FingerprintException e) {
             statusText.setText("stop fail, errno=" + e.getErrorCode() + "\nmessage=" + e.getMessage());

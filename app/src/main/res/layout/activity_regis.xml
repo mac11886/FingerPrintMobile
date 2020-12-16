@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/gmint"
     tools:context=".RegisActivity">
 
     <TextView
@@ -16,8 +17,8 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:fontFamily="@font/kanit_light"
-        android:text="STATUS
-"
+        android:text="STATUS"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.192"
@@ -25,41 +26,57 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.43" />
 
+
+    <TextView
+        android:layout_width="380dp"
+        android:layout_height="372dp"
+        android:elevation="1dp"
+        android:background="@drawable/shape_rectangle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.483"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.988"
+        tools:ignore="MissingConstraints" />
+
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
+        android:backgroundTint="@color/greentea"
+        android:elevation="20dp"
         android:fontFamily="@font/kanit_light"
         android:onClick="OnBnBegin"
         android:text="สแกนลายนิ้วมือ"
-        android:background="@drawable/s_bg_button_green"
-        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.982"
+        app:layout_constraintHorizontal_bias="0.942"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.427" />
+        app:layout_constraintVertical_bias="0.43" />
 
     <Button
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/button"
-        android:background="@drawable/s_bg_button_green"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
+        android:background="@drawable/s_bg_button_green"
+        android:backgroundTint="@color/greentea"
         android:fontFamily="@font/kanit_light"
         android:onClick="OnBnStop"
         android:text="ปิดเครื่อง"
+        android:translationZ="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.949"
+        app:layout_constraintHorizontal_bias="0.072"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.726" />
+        app:layout_constraintVertical_bias="0.976" />
 
     <Button
         android:id="@+id/button3"
@@ -68,15 +85,17 @@
         android:layout_below="@+id/button2"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
+        android:backgroundTint="@color/greentea"
         android:fontFamily="@font/kanit_light"
         android:onClick="OnBnEnroll"
         android:text="ลงทะเบียน"
+        android:translationZ="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.948"
+        app:layout_constraintHorizontal_bias="0.906"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.92" />
+        app:layout_constraintVertical_bias="0.976" />
 
     <Button
         android:id="@+id/button4"
@@ -88,12 +107,13 @@
         android:fontFamily="@font/kanit_light"
         android:onClick="OnBnVerify"
         android:text="Identify"
+        android:translationZ="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.948"
+        app:layout_constraintHorizontal_bias="0.907"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.825" />
+        app:layout_constraintVertical_bias="0.579" />
 
     <ImageView
         android:id="@+id/imageFinger"
@@ -130,12 +150,13 @@
         android:ems="10"
         android:hint="Name"
         android:inputType="textPersonName"
+        android:translationZ="3dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.079"
+        app:layout_constraintHorizontal_bias="0.169"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.727" />
+        app:layout_constraintVertical_bias="0.594" />
 
     <EditText
         android:id="@+id/ageEditText"
@@ -143,38 +164,41 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="AGE"
+        android:translationZ="5dp"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.119"
+        app:layout_constraintHorizontal_bias="0.169"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.826" />
+        app:layout_constraintVertical_bias="0.683" />
 
     <Spinner
         android:id="@+id/spinnerInterest"
-        android:layout_width="250dp"
-        android:layout_height="37dp"
+        android:layout_width="209dp"
+        android:layout_height="43dp"
         android:fontFamily="@font/kanit_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.149"
+        android:translationZ="5dp"
+        app:layout_constraintHorizontal_bias="0.168"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.922" />
+        app:layout_constraintVertical_bias="0.776" />
 
     <TextView
         android:id="@+id/textDropdown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="dropdown"
         android:fontFamily="@font/kanit_light"
+        android:text="dropdown"
+        android:translationZ="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.198"
+        app:layout_constraintHorizontal_bias="0.16"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.977" />
+        app:layout_constraintVertical_bias="0.86" />
 
     <ImageView
         android:id="@+id/imageView3"

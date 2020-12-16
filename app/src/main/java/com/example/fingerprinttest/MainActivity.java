@@ -32,6 +32,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -79,7 +81,8 @@ public class MainActivity extends AppCompatActivity {
 
         textView = (TextView)findViewById(R.id.statusText);
         imageView = (ImageView)findViewById(R.id.imageView);
-
+        TextView dateUser = (TextView)findViewById(R.id.DateUser);
+        TextView timeUser =(TextView)findViewById(R.id.timeUser);
         Button regisBtn = (Button) findViewById(R.id.registerBtn);
         regisBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +94,14 @@ public class MainActivity extends AppCompatActivity {
 
         InitDevice();
         startFingerprintSensor();
+
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("K:mm a");
+        String formatdate = simpleDateFormat.format(c.getTime());
+        String formattime = simpleTimeFormat.format(c.getTime());
+        dateUser.setText(formatdate);
+        timeUser.setText(formattime);
     }
 
 

@@ -1,5 +1,9 @@
 package com.example.fingerprinttest.model;
 
+import android.text.Editable;
+
+import com.google.gson.annotations.SerializedName;
+
 import java.sql.Timestamp;
 
 public class User {
@@ -47,6 +51,24 @@ public class User {
         return interest;
     }
 
+    public User(String name, int age, String interest, String imguser, String fingerprint) {
+        this.name = name;
+        this.age = age;
+        this.interest = interest;
+        this.imguser = imguser;
+        this.fingerprint = fingerprint;
 
+    }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", interest='" + interest + '\'' +
+                ", imguser='" + imguser + '\'' +
+                ", fingerprint='" + fingerprint + '\'' +
+                '}';
+    }
 }

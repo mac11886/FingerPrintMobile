@@ -4,8 +4,7 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-    <uses-permission android:name="android.permission.INTERNET" />
-<!--    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />-->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> -->
     <uses-feature
         android:name="android.hardware.camera2"
         android:required="false" />
@@ -17,13 +16,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FingerprintTEST"
-        android:networkSecurityConfig="@xml/network_security_config"
-        android:usesCleartextTraffic="true"
-        >
-
-
-
-        <activity android:name=".controller.RegisActivity"></activity>
+        android:usesCleartextTraffic="true">
+        <activity android:name=".controller.DebugFinger"></activity>
+        <!-- android:networkSecurityConfig="@xml/network_security_config" -->
+        <activity android:name=".controller.RegisActivity" />
         <activity android:name=".controller.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

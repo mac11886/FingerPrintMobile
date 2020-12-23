@@ -7,6 +7,7 @@
     android:background="@color/gmint"
     tools:context=".controller.RegisActivity">
 
+
     <TextView
         android:id="@+id/statusText"
         android:layout_width="wrap_content"
@@ -21,16 +22,14 @@
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.192"
+        app:layout_constraintHorizontal_bias="0.137"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.43" />
-
+        app:layout_constraintVertical_bias="0.471" />
 
     <TextView
         android:layout_width="380dp"
         android:layout_height="372dp"
-        android:elevation="1dp"
         android:background="@drawable/shape_rectangle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -59,7 +58,26 @@
         app:layout_constraintVertical_bias="0.43" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/saveDataBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/s_bg_button_green"
+        android:backgroundTint="@color/greentea"
+        android:fontFamily="@font/kanit_light"
+        android:text="บันทึกข้อมูล"
+        android:translationZ="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.889"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.737" />
+
+    <Button
+        android:id="@+id/button5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/button"
@@ -82,7 +100,7 @@
         android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/button2"
+        android:layout_below="@+id/saveDataBtn"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:backgroundTint="@color/greentea"
@@ -150,7 +168,6 @@
         android:ems="10"
         android:hint="Name"
         android:inputType="textPersonName"
-        android:translationZ="3dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.169"
@@ -164,7 +181,6 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="AGE"
-        android:translationZ="5dp"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -198,7 +214,7 @@
         app:layout_constraintHorizontal_bias="0.46"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.909" />
+        app:layout_constraintVertical_bias="0.846" />
 
     <ImageView
         android:id="@+id/imageView3"
@@ -224,5 +240,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.023" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

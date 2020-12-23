@@ -67,7 +67,7 @@
         app:layout_constraintVertical_bias="0.56" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/saveDataBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/button"
@@ -88,7 +88,7 @@
         android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/button2"
+        android:layout_below="@+id/saveDataBtn"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:fontFamily="@font/kanit_light"
@@ -256,5 +256,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.022" />
+    <Button
+        android:id="@+id/debugpage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DebugPage"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.908"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.856" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
-package com.example.fingerprinttest.controller;
+    package com.example.fingerprinttest.controller;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.PendingIntent;
@@ -11,18 +12,20 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.fingerprinttest.JsonPlaceHolderApi;
+import com.example.fingerprinttest.services.JsonPlaceHolderApi;
 import com.example.fingerprinttest.R;
 import com.example.fingerprinttest.model.User;
 import com.zkteco.android.biometric.core.device.ParameterHelper;
@@ -33,13 +36,17 @@ import com.zkteco.android.biometric.module.fingerprintreader.FingerprintCaptureL
 import com.zkteco.android.biometric.module.fingerprintreader.FingerprintSensor;
 import com.zkteco.android.biometric.module.fingerprintreader.FingprintFactory;
 import com.zkteco.android.biometric.module.fingerprintreader.ZKFingerService;
+import com.zkteco.android.biometric.module.fingerprintreader.ZKIDFprService;
 import com.zkteco.android.biometric.module.fingerprintreader.exception.FingerprintException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,11 +65,17 @@ public class RegisActivity extends AppCompatActivity {
     private static int REQUEST_IMAGE_CAPTURE = 1;
     private TextView statusText = null;
     private ImageView imageFinger = null;
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
     ImageView imageUser;
     EditText nameText;
     EditText ageText;
     TextView textDropdown;
+    Spinner spinner;
     User user;
+    Button saveBtn;
+    String interestText;
+    String text = "";
+    int dataFinger;
     String[] interest = {"football", "basketball", "book"};
     private boolean bstart = false;
     private boolean isRegister = false;
@@ -75,9 +88,12 @@ public class RegisActivity extends AppCompatActivity {
     private JsonPlaceHolderApi jsonPlaceHolderApi;
 
 
-    public void getPosts() {
-        Call<List<User>> call = jsonPlaceHolderApi.getPost(6);
 
+
+    //get API
+    public void getPosts() {
+        Call<List<User>> call = jsonPlaceHolderApi.getPost(7);
+        textDropdown.setText(call.request().toString());
         call.enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
@@ -88,14 +104,14 @@ public class RegisActivity extends AppCompatActivity {
                 List<User> users = response.body();
                 for (User user : users) {
                     String content = "";
-                    content += "ID: "+user.getId() +"\n";
-                    content += "Name: "+user.getName() +"\n";
-                    content += "Age: "+user.getAge() +"\n";
-                    content += "Interest: "+user.getInterest() +"\n";
-                    content += "ImageUser: "+user.getImguser() +"\n";
-                    content += "Fingeprint: "+user.getFingerprint() +"\n";
-                    content += "update_at: "+user.getUpdated_at() +"\n";
-                    content += "Create_at: "+user.getCreated_at() +"\n";
+                    content += "ID: " + user.getId() + "\n";
+                    content += "Name: " + user.getName() + "\n";
+                    content += "Age: " + user.getAge() + "\n";
+                    content += "Interest: " + user.getInterest() + "\n";
+                    content += "ImageUser: " + user.getImguser() + "\n";
+                    content += "Fingeprint: " + user.getFingerprint() + "\n";
+                    content += "update_at: " + user.getUpdated_at() + "\n";
+                    content += "Create_at: " + user.getCreated_at() + "\n";
                     textDropdown.setText(content);
 
                 }
@@ -110,6 +126,51 @@ public class RegisActivity extends AppCompatActivity {
 
     }
 
+    //save API
+    public void createPost() {
+
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+//         user = new User(""+nameText.getText(),Integer.parseInt(ageText.getText().toString()), ""+interest,""+imageUser.toString(),"", timestamp ,timestamp);
+
+
+
+        int ageEdit = Integer.parseInt(ageText.getText().toString());
+
+        user = new User(" "+nameText.getText(),ageEdit,""+interestText.substring(0,interestText.length()-1),"123.jpg"," "+ dataFinger);
+        Call<User> call = jsonPlaceHolderApi.createPost(user);
+//        Call<User> call = jsonPlaceHolderApi.createPost("" + nameText.getText(), Integer.parseInt(ageText.getText().toString()),
+//                "" + interestText[0], "" + imageUser.toString(), "", timestamp, timestamp);
+//        textDropdown.setText(call.request().toString());
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (!response.isSuccessful()) {
+                    textDropdown.setText("Code ERROR : " +response.code());
+                    return;
+                }
+                    textDropdown.setText("success");
+                //
+                User userPost = response.body();
+                String content = "";
+                content += "ID: " + userPost.getId() + "\n";
+                content += "Name: " + userPost.getName() + "\n";
+                content += "Age: " + userPost.getAge() + "\n";
+                content += "Interest: " + userPost.getInterest() + "\n";
+                content += "ImageUser: " + userPost.getImguser() + "\n";
+                content += "Fingeprint: " + userPost.getFingerprint() + "\n";
+                content += "update_at: " + userPost.getUpdated_at() + "\n";
+                content += "Create_at: " + userPost.getCreated_at() + "\n";
+               // textDropdown.setText(response.body().toString());
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+
+            }
+
+
+        });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,40 +183,54 @@ public class RegisActivity extends AppCompatActivity {
         ageText = (EditText) findViewById(R.id.ageEditText);
         imageUser = (ImageView) findViewById(R.id.imageUser);
         textDropdown = (TextView) findViewById(R.id.textDropdown);
+        spinner = (Spinner) findViewById(R.id.spinnerInterest);
+        saveBtn = (Button) findViewById(R.id.saveDataBtn);
 
         //connectApi
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://127.0.0.1:8000/")
+                .baseUrl("https://ta.kisrateam.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-
-
-        takeImage();
-        //dropdown
-        Spinner spinner = (Spinner) findViewById(R.id.spinnerInterest);
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item,interest);
-//        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-//        spinner.setAdapter(adapter);
-//        spinner.setOnItemSelectedListener(this);
-
         HintSpinner<String> hintSpinner = new HintSpinner<>(
                 spinner,
                 // Default layout - You don't need to pass in any layout id, just your hint text and
                 // your list data
                 new HintAdapter<String>(this, "เลือกสิ่งที่น่าสนใจ", Arrays.asList(interest)),
                 new HintSpinner.Callback<String>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onItemSelected(int position, String itemAtPosition) {
                         // Here you handle the on item selected event (this skips the hint selected event)
-                        textDropdown.setText("" + interest[position]);
+
+                        text += interest[position];
+                        text += ",";
+                        textDropdown.setText("" + text);
+                        interestText = text;
                     }
                 });
         hintSpinner.init();
+
+
+
+        takeImage();
+
         //fingerprint
         initDevice();
         startFingerprintSensor();
-        getPosts();
+        //connectAPI
+        // getPosts();
+       // createPost();
+
+
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createPost();
+            }
+        });
+
+
 
 
     }
@@ -334,13 +409,17 @@ public class RegisActivity extends AppCompatActivity {
                                     if (0 < (ret = ZKFingerService.merge(regtemparray[0], regtemparray[1], regtemparray[2], regTemp))) {
                                         // save id
                                         String name = nameText.getText().toString();
-                                        ZKFingerService.save(regTemp, "" + nameText.getText().toString() + uid);
+                                        ZKFingerService.save(regTemp, "test"  + uid++);
                                         Log.e(String.valueOf(REQUEST_IMAGE_CAPTURE), "run: " + regTemp.toString());
                                         System.arraycopy(regTemp, 0, lastRegTemp, 0, ret);
                                         //Base64 Template
                                         // register success
                                         String strBase64 = Base64.encodeToString(regTemp, 0, ret, Base64.NO_WRAP);
                                         statusText.setText("ลงทะเบียนเสร็จสิ้น, name :" + nameText.getText().toString() + " คนที่" + ZKFingerService.count());
+
+                                         dataFinger = ZKFingerService.get(tmpBuffer,"test"+(uid-1));
+                                         textDropdown.setText(" " +dataFinger);
+
                                     } else {
                                         statusText.setText("ลงทะเบียนไม่สำเร็จ");
                                     }

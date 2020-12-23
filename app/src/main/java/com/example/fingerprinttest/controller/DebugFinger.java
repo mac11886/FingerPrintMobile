@@ -1,4 +1,8 @@
 package com.example.fingerprinttest.controller;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,18 +11,22 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.os.Build;
 import android.os.Bundle;
-
 import android.util.Base64;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.appcompat.app.AppCompatActivity;
+import android.widget.Toolbar;
 
 import com.example.fingerprinttest.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.zkteco.android.biometric.ZKSensorHelper;
 import com.zkteco.android.biometric.core.device.ParameterHelper;
 import com.zkteco.android.biometric.core.device.TransportType;
 import com.zkteco.android.biometric.core.utils.LogHelper;
@@ -27,34 +35,68 @@ import com.zkteco.android.biometric.module.fingerprintreader.FingerprintCaptureL
 import com.zkteco.android.biometric.module.fingerprintreader.FingerprintSensor;
 import com.zkteco.android.biometric.module.fingerprintreader.FingprintFactory;
 import com.zkteco.android.biometric.module.fingerprintreader.ZKFingerService;
+import com.zkteco.android.biometric.module.fingerprintreader.ZKIDFprService;
 import com.zkteco.android.biometric.module.fingerprintreader.exception.FingerprintException;
+import com.zkteco.zkfinger.ZKFingerLibSetting;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
-    private static final int VID = 6997;
+public class DebugFinger extends AppCompatActivity {
     private static final int PID = 288;
+    private static final int VID = 6997;
     private TextView textView = null;
     private ImageView imageView = null;
+    TextView textLog ;
     private boolean bstart = false;
     private boolean isRegister = false;
-    private int uid = 1;
-    Button debug;
+    public int uid = 1;
     private byte[][] regtemparray = new byte[3][2048];  //register template buffer array
     private int enrollidx = 0;
     private byte[] lastRegTemp = new byte[2048];
+    Button saveBtn;
+
 
     private FingerprintSensor fingerprintSensor = null;
 
     private final String ACTION_USB_PERMISSION = "com.zkteco.silkiddemo.USB_PERMISSION";
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_debug_finger);
+        textView = (TextView)findViewById(R.id.textView);
+        imageView = (ImageView)findViewById(R.id.imageView);
+        textLog = (TextView) findViewById(R.id.debugText);
+        saveBtn = (Button) findViewById(R.id.saveDataBtn);
+        LogHelper.d("Helper");
 
+        // text mail pink right down
+
+        // set id
+        InitDevice();
+        startFingerprintSensor();
+
+
+
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    fingerprintSensor.open(0);
+                    textLog.setText("success open");
+                } catch (FingerprintException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    //accept usb
     private BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -76,48 +118,14 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        textView = (TextView)findViewById(R.id.statusText);
-        imageView = (ImageView)findViewById(R.id.imageView);
-        TextView dateUser = (TextView)findViewById(R.id.DateUser);
-        TextView timeUser =(TextView)findViewById(R.id.timeUser);
-        Button regisBtn = (Button) findViewById(R.id.registerBtn);
-        regisBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, RegisActivity.class);
-                startActivity(intent);
-            }
-        });
-        debug = (Button) findViewById(R.id.debugpage);
-        debug.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, DebugFinger.class);
-                startActivity(intent);
-            }
-        });
-        InitDevice();
-        startFingerprintSensor();
-
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("K:mm a");
-        String formatdate = simpleDateFormat.format(c.getTime());
-        String formattime = simpleTimeFormat.format(c.getTime());
-        dateUser.setText(formatdate);
-        timeUser.setText(formattime);
-    }
 
 
     private void startFingerprintSensor() {
         // Define output log level
         LogHelper.setLevel(Log.VERBOSE);
         // Start fingerprint sensor
+
         Map fingerprintParams = new HashMap();
         //set vid
         fingerprintParams.put(ParameterHelper.PARAM_KEY_VID, VID);
@@ -127,6 +135,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+    //save image??
     public void saveBitmap(Bitmap bm) {
         File f = new File("/sdcard/fingerprint", "test.bmp");
         if (f.exists()) {
@@ -145,15 +155,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // เชื่อมต่อกับ แสกนนิ้ว
     private void InitDevice()
     {
+        System.out.println("INITDEVICE CONNECT");
         UsbManager musbManager = (UsbManager)this.getSystemService(Context.USB_SERVICE);
         IntentFilter filter = new IntentFilter();
         filter.addAction(ACTION_USB_PERMISSION);
         filter.addAction(UsbManager.ACTION_USB_ACCESSORY_ATTACHED);
         Context context = this.getApplicationContext();
         context.registerReceiver(mUsbReceiver, filter);
-
+        System.out.println("connect finger");
         for (UsbDevice device : musbManager.getDeviceList().values())
         {
             if (device.getVendorId() == VID && device.getProductId() == PID)
@@ -168,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //start app
     public void OnBnBegin(View view) throws FingerprintException
     {
         try {
@@ -225,11 +238,13 @@ public class MainActivity extends AppCompatActivity {
                             if (isRegister) {
                                 byte[] bufids = new byte[256];
                                 int ret = ZKFingerService.identify(tmpBuffer, bufids, 55, 1);
+
                                 if (ret > 0)
                                 {
                                     String strRes[] = new String(bufids).split("\t");
-                                    // finger has registry
                                     textView.setText("the finger already enroll by " + strRes[0] + ",cancel enroll");
+                                    textLog.setText("bufidRegis=" + bufids.toString()+"\n"+"tmpbuffer=0"+tmpBuffer +"\n"+ "GET =="+ZKFingerService.get(tmpBuffer,"test"+uid) );
+
                                     isRegister = false;
                                     enrollidx = 0;
                                     return;
@@ -237,7 +252,6 @@ public class MainActivity extends AppCompatActivity {
 
                                 if (enrollidx > 0 && ZKFingerService.verify(regtemparray[enrollidx-1], tmpBuffer) <= 0)
                                 {
-                                    //เมื่อลงทะเบียน นิ้ว 1 ครั้งละเปลี่ยนนิ้ว จะเข้า if นี้
                                     textView.setText("please press the same finger 3 times for the enrollment");
                                     return;
                                 }
@@ -246,30 +260,31 @@ public class MainActivity extends AppCompatActivity {
                                 if (enrollidx == 3) {
                                     byte[] regTemp = new byte[2048];
                                     if (0 < (ret = ZKFingerService.merge(regtemparray[0], regtemparray[1], regtemparray[2], regTemp))) {
-                                        // save id
-                                        ZKFingerService.save(regTemp, "test  " + uid++);
+                                        ZKFingerService.save(regTemp, "test" + uid++);
                                         System.arraycopy(regTemp, 0, lastRegTemp, 0, ret);
+                                        textLog.setText("ENROLLSUCCESS "+"\n" +"regTemp=" + regTemp+"\n");
                                         //Base64 Template
-                                        // register success
                                         String strBase64 = Base64.encodeToString(regTemp, 0, ret, Base64.NO_WRAP);
                                         textView.setText("enroll succ, uid:" + uid + "count:" + ZKFingerService.count());
+                                        textLog.setText("Enroll OK" + ZKFingerService.get(tmpBuffer,"test"+(uid-1)));
+
                                     } else {
                                         textView.setText("enroll fail");
                                     }
                                     isRegister = false;
                                 } else {
-                                    //เมื่อสแกนครั้งแรกเส้ดจะขึ้นให้แสกนอีกกี่ครั้ง
-                                    textView.setText("You need to press the " + (3 - enrollidx) + "time fingerprint");
+                                    textView.setText("You need to press the " + (3 - enrollidx) + " time fingerprint");
                                 }
                             } else {
                                 byte[] bufids = new byte[256];
                                 int ret = ZKFingerService.identify(tmpBuffer, bufids, 55, 1);
-                                // register success เมื่อสแกนอีกรอบจะขึ้นอันนี้
                                 if (ret > 0) {
                                     String strRes[] = new String(bufids).split("\t");
                                     textView.setText("identify succ, userid:" + strRes[0] + ", score:" + strRes[1]);
+                                    textLog.setText("tmpbuffer="+tmpBuffer +"\n" +"bufid="+bufids + "GET="+ ZKFingerService.get(tmpBuffer,strRes[0])+"\n"
+                                    +"RegTemp0=" +regtemparray[0]+"\n" +"RegTemp1=" +regtemparray[1] +"\n"+"RegTemp2=" +regtemparray[2]
+                                    );
                                 } else {
-                                    //ยังไม่เคยสแกนลายนิ้วมือ
                                     textView.setText("identify fail");
                                 }
                                 //Base64 Template
@@ -300,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
                 fingerprintSensor.stopCapture(0);
                 bstart = false;
                 fingerprintSensor.close(0);
-                textView.setText("stop capture succ");
+                textView.setText("stop capture success");
             }
             else
             {
@@ -311,6 +326,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //register
     public void OnBnEnroll(View view) {
         if (bstart) {
             isRegister = true;
@@ -327,6 +343,7 @@ public class MainActivity extends AppCompatActivity {
         if (bstart) {
             isRegister = false;
             enrollidx = 0;
+
         }else {
             textView.setText("please begin capture first");
         }

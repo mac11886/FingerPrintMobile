@@ -24,3 +24,142 @@
             imageUser.setImageBitmap(imageBitmap);
         }
     }
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ //start app
+    public void OnBnBegin(View view) throws FingerprintException
+    {
+        try {
+            if (bstart) return;
+            fingerprintSensor.open(0);
+            final FingerprintCaptureListener listener = new FingerprintCaptureListener() {
+                @Override
+                public void captureOK(final byte[] fpImage) {
+                    final int width = fingerprintSensor.getImageWidth();
+                    final int height = fingerprintSensor.getImageHeight();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(null != fpImage)
+                            {
+                                ToolUtils.outputHexString(fpImage);
+                                LogHelper.i("width=" + width + "\nHeight=" + height);
+                                Bitmap bitmapFp = ToolUtils.renderCroppedGreyScaleBitmap(fpImage, width, height);
+                                //saveBitmap(bitmapFp);
+                                imageView.setImageBitmap(bitmapFp);
+                            }
+                            //textView.setText("FakeStatus:" + fingerprintSensor.getFakeStatus());
+                        }
+                    });
+                }
+                @Override
+                public void captureError(FingerprintException e) {
+                    final FingerprintException exp = e;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            LogHelper.d("captureError  errno=" + exp.getErrorCode() +
+                                    ",Internal error code: " + exp.getInternalErrorCode() + ",message=" + exp.getMessage());
+                        }
+                    });
+                }
+                @Override
+                public void extractError(final int err)
+                {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            textView.setText("extract fail, errorcode:" + err);
+                        }
+                    });
+                }
+
+                @Override
+                public void extractOK(final byte[] fpTemplate)
+                {
+                    final byte[] tmpBuffer = fpTemplate;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (isRegister) {
+                                byte[] bufids = new byte[256];
+                                int ret = ZKFingerService.identify(tmpBuffer, bufids, 55, 1);
+
+                                if (ret > 0)
+                                {
+                                    String strRes[] = new String(bufids).split("\t");
+                                    textView.setText("the finger already enroll by " + strRes[0] + ",cancel enroll");
+
+                                    isRegister = false;
+                                    enrollidx = 0;
+                                    return;
+                                }
+
+                                if (enrollidx > 0 && ZKFingerService.verify(regtemparray[enrollidx-1], tmpBuffer) <= 0)
+                                {
+
+                                    textView.setText("please press the same finger 3 times for the enrollment");
+                                    return;
+                                }
+                                System.arraycopy(tmpBuffer, 0, regtemparray[enrollidx], 0, 2048);
+
+                                enrollidx++;
+                                if (enrollidx == 3) {
+                                    byte[] regTemp = new byte[2048];
+
+                                    if (0 < (ret = ZKFingerService.merge(regtemparray[0], regtemparray[1], regtemparray[2], regTemp))) {
+                                        textArray.setText("regArray0= "+regtemparray[0]+"\n"+"regArray1= "+regtemparray[1]+"\n"+"regArray2="
+                                                +regtemparray[2]+"\n"+"regTemp="+regTemp+"\n regArrayclone= "+regtemparray+"\nret="+ret
+                                                );
+
+                                        ZKFingerService.save(regTemp, "test" + uid++);
+                                        int it = Integer.parseInt(regTemp.toString().substring(3,regTemp.toString().length()),16);
+                                        BigInteger bigInteger = BigInteger.valueOf(it);
+                                        byte[] bytes = (bigInteger.toByteArray());
+                                        textEnroll.setText("regtemptostring=" + regTemp +"\n ZK"+ZKFingerService.save(regTemp,"test"+(uid-1))+"" +
+                                                "\n New Byte = "+bytes+"\n regtemSub="+regTemp.toString().substring(3,regTemp.toString().length())
+                                        +"\n"+regTemp[0]+"\n"+regTemp[1]+"\n tmpbuffer="+tmpBuffer);
+                                        System.arraycopy(regTemp, 0, lastRegTemp, 0, ret);
+
+                                        //Base64 Template
+                                        String strBase64 = Base64.encodeToString(regTemp, 0, ret, Base64.NO_WRAP);
+                                        textView.setText("enroll succ, uid:" + uid + "count:" + ZKFingerService.count());
+//                                        textEnroll.setText(""+ZKFingerService.);
+                                        textLog.setText("ret="+ret +"\n"+"GET="+ZKFingerService.get(tmpBuffer,"test"+(uid-1)));
+                                    } else {
+                                        textView.setText("enroll fail");
+                                    }
+                                    isRegister = false;
+                                } else {
+                                    textView.setText("You need to press the " + (3 - enrollidx) + " time fingerprint");
+                                }
+                            } else {
+                                byte[] bufids = new byte[256];
+                                int ret = ZKFingerService.identify(tmpBuffer, bufids, 55, 1);
+                                if (ret > 0) {
+                                    String strRes[] = new String(bufids).split("\t");
+                                    textView.setText("identify succ, userid:" + strRes[0] + ", score:" + strRes[1]);
+//                                    textEnroll.setText("regIden=");
+                                } else {
+                                    textView.setText("identify fail");
+                                }
+                                //Base64 Template
+                                //String strBase64 = Base64.encodeToString(tmpBuffer, 0, fingerprintSensor.getLastTempLen(), Base64.NO_WRAP);
+                            }
+                        }
+                    });
+                }
+
+
+            };
+            fingerprintSensor.setFingerprintCaptureListener(0, listener);
+            fingerprintSensor.startCapture(0);
+            bstart = true;
+            textView.setText("start capture succ");
+        }catch (FingerprintException e)
+        {
+            textView.setText("begin capture fail.errorcode:"+ e.getErrorCode() + "err message:" + e.getMessage() + "inner code:" + e.getInternalErrorCode());
+        }
+    }

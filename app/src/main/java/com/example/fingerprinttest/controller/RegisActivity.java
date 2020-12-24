@@ -75,7 +75,11 @@ public class RegisActivity extends AppCompatActivity {
     Button saveBtn;
     String interestText;
     String text = "";
+    String saveRegTem ;
+    String saveRegTem1;
+    String saveRegTem2;
     int dataFinger;
+    String strBase64;
     String[] interest = {"football", "basketball", "book"};
     private boolean bstart = false;
     private boolean isRegister = false;
@@ -132,11 +136,13 @@ public class RegisActivity extends AppCompatActivity {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 //         user = new User(""+nameText.getText(),Integer.parseInt(ageText.getText().toString()), ""+interest,""+imageUser.toString(),"", timestamp ,timestamp);
 
-
-
         int ageEdit = Integer.parseInt(ageText.getText().toString());
 
-        user = new User(" "+nameText.getText(),ageEdit,""+interestText.substring(0,interestText.length()-1),"123.jpg"," "+ dataFinger);
+
+        saveRegTem1 =saveRegTem.replace("\\","\\ ");
+
+        user = new User(" "+nameText.getText(),ageEdit,""+interestText.substring(0,interestText.length()-1),"11111",
+                ""+strBase64);
         Call<User> call = jsonPlaceHolderApi.createPost(user);
 //        Call<User> call = jsonPlaceHolderApi.createPost("" + nameText.getText(), Integer.parseInt(ageText.getText().toString()),
 //                "" + interestText[0], "" + imageUser.toString(), "", timestamp, timestamp);
@@ -409,16 +415,16 @@ public class RegisActivity extends AppCompatActivity {
                                     if (0 < (ret = ZKFingerService.merge(regtemparray[0], regtemparray[1], regtemparray[2], regTemp))) {
                                         // save id
                                         String name = nameText.getText().toString();
+                                        saveRegTem =new String (regTemp);
                                         ZKFingerService.save(regTemp, "test"  + uid++);
                                         Log.e(String.valueOf(REQUEST_IMAGE_CAPTURE), "run: " + regTemp.toString());
                                         System.arraycopy(regTemp, 0, lastRegTemp, 0, ret);
                                         //Base64 Template
                                         // register success
-                                        String strBase64 = Base64.encodeToString(regTemp, 0, ret, Base64.NO_WRAP);
+                                         strBase64 = Base64.encodeToString(regTemp, 0, ret, Base64.NO_WRAP);
                                         statusText.setText("ลงทะเบียนเสร็จสิ้น, name :" + nameText.getText().toString() + " คนที่" + ZKFingerService.count());
-
                                          dataFinger = ZKFingerService.get(tmpBuffer,"test"+(uid-1));
-                                         textDropdown.setText(" " +dataFinger);
+                                         textDropdown.setText("regtem " +Arrays.toString(regTemp));
 
                                     } else {
                                         statusText.setText("ลงทะเบียนไม่สำเร็จ");

@@ -45,6 +45,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -66,6 +67,8 @@ public class RegisActivity extends AppCompatActivity {
     private TextView statusText = null;
     private ImageView imageFinger = null;
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
+    List<User> users ;
+
     ImageView imageUser;
     EditText nameText;
     EditText ageText;
@@ -96,8 +99,8 @@ public class RegisActivity extends AppCompatActivity {
 
     //get API
     public void getPosts() {
-        Call<List<User>> call = jsonPlaceHolderApi.getPost(7);
-        textDropdown.setText(call.request().toString());
+        Call<List<User>> call = jsonPlaceHolderApi.getPost();
+//        textDropdown.setText(call.request().toString());
         call.enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
@@ -105,7 +108,7 @@ public class RegisActivity extends AppCompatActivity {
                     textDropdown.setText("Code : " + response.code());
                     return;
                 }
-                List<User> users = response.body();
+                users = response.body();
                 for (User user : users) {
                     String content = "";
                     content += "ID: " + user.getId() + "\n";
@@ -116,10 +119,9 @@ public class RegisActivity extends AppCompatActivity {
                     content += "Fingeprint: " + user.getFingerprint() + "\n";
                     content += "update_at: " + user.getUpdated_at() + "\n";
                     content += "Create_at: " + user.getCreated_at() + "\n";
-                    textDropdown.setText(content);
+                    //textDropdown.setText(content);
 
                 }
-
             }
 
             @Override
@@ -225,7 +227,7 @@ public class RegisActivity extends AppCompatActivity {
         initDevice();
         startFingerprintSensor();
         //connectAPI
-        // getPosts();
+         getPosts();
        // createPost();
 
 
@@ -341,6 +343,12 @@ public class RegisActivity extends AppCompatActivity {
         try {
             if (bstart) return;
             fingerprintSensor.open(0);
+//            getPosts();
+            for (User user:users) {
+                byte[] byte2 = Base64.decode(user.getFingerprint(),Base64.NO_WRAP);
+                int ret = ZKFingerService.save(byte2,""+user.getId());
+
+            }
             final FingerprintCaptureListener listener = new FingerprintCaptureListener() {
                 @Override
                 public void captureOK(final byte[] fpImage) {
@@ -424,7 +432,7 @@ public class RegisActivity extends AppCompatActivity {
                                          strBase64 = Base64.encodeToString(regTemp, 0, ret, Base64.NO_WRAP);
                                         statusText.setText("ลงทะเบียนเสร็จสิ้น, name :" + nameText.getText().toString() + " คนที่" + ZKFingerService.count());
                                          dataFinger = ZKFingerService.get(tmpBuffer,"test"+(uid-1));
-                                         textDropdown.setText("regtem " +Arrays.toString(regTemp));
+
 
                                     } else {
                                         statusText.setText("ลงทะเบียนไม่สำเร็จ");

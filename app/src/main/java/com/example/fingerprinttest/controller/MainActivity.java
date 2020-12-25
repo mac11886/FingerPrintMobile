@@ -5,10 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.net.Uri;
 import android.os.Bundle;
 
+import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +22,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fingerprinttest.R;
+import com.example.fingerprinttest.model.User;
+import com.example.fingerprinttest.services.JsonPlaceHolderApi;
 import com.zkteco.android.biometric.core.device.ParameterHelper;
 import com.zkteco.android.biometric.core.device.TransportType;
 import com.zkteco.android.biometric.core.utils.LogHelper;
@@ -29,6 +34,7 @@ import com.zkteco.android.biometric.module.fingerprintreader.FingprintFactory;
 import com.zkteco.android.biometric.module.fingerprintreader.ZKFingerService;
 import com.zkteco.android.biometric.module.fingerprintreader.exception.FingerprintException;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -36,11 +42,19 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
     private static final int VID = 6997;
     private static final int PID = 288;
+    private static final int GALLERY_REQUEST_CODE = 123;
     private TextView textView = null;
     private ImageView imageView = null;
     private boolean bstart = false;
@@ -50,7 +64,17 @@ public class MainActivity extends AppCompatActivity {
     private byte[][] regtemparray = new byte[3][2048];  //register template buffer array
     private int enrollidx = 0;
     private byte[] lastRegTemp = new byte[2048];
+    List<User> users;
+    String strBase64;
+    String encoded;
+    int userid;
+    String userImage;
+    String decoded;
+    ImageView imageUser ;
+    TextView textLog,nameUser;
+    String name ;
 
+    private JsonPlaceHolderApi jsonPlaceHolderApi;
     private FingerprintSensor fingerprintSensor = null;
 
     private final String ACTION_USB_PERMISSION = "com.zkteco.silkiddemo.USB_PERMISSION";
@@ -75,6 +99,76 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
+    //get API
+    public void getPosts() {
+        Call<List<User>> call = jsonPlaceHolderApi.getPost();
+//        textDropdown.setText(call.request().toString());
+        call.enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                if (!response.isSuccessful()) {
+//                    textDropdown.setText("Code : " + response.code());
+                    return;
+                }
+                users = response.body();
+                for (User user : users) {
+                    String content = "";
+                    content += "ID: " + user.getId() + "\n";
+                    content += "Name: " + user.getName() + "\n";
+                    content += "Age: " + user.getAge() + "\n";
+                    content += "Interest: " + user.getInterest() + "\n";
+                    content += "ImageUser: " + user.getImguser() + "\n";
+                    content += "Fingeprint: " + user.getFingerprint() + "\n";
+                    content += "update_at: " + user.getUpdated_at() + "\n";
+                    content += "Create_at: " + user.getCreated_at() + "\n";
+                    //textDropdown.setText(content);
+                    userImage = user.getImguser();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+//                textDropdown.setText(t.getMessage());
+            }
+        });
+
+    }
+    public User getUser(int id){
+        return users.get(id);
+    }
+//    //get Image to ImageView
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+//            Uri uri  =data.getData();
+//            try {
+//
+//
+//                Bitmap bitmap  = MediaStore.Images.Media.getBitmap(getContentResolver(),uri);
+//                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//                bitmap.compress(Bitmap.CompressFormat.WEBP, 40, byteArrayOutputStream);
+//                byte[] byteArray = byteArrayOutputStream .toByteArray();
+//
+//                encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+//                byte[] decodedString = Base64.decode(encoded, Base64.DEFAULT);
+//                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+//
+////                textDropdown.setText("encode"+encoded.length()+"\n byte"+byteArray.length);
+//                imageUser.setImageBitmap(decodedByte);
+//
+//
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
+//    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +177,9 @@ public class MainActivity extends AppCompatActivity {
 
         textView = (TextView)findViewById(R.id.statusText);
         imageView = (ImageView)findViewById(R.id.imageView);
+        imageUser = (ImageView) findViewById(R.id.imageUser);
+        textLog = (TextView) findViewById(R.id.textLog);
+        nameUser = (TextView) findViewById(R.id.nameUser);
         TextView dateUser = (TextView)findViewById(R.id.DateUser);
         TextView timeUser =(TextView)findViewById(R.id.timeUser);
         Button regisBtn = (Button) findViewById(R.id.registerBtn);
@@ -101,9 +198,17 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        //connectApi
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://ta.kisrateam.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+
         InitDevice();
         startFingerprintSensor();
-
+        getPosts();
         Calendar c = Calendar.getInstance();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("K:mm a");
@@ -173,6 +278,10 @@ public class MainActivity extends AppCompatActivity {
         try {
             if (bstart) return;
             fingerprintSensor.open(0);
+            for (User user : users) {
+                byte[] byte2 = Base64.decode(user.getFingerprint(), Base64.NO_WRAP);
+                ZKFingerService.save(byte2, "" + user.getId());
+            }
             final FingerprintCaptureListener listener = new FingerprintCaptureListener() {
                 @Override
                 public void captureOK(final byte[] fpImage) {
@@ -268,6 +377,16 @@ public class MainActivity extends AppCompatActivity {
                                 if (ret > 0) {
                                     String strRes[] = new String(bufids).split("\t");
                                     textView.setText("identify succ, userid:" + strRes[0] + ", score:" + strRes[1]);
+                                    userImage = getUser(Integer.parseInt(strRes[0])-1).getImguser();
+                                    name = getUser(Integer.parseInt(strRes[0])-1).getName();
+                                    nameUser.setText(""+name);
+                                    textLog.setText("str0="+ users.get(Integer.parseInt(strRes[0])-1).getId()+"\n size"+users.size());
+                                    byte[] decodedString = Base64.decode(userImage, Base64.DEFAULT);
+                                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                                    imageUser.setImageBitmap(decodedByte);
+//                textDropdown.setText("encode"+encoded.length()+"\n byte"+byteArray.length);
+
+
                                 } else {
                                     //ยังไม่เคยสแกนลายนิ้วมือ
                                     textView.setText("identify fail");

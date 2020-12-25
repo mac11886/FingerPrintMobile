@@ -4,6 +4,7 @@ import android.text.Editable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.File;
 import java.sql.Timestamp;
 
 public class User {
@@ -15,6 +16,7 @@ public class User {
     private String fingerprint;
     private Timestamp updated_at;
     private Timestamp created_at;
+
 
     public String getImguser() {
         return imguser;

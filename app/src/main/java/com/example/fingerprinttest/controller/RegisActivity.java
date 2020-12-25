@@ -1,4 +1,4 @@
-    package com.example.fingerprinttest.controller;
+package com.example.fingerprinttest.controller;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,13 +7,18 @@ import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
@@ -39,10 +44,13 @@ import com.zkteco.android.biometric.module.fingerprintreader.ZKFingerService;
 import com.zkteco.android.biometric.module.fingerprintreader.ZKIDFprService;
 import com.zkteco.android.biometric.module.fingerprintreader.exception.FingerprintException;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -64,11 +72,11 @@ public class RegisActivity extends AppCompatActivity {
     private static final int VID = 6997;
     private static final int PID = 288;
     private static int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int GALLERY_REQUEST_CODE = 123;
     private TextView statusText = null;
     private ImageView imageFinger = null;
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
-    List<User> users ;
-    //test PUSH
+    List<User> users;
     ImageView imageUser;
     EditText nameText;
     EditText ageText;
@@ -78,11 +86,15 @@ public class RegisActivity extends AppCompatActivity {
     Button saveBtn;
     String interestText;
     String text = "";
-    String saveRegTem ;
+    String saveRegTem;
     String saveRegTem1;
     String saveRegTem2;
+    File file;
     int dataFinger;
     String strBase64;
+    String encoded;
+    Bitmap imageBitmap;
+    OutputStream outputStream;
     String[] interest = {"football", "basketball", "book"};
     private boolean bstart = false;
     private boolean isRegister = false;
@@ -93,8 +105,6 @@ public class RegisActivity extends AppCompatActivity {
     private FingerprintSensor fingerprintSensor = null;
     private final String ACTION_USB_PERMISSION = "com.zkteco.silkiddemo.USB_PERMISSION";
     private JsonPlaceHolderApi jsonPlaceHolderApi;
-
-
 
 
     //get API
@@ -135,28 +145,22 @@ public class RegisActivity extends AppCompatActivity {
     //save API
     public void createPost() {
 
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-//         user = new User(""+nameText.getText(),Integer.parseInt(ageText.getText().toString()), ""+interest,""+imageUser.toString(),"", timestamp ,timestamp);
-
         int ageEdit = Integer.parseInt(ageText.getText().toString());
 
 
-        saveRegTem1 =saveRegTem.replace("\\","\\ ");
-
-        user = new User(" "+nameText.getText(),ageEdit,""+interestText.substring(0,interestText.length()-1),"11111",
-                ""+strBase64);
+        saveBitmap();
+        user = new User(" " + nameText.getText(), ageEdit, "" + interestText.substring(0, interestText.length() - 1), ""+encoded ,
+                "" + strBase64);
         Call<User> call = jsonPlaceHolderApi.createPost(user);
-//        Call<User> call = jsonPlaceHolderApi.createPost("" + nameText.getText(), Integer.parseInt(ageText.getText().toString()),
-//                "" + interestText[0], "" + imageUser.toString(), "", timestamp, timestamp);
-//        textDropdown.setText(call.request().toString());
+
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (!response.isSuccessful()) {
-                    textDropdown.setText("Code ERROR : " +response.code());
+                    textDropdown.setText("Code ERROR : " + response.code());
                     return;
                 }
-                    textDropdown.setText("success");
+                textDropdown.setText("success");
                 //
                 User userPost = response.body();
                 String content = "";
@@ -168,7 +172,7 @@ public class RegisActivity extends AppCompatActivity {
                 content += "Fingeprint: " + userPost.getFingerprint() + "\n";
                 content += "update_at: " + userPost.getUpdated_at() + "\n";
                 content += "Create_at: " + userPost.getCreated_at() + "\n";
-               // textDropdown.setText(response.body().toString());
+                // textDropdown.setText(response.body().toString());
             }
 
             @Override
@@ -220,25 +224,25 @@ public class RegisActivity extends AppCompatActivity {
         hintSpinner.init();
 
 
-
-        takeImage();
+        getImage();
 
         //fingerprint
         initDevice();
         startFingerprintSensor();
         //connectAPI
-         getPosts();
-       // createPost();
+        getPosts();
+        // createPost();
 
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 createPost();
+                ageText.setText("");
+                nameText.setText("");
+                textDropdown.setText("");
             }
         });
-
-
 
 
     }
@@ -273,51 +277,49 @@ public class RegisActivity extends AppCompatActivity {
     }
 
 
-    public void takeImage() {
+    public void getImage() {
         imageUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                try {
-                    startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
-                } catch (ActivityNotFoundException e) {
-                    Toast toast = Toast.makeText(getApplicationContext(), "NOT TAKE A PHOTO ", Toast.LENGTH_SHORT);
-                    toast.show();
-                }
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+
+                startActivityForResult(intent, GALLERY_REQUEST_CODE);
             }
         });
 
 
     }
 
-
     //get Image to ImageView
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            imageUser.setImageBitmap(imageBitmap);
+        if (requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            Uri uri  =data.getData();
+            try {
+                Bitmap bitmap  = MediaStore.Images.Media.getBitmap(getContentResolver(),uri);
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.WEBP, 40, byteArrayOutputStream);
+                byte[] byteArray = byteArrayOutputStream .toByteArray();
+                encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                textDropdown.setText("encode"+encoded.length()+"\n byte"+byteArray.length);
+                imageUser.setImageBitmap(bitmap);
+
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 
-    public void saveBitmap(Bitmap bm) {
-        File f = new File("/sdcard/fingerprint", "test.bmp");
-        if (f.exists()) {
-            f.delete();
-        }
-        FileOutputStream out = null;
-        try {
-            out = new FileOutputStream(f);
-            bm.compress(Bitmap.CompressFormat.PNG, 90, out);
-            out.flush();
-            out.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    //save Image
+    public void saveBitmap() {
+
+
     }
 
     private void initDevice() {
@@ -344,9 +346,9 @@ public class RegisActivity extends AppCompatActivity {
             if (bstart) return;
             fingerprintSensor.open(0);
 //            getPosts();
-            for (User user:users) {
-                byte[] byte2 = Base64.decode(user.getFingerprint(),Base64.NO_WRAP);
-                int ret = ZKFingerService.save(byte2,""+user.getId());
+            for (User user : users) {
+                byte[] byte2 = Base64.decode(user.getFingerprint(), Base64.NO_WRAP);
+                int ret = ZKFingerService.save(byte2, "" + user.getId());
 
             }
             final FingerprintCaptureListener listener = new FingerprintCaptureListener() {
@@ -423,15 +425,15 @@ public class RegisActivity extends AppCompatActivity {
                                     if (0 < (ret = ZKFingerService.merge(regtemparray[0], regtemparray[1], regtemparray[2], regTemp))) {
                                         // save id
                                         String name = nameText.getText().toString();
-                                        saveRegTem =new String (regTemp);
-                                        ZKFingerService.save(regTemp, "test"  + uid++);
+                                        saveRegTem = new String(regTemp);
+                                        ZKFingerService.save(regTemp, "test" + uid++);
                                         Log.e(String.valueOf(REQUEST_IMAGE_CAPTURE), "run: " + regTemp.toString());
                                         System.arraycopy(regTemp, 0, lastRegTemp, 0, ret);
                                         //Base64 Template
                                         // register success
-                                         strBase64 = Base64.encodeToString(regTemp, 0, ret, Base64.NO_WRAP);
+                                        strBase64 = Base64.encodeToString(regTemp, 0, ret, Base64.NO_WRAP);
                                         statusText.setText("ลงทะเบียนเสร็จสิ้น, name :" + nameText.getText().toString() + " คนที่" + ZKFingerService.count());
-                                         dataFinger = ZKFingerService.get(tmpBuffer,"test"+(uid-1));
+                                        dataFinger = ZKFingerService.get(tmpBuffer, "test" + (uid - 1));
 
 
                                     } else {

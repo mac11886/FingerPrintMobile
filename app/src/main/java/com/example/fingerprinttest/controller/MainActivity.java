@@ -15,10 +15,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fingerprinttest.R;
+import com.example.fingerprinttest.model.User;
+import com.example.fingerprinttest.services.JsonPlaceHolderApi;
 import com.zkteco.android.biometric.core.device.ParameterHelper;
 import com.zkteco.android.biometric.core.device.TransportType;
 import com.zkteco.android.biometric.core.utils.LogHelper;
@@ -36,7 +39,14 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
     private static final int VID = 6997;
@@ -50,7 +60,9 @@ public class MainActivity extends AppCompatActivity {
     private byte[][] regtemparray = new byte[3][2048];  //register template buffer array
     private int enrollidx = 0;
     private byte[] lastRegTemp = new byte[2048];
-
+    private JsonPlaceHolderApi jsonPlaceHolderApi;
+    String strBase64;
+    List<User> users ;
     private FingerprintSensor fingerprintSensor = null;
 
     private final String ACTION_USB_PERMISSION = "com.zkteco.silkiddemo.USB_PERMISSION";
@@ -103,6 +115,13 @@ public class MainActivity extends AppCompatActivity {
         });
         InitDevice();
         startFingerprintSensor();
+        //connectApi
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://ta.kisrateam.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        getPosts();
 
         Calendar c = Calendar.getInstance();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -112,7 +131,42 @@ public class MainActivity extends AppCompatActivity {
         dateUser.setText(formatdate);
         timeUser.setText(formattime);
     }
+    //get API
+    public void getPosts() {
+        Call<List<User>> call = jsonPlaceHolderApi.getPost();
+//        textDropdown.setText(call.request().toString());
+        call.enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                if (!response.isSuccessful()) {
+                    //textDropdown.setText("Code : " + response.code());
 
+                    return;
+                }
+                users = response.body();
+                for (User user : users) {
+                    String content = "";
+                    content += "ID: " + user.getId() + "\n";
+                    content += "Name: " + user.getName() + "\n";
+                    content += "Age: " + user.getAge() + "\n";
+                    content += "Interest: " + user.getInterest() + "\n";
+                    content += "ImageUser: " + user.getImguser() + "\n";
+                    content += "Fingeprint: " + user.getFingerprint() + "\n";
+                    content += "update_at: " + user.getUpdated_at() + "\n";
+                    content += "Create_at: " + user.getCreated_at() + "\n";
+                    //textDropdown.setText(content);
+                    uid = user.getId();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+                //textDropdown.setText(t.getMessage());
+                Toast.makeText(getApplicationContext(),""+t.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
 
     private void startFingerprintSensor() {
         // Define output log level
@@ -173,6 +227,11 @@ public class MainActivity extends AppCompatActivity {
         try {
             if (bstart) return;
             fingerprintSensor.open(0);
+            //get API
+            for (User user:users) {
+                byte[] byte2 = Base64.decode(user.getFingerprint(),Base64.NO_WRAP);
+                ZKFingerService.save(byte2," "+user.getId());
+            }
             final FingerprintCaptureListener listener = new FingerprintCaptureListener() {
                 @Override
                 public void captureOK(final byte[] fpImage) {

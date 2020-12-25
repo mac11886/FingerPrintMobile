@@ -68,7 +68,6 @@ public class RegisActivity extends AppCompatActivity {
     private ImageView imageFinger = null;
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
     List<User> users ;
-
     ImageView imageUser;
     EditText nameText;
     EditText ageText;
@@ -120,7 +119,7 @@ public class RegisActivity extends AppCompatActivity {
                     content += "update_at: " + user.getUpdated_at() + "\n";
                     content += "Create_at: " + user.getCreated_at() + "\n";
                     //textDropdown.setText(content);
-
+                    uid = user.getId();
                 }
             }
 
@@ -136,7 +135,6 @@ public class RegisActivity extends AppCompatActivity {
     public void createPost() {
 
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-//         user = new User(""+nameText.getText(),Integer.parseInt(ageText.getText().toString()), ""+interest,""+imageUser.toString(),"", timestamp ,timestamp);
 
         int ageEdit = Integer.parseInt(ageText.getText().toString());
 
@@ -193,7 +191,7 @@ public class RegisActivity extends AppCompatActivity {
         textDropdown = (TextView) findViewById(R.id.textDropdown);
         spinner = (Spinner) findViewById(R.id.spinnerInterest);
         saveBtn = (Button) findViewById(R.id.saveDataBtn);
-
+        ImageView backPage = (ImageView) findViewById(R.id.backPage);
         //connectApi
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://ta.kisrateam.com/")
@@ -218,7 +216,13 @@ public class RegisActivity extends AppCompatActivity {
                     }
                 });
         hintSpinner.init();
-
+        backPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RegisActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         takeImage();
@@ -343,11 +347,10 @@ public class RegisActivity extends AppCompatActivity {
         try {
             if (bstart) return;
             fingerprintSensor.open(0);
-//            getPosts();
+            //get API
             for (User user:users) {
                 byte[] byte2 = Base64.decode(user.getFingerprint(),Base64.NO_WRAP);
-                int ret = ZKFingerService.save(byte2,""+user.getId());
-
+                ZKFingerService.save(byte2," "+user.getId());
             }
             final FingerprintCaptureListener listener = new FingerprintCaptureListener() {
                 @Override
@@ -424,7 +427,7 @@ public class RegisActivity extends AppCompatActivity {
                                         // save id
                                         String name = nameText.getText().toString();
                                         saveRegTem =new String (regTemp);
-                                        ZKFingerService.save(regTemp, "test"  + uid++);
+                                        ZKFingerService.save(regTemp, ""  + ++uid);
                                         Log.e(String.valueOf(REQUEST_IMAGE_CAPTURE), "run: " + regTemp.toString());
                                         System.arraycopy(regTemp, 0, lastRegTemp, 0, ret);
                                         //Base64 Template

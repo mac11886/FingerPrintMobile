@@ -68,7 +68,7 @@ public class RegisActivity extends AppCompatActivity {
     private ImageView imageFinger = null;
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
     List<User> users ;
-
+    //test PUSH
     ImageView imageUser;
     EditText nameText;
     EditText ageText;

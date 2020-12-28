@@ -8,6 +8,10 @@ import java.io.File;
 import java.sql.Timestamp;
 
 public class User {
+    public User(int id) {
+        this.id = id;
+    }
+
     private int id;
     private String name;
     private int age;

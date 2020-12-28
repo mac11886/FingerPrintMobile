@@ -73,6 +73,8 @@ public class RegisActivity extends AppCompatActivity {
     private static final int PID = 288;
     private static int REQUEST_IMAGE_CAPTURE = 1;
     private static final int GALLERY_REQUEST_CODE = 123;
+    public static final int COLOR_PALEGOLDENROD = 0xFFEEE8AA;
+
     private TextView statusText = null;
     private ImageView imageFinger = null;
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
@@ -87,14 +89,12 @@ public class RegisActivity extends AppCompatActivity {
     String interestText;
     String text = "";
     String saveRegTem;
-    String saveRegTem1;
-    String saveRegTem2;
-    File file;
+
+
     int dataFinger;
     String strBase64;
     String encoded;
-    Bitmap imageBitmap;
-    OutputStream outputStream;
+
     String[] interest = {"football", "basketball", "book"};
     private boolean bstart = false;
     private boolean isRegister = false;
@@ -110,7 +110,6 @@ public class RegisActivity extends AppCompatActivity {
     //get API
     public void getPosts() {
         Call<List<User>> call = jsonPlaceHolderApi.getPost();
-//        textDropdown.setText(call.request().toString());
         call.enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
@@ -144,15 +143,10 @@ public class RegisActivity extends AppCompatActivity {
 
     //save API
     public void createPost() {
-
         int ageEdit = Integer.parseInt(ageText.getText().toString());
-
-
-        saveBitmap();
         user = new User(" " + nameText.getText(), ageEdit, "" + interestText.substring(0, interestText.length() - 1), ""+encoded ,
                 "" + strBase64);
         Call<User> call = jsonPlaceHolderApi.createPost(user);
-
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
@@ -174,10 +168,8 @@ public class RegisActivity extends AppCompatActivity {
                 content += "Create_at: " + userPost.getCreated_at() + "\n";
                 // textDropdown.setText(response.body().toString());
             }
-
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-
             }
 
 
@@ -197,7 +189,7 @@ public class RegisActivity extends AppCompatActivity {
         textDropdown = (TextView) findViewById(R.id.textDropdown);
         spinner = (Spinner) findViewById(R.id.spinnerInterest);
         saveBtn = (Button) findViewById(R.id.saveDataBtn);
-
+        ImageView  backBtn = (ImageView) findViewById(R.id.backBtn);
         //connectApi
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://ta.kisrateam.com/")
@@ -233,6 +225,14 @@ public class RegisActivity extends AppCompatActivity {
         getPosts();
         // createPost();
 
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RegisActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -241,6 +241,10 @@ public class RegisActivity extends AppCompatActivity {
                 ageText.setText("");
                 nameText.setText("");
                 textDropdown.setText("");
+                Bitmap bmUser = Bitmap.createBitmap(149,147,Bitmap.Config.ARGB_8888);
+                bmUser.eraseColor(COLOR_PALEGOLDENROD);
+                imageUser.setImageBitmap(bmUser);
+                imageFinger.setImageBitmap(bmUser);
             }
         });
 
@@ -316,11 +320,6 @@ public class RegisActivity extends AppCompatActivity {
         }
     }
 
-    //save Image
-    public void saveBitmap() {
-
-
-    }
 
     private void initDevice() {
         UsbManager musbManager = (UsbManager) this.getSystemService(Context.USB_SERVICE);
@@ -341,7 +340,7 @@ public class RegisActivity extends AppCompatActivity {
         }
     }
 
-    public void OnBnBegin(View view) throws FingerprintException {
+    public void OnBnBegin() throws FingerprintException {
         try {
             if (bstart) return;
             fingerprintSensor.open(0);
@@ -427,12 +426,12 @@ public class RegisActivity extends AppCompatActivity {
                                         String name = nameText.getText().toString();
                                         saveRegTem = new String(regTemp);
                                         ZKFingerService.save(regTemp, "test" + uid++);
-                                        Log.e(String.valueOf(REQUEST_IMAGE_CAPTURE), "run: " + regTemp.toString());
+//                                        Log.e(String.valueOf(REQUEST_IMAGE_CAPTURE), "run: " + regTemp.toString());
                                         System.arraycopy(regTemp, 0, lastRegTemp, 0, ret);
                                         //Base64 Template
                                         // register success
                                         strBase64 = Base64.encodeToString(regTemp, 0, ret, Base64.NO_WRAP);
-                                        statusText.setText("ลงทะเบียนเสร็จสิ้น, name :" + nameText.getText().toString() + " คนที่" + ZKFingerService.count());
+                                        statusText.setText("ลงทะเบียนเสร็จสิ้น, name :" + nameText.getText().toString() + "คนที่ " + ZKFingerService.count());
                                         dataFinger = ZKFingerService.get(tmpBuffer, "test" + (uid - 1));
 
 
@@ -450,13 +449,13 @@ public class RegisActivity extends AppCompatActivity {
                                 // register success เมื่อสแกนอีกรอบจะขึ้นอันนี้
                                 if (ret > 0) {
                                     String strRes[] = new String(bufids).split("\t");
-                                    statusText.setText("ยืนยันตัวตนสำเร็จ, userid:" + strRes[0] + ", score:" + strRes[1]);
+                                    //statusText.setText("ยืนยันตัวตนสำเร็จ, userid:" + strRes[0] + ", score:" + strRes[1]);
                                 } else {
                                     //ยังไม่เคยสแกนลายนิ้วมือ
-                                    statusText.setText("ยืนยันตัวตนไม่สำเร็จ");
+                                    //statusText.setText("ยืนยันตัวตนไม่สำเร็จ");
                                 }
                                 //Base64 Template
-                                //String strBase64 = Base64.encodeToString(tmpBuffer, 0, fingerprintSensor.getLastTempLen(), Base64.NO_WRAP);
+                                //String strBase64 = Base64.encodeToString(tmpBuffer, 0, fingerprintSensor.getLastTempLen(), Base64.NO_WRAP);+
                             }
                         }
                     });
@@ -491,7 +490,8 @@ public class RegisActivity extends AppCompatActivity {
         }
     }
 
-    public void OnBnEnroll(View view) {
+    public void OnBnEnroll(View view) throws FingerprintException {
+        OnBnBegin();
         if (bstart) {
             isRegister = true;
             enrollidx = 0;
@@ -511,15 +511,5 @@ public class RegisActivity extends AppCompatActivity {
     }
 
 
-//
-//    @Override
-//    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//        textDropdown.setText(" "+ interest[position]);
-//      //  Toast.makeText(getApplicationContext(),"Select Interest: "+interest[position],Toast.LENGTH_LONG).show();
-//    }
-//
-//    @Override
-//    public void onNothingSelected(AdapterView<?> parent) {
-//
-//    }
+
 }

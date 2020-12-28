@@ -20,16 +20,19 @@ public interface JsonPlaceHolderApi {
     Call<List<User>> getPost();
 
 
+    @POST("api/edit-data")
+    Call<User> createPostDate(@Body User user );
+
     @POST("api/save")
     Call<User> createPost(@Body  User user);
 
-    @FormUrlEncoded
-    @POST("api/save")
-    Call<User> createPost(
-            @Field("name") String name,
-            @Field("age") int age,
-            @Field("interest") String interest,
-            @Field("imguser") String imguser,
-            @Field("fingerprint") String fingerprint
-    );
+//    @FormUrlEncoded
+//    @POST("api/save")
+//    Call<User> createPost(
+//            @Field("name") String name,
+//            @Field("age") int age,
+//            @Field("interest") String interest,
+//            @Field("imguser") String imguser,
+//            @Field("fingerprint") String fingerprint
+//    );
 }

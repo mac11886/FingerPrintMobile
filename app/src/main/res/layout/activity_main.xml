@@ -230,7 +230,6 @@
         android:id="@+id/textLog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
         android:translationZ="10dp"
 
         app:layout_constraintBottom_toBottomOf="parent"

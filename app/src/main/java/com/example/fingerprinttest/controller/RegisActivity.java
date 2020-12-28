@@ -73,7 +73,7 @@ public class RegisActivity extends AppCompatActivity {
     private static final int PID = 288;
     private static int REQUEST_IMAGE_CAPTURE = 1;
     private static final int GALLERY_REQUEST_CODE = 123;
-    public static final int COLOR_PALEGOLDENROD = 0xFFEEE8AA;
+    public static final int COLOR_PALEGOLDENROD = 0xC0C0C0;
 
     private TextView statusText = null;
     private ImageView imageFinger = null;
@@ -305,10 +305,11 @@ public class RegisActivity extends AppCompatActivity {
                 Bitmap bitmap  = MediaStore.Images.Media.getBitmap(getContentResolver(),uri);
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.WEBP, 40, byteArrayOutputStream);
+
+                imageUser.setImageBitmap(bitmap);
                 byte[] byteArray = byteArrayOutputStream .toByteArray();
                 encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                textDropdown.setText("encode"+encoded.length()+"\n byte"+byteArray.length);
-                imageUser.setImageBitmap(bitmap);
+//                textDropdown.setText("encode"+encoded.length()+"\n byte"+byteArray.length);
 
 
             } catch (FileNotFoundException e) {

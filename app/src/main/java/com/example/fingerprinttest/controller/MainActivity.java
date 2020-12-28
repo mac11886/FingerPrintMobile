@@ -382,7 +382,7 @@ public class MainActivity extends AppCompatActivity {
                                     userImage = getUser(Integer.parseInt(strRes[0]) - 1).getImguser();
                                     name = getUser(Integer.parseInt(strRes[0]) - 1).getName();
                                     nameUser.setText("" + name);
-                                    textLog.setText("str0=" + users.get(Integer.parseInt(strRes[0]) - 1).getId() + "\n size" + users.size());
+//                                    textLog.setText("str0=" + users.get(Integer.parseInt(strRes[0]) - 1).getId() + "\n size" + users.size());
                                     byte[] decodedString = Base64.decode(userImage, Base64.DEFAULT);
                                     Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                                     imageUser.setImageBitmap(decodedByte);

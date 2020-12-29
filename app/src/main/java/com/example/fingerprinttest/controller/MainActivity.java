@@ -9,10 +9,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
-import android.net.Uri;
 import android.os.Bundle;
 
-import android.provider.MediaStore;
+import android.text.format.Time;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +22,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fingerprinttest.R;
+import com.example.fingerprinttest.model.Date;
 import com.example.fingerprinttest.model.User;
 import com.example.fingerprinttest.services.JsonPlaceHolderApi;
 import com.zkteco.android.biometric.core.device.ParameterHelper;
@@ -35,14 +35,12 @@ import com.zkteco.android.biometric.module.fingerprintreader.FingprintFactory;
 import com.zkteco.android.biometric.module.fingerprintreader.ZKFingerService;
 import com.zkteco.android.biometric.module.fingerprintreader.exception.FingerprintException;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean bstart = false;
     private boolean isRegister = false;
     private int uid = 1;
-    Button debug;
+    Button debug,inBtn,outbtn;
     private byte[][] regtemparray = new byte[3][2048];  //register template buffer array
     private int enrollidx = 0;
     private byte[] lastRegTemp = new byte[2048];
@@ -72,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
     String name;
     TextView dateUser;
     TextView timeUser;
+    String status ;
 
     private JsonPlaceHolderApi jsonPlaceHolderApi;
     private FingerprintSensor fingerprintSensor = null;
@@ -94,23 +93,44 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    //post id to get date
-    public void createPostDate(int id) {
 
-        User user = new User(id);
-        Call<User> call = jsonPlaceHolderApi.createPostDate(user);
-        call.enqueue(new Callback<User>() {
+    public void  createPostDate(int id , String date1, String time, String status){
+        Date date = new Date(id," "+date1," "+ time,""+ status);
+        Call<Date>  call = jsonPlaceHolderApi.createPostDate(date);
+        call.enqueue(new Callback<Date>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                User user1 = response.body();
+            public void onResponse(Call<Date> call, Response<Date> response) {
+                Date date2 = response.body();
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
+            public void onFailure(Call<Date> call, Throwable t) {
 
             }
         });
     }
+
+
+
+
+
+    //post id to get date
+//    public void createPostId(int id) {
+//
+//        User user = new User(id);
+//        Call<User> call = jsonPlaceHolderApi.createPostId(user);
+//        call.enqueue(new Callback<User>() {
+//            @Override
+//            public void onResponse(Call<User> call, Response<User> response) {
+//                User user1 = response.body();
+//            }
+//
+//            @Override
+//            public void onFailure(Call<User> call, Throwable t) {
+//
+//            }
+//        });
+//    }
 
 
     //get API
@@ -196,6 +216,8 @@ public class MainActivity extends AppCompatActivity {
         dateUser = (TextView) findViewById(R.id.DateUser);
         timeUser = (TextView) findViewById(R.id.timeUser);
         Button regisBtn = (Button) findViewById(R.id.registerBtn);
+        inBtn = (Button) findViewById(R.id.inBtn);
+        outbtn = (Button) findViewById(R.id.outBtn);
         regisBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -222,6 +244,18 @@ public class MainActivity extends AppCompatActivity {
         InitDevice();
         startFingerprintSensor();
         getPosts();
+        outbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                status = "ออก";
+            }
+        });
+        inBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                status = "เข้า";
+            }
+        });
 
     }
 
@@ -377,7 +411,7 @@ public class MainActivity extends AppCompatActivity {
                                     String strRes[] = new String(bufids).split("\t");
                                     textView.setText("identify succ, userid:" + strRes[0] + ", score:" + strRes[1]);
 
-                                    createPostDate(Integer.parseInt(strRes[0]));
+//                                    createPostId(Integer.parseInt(strRes[0]));
                                     getPosts();
                                     userImage = getUser(Integer.parseInt(strRes[0]) - 1).getImguser();
                                     name = getUser(Integer.parseInt(strRes[0]) - 1).getName();
@@ -394,6 +428,9 @@ public class MainActivity extends AppCompatActivity {
                                     String formattime = simpleTimeFormat.format(c.getTime());
                                     dateUser.setText(formatdate);
                                     timeUser.setText(formattime);
+
+
+                                    createPostDate(Integer.parseInt(strRes[0]),formatdate,formattime," "+status);
 
                                 } else {
                                     //ยังไม่เคยสแกนลายนิ้วมือ

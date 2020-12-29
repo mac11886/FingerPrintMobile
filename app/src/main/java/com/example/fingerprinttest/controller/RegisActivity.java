@@ -1,17 +1,22 @@
 package com.example.fingerprinttest.controller;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
@@ -19,6 +24,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
@@ -67,6 +73,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import android.graphics.Matrix;
+import android.widget.ImageView;
 
 public class RegisActivity extends AppCompatActivity {
     private static final int VID = 6997;
@@ -82,10 +90,10 @@ public class RegisActivity extends AppCompatActivity {
     ImageView imageUser;
     EditText nameText;
     EditText ageText;
-    TextView textDropdown;
+    TextView textDropdown, takeImageText;
     Spinner spinner;
     User user;
-    Button saveBtn;
+    Button saveBtn, chooseImageBtn;
     String interestText;
     String text = "";
     String saveRegTem;
@@ -144,7 +152,7 @@ public class RegisActivity extends AppCompatActivity {
     //save API
     public void createPost() {
         int ageEdit = Integer.parseInt(ageText.getText().toString());
-        user = new User(" " + nameText.getText(), ageEdit, "" + interestText.substring(0, interestText.length() - 1), ""+encoded ,
+        user = new User(" " + nameText.getText(), ageEdit, "" + interestText.substring(0, interestText.length() - 1), "" + encoded,
                 "" + strBase64);
         Call<User> call = jsonPlaceHolderApi.createPost(user);
         call.enqueue(new Callback<User>() {
@@ -168,6 +176,7 @@ public class RegisActivity extends AppCompatActivity {
                 content += "Create_at: " + userPost.getCreated_at() + "\n";
                 // textDropdown.setText(response.body().toString());
             }
+
             @Override
             public void onFailure(Call<User> call, Throwable t) {
             }
@@ -182,6 +191,8 @@ public class RegisActivity extends AppCompatActivity {
         setContentView(R.layout.activity_regis);
         imageUser = (ImageView) findViewById(R.id.imageUser);
         statusText = (TextView) findViewById(R.id.statusText);
+
+        chooseImageBtn = (Button) findViewById(R.id.chooseandtakeImageBtn);
         imageFinger = (ImageView) findViewById(R.id.imageFinger);
         nameText = (EditText) findViewById(R.id.nameEditText);
         ageText = (EditText) findViewById(R.id.ageEditText);
@@ -189,7 +200,7 @@ public class RegisActivity extends AppCompatActivity {
         textDropdown = (TextView) findViewById(R.id.textDropdown);
         spinner = (Spinner) findViewById(R.id.spinnerInterest);
         saveBtn = (Button) findViewById(R.id.saveDataBtn);
-        ImageView  backBtn = (ImageView) findViewById(R.id.backBtn);
+        ImageView backBtn = (ImageView) findViewById(R.id.backBtn);
         //connectApi
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://ta.kisrateam.com/")
@@ -215,9 +226,16 @@ public class RegisActivity extends AppCompatActivity {
                 });
         hintSpinner.init();
 
+        //Image
+//        takeImage();
+//        getImage();
 
-        getImage();
-
+        chooseImageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectImage(RegisActivity.this);
+            }
+        });
         //fingerprint
         initDevice();
         startFingerprintSensor();
@@ -241,7 +259,7 @@ public class RegisActivity extends AppCompatActivity {
                 ageText.setText("");
                 nameText.setText("");
                 textDropdown.setText("");
-                Bitmap bmUser = Bitmap.createBitmap(149,147,Bitmap.Config.ARGB_8888);
+                Bitmap bmUser = Bitmap.createBitmap(149, 147, Bitmap.Config.ARGB_8888);
                 bmUser.eraseColor(COLOR_PALEGOLDENROD);
                 imageUser.setImageBitmap(bmUser);
                 imageFinger.setImageBitmap(bmUser);
@@ -281,45 +299,156 @@ public class RegisActivity extends AppCompatActivity {
     }
 
 
-    public void getImage() {
-        imageUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
+//    public void takeImage() {
+//
+//        takeImageText.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                startActivityForResult(cameraIntent, GALLERY_REQUEST_CODE);
+//
+//            }
+//        });
+//    }
+//
+//    public void getImage() {
+//        chooseImageText.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(Intent.ACTION_PICK);
+//                intent.setType("image/*");
+//
+//                startActivityForResult(intent, GALLERY_REQUEST_CODE);
+//            }
+//        });
+//
+//
+//    }
 
-                startActivityForResult(intent, GALLERY_REQUEST_CODE);
+
+    private void selectImage(Context context) {
+        final CharSequence[] options = {"ถ่ายรูป", "เลือกจาก Gallery", "ยกเลิก"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("เลือกรูปภาพของคุณ");
+
+
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+
+                if (options[item].equals("ถ่ายรูป")) {
+                    Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(takePicture, 0);
+                } else if (options[item].equals("เลือกจาก Gallery")) {
+                    Intent intent = new Intent(Intent.ACTION_PICK);
+                    intent.setType("image/*");
+                    startActivityForResult(intent, 1);
+
+//                    Intent pickPicture = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                    startActivityForResult(pickPicture, 1);
+                } else if (options[item].equals("ยกเลิก")) {
+                    dialog.dismiss();
+                }
             }
         });
-
-
+        builder.show();
     }
 
-    //get Image to ImageView
+    //NEW
+    //GET IMAGE TO IMAGEVIEW
+
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            Uri uri  =data.getData();
-            try {
-                Bitmap bitmap  = MediaStore.Images.Media.getBitmap(getContentResolver(),uri);
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.WEBP, 40, byteArrayOutputStream);
+        if (resultCode != RESULT_CANCELED) {
+            switch (requestCode) {
+                case 0:
+                    if (resultCode == RESULT_OK && data != null) {
+                        Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
+                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                        selectedImage.compress(Bitmap.CompressFormat.WEBP, 40, byteArrayOutputStream);
+                        byte[] byteArray = byteArrayOutputStream.toByteArray();
+                        encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                        imageUser.setImageBitmap(selectedImage);
+                    }
+                    break;
+                case 1:
+                    if (resultCode == RESULT_OK && data != null) {
+                        Uri uri = data.getData();
+                        try {
+                            Bundle extras = data.getExtras();
+                            //Bitmap imageBitmap = (Bitmap) extras.get("data");
+                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                            bitmap.compress(Bitmap.CompressFormat.WEBP, 40, byteArrayOutputStream);
 
-                imageUser.setImageBitmap(bitmap);
-                byte[] byteArray = byteArrayOutputStream .toByteArray();
-                encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+
+                            byte[] byteArray = byteArrayOutputStream.toByteArray();
+                            encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
 //                textDropdown.setText("encode"+encoded.length()+"\n byte"+byteArray.length);
+                            imageUser.setRotation(90);
+                            imageUser.setImageBitmap(bitmap);
+
+//                imageUser.setImageBitmap(bitmap);
+
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
 
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+//                        Uri selectedImage = data.getData();
+//                        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+//                        if (selectedImage != null) {
+//                            Cursor cursor = getContentResolver().query(selectedImage,
+//                                    filePathColumn, null, null, null);
+//                            if (cursor != null) {
+//                                cursor.moveToFirst();
+//
+//                                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//                                String picturePath = cursor.getString(columnIndex);
+//                                imageUser.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+//                                cursor.close();
+//                            }
+//                        }
+                    }
+                    break;
             }
-
         }
+
     }
+
+
+//    //OLD
+//    //get Image to ImageView
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+//            Uri uri = data.getData();
+//            try {
+//                Bundle extras = data.getExtras();
+//                Bitmap imageBitmap = (Bitmap) extras.get("data");
+//                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+//                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//                bitmap.compress(Bitmap.CompressFormat.WEBP, 40, byteArrayOutputStream);
+//
+//                byte[] byteArray = byteArrayOutputStream.toByteArray();
+//                encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+////                textDropdown.setText("encode"+encoded.length()+"\n byte"+byteArray.length);
+//imageUser.setImageBitmap(imageBitmap);
+////                imageUser.setImageBitmap(bitmap);
+//
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
+//    }
 
 
     private void initDevice() {
@@ -510,7 +639,6 @@ public class RegisActivity extends AppCompatActivity {
             statusText.setText("กรุณากด แสกนลายนิ้วมือ");
         }
     }
-
 
 
 }

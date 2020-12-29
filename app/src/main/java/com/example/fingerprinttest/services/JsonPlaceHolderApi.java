@@ -1,5 +1,6 @@
 package com.example.fingerprinttest.services;
 
+import com.example.fingerprinttest.model.Date;
 import com.example.fingerprinttest.model.User;
 
 import java.sql.Timestamp;
@@ -19,9 +20,11 @@ public interface JsonPlaceHolderApi {
     @GET("api/get-data")
     Call<List<User>> getPost();
 
+    @POST("api/date")
+    Call<Date> createPostDate(@Body Date date);
 
-    @POST("api/edit-data")
-    Call<User> createPostDate(@Body User user );
+//    @POST("api/edit-data")
+//    Call<User> createPostId(@Body User user );
 
     @POST("api/save")
     Call<User> createPost(@Body  User user);

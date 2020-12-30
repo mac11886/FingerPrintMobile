@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView imageUser;
     TextView textLog, nameUser;
     String name;
+    TextView textStatus;
     TextView dateUser;
     TextView timeUser;
     String status;
@@ -208,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.statusText);
         imageView = (ImageView) findViewById(R.id.imageView);
         imageUser = (ImageView) findViewById(R.id.imageUser);
-        textLog = (TextView) findViewById(R.id.textLog);
+        textStatus = (TextView) findViewById(R.id.textLog);
         nameUser = (TextView) findViewById(R.id.nameUser);
         dateUser = (TextView) findViewById(R.id.DateUser);
         timeUser = (TextView) findViewById(R.id.timeUser);
@@ -245,12 +246,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 status = "ออก";
+                textStatus.setText("ออก");
             }
+
         });
         inBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 status = "เข้า";
+                textStatus.setText("เข้า");
             }
         });
 
@@ -426,6 +430,9 @@ public class MainActivity extends AppCompatActivity {
                                     dateUser.setText(formatdate);
                                     timeUser.setText(formattime);
 
+//                                    if (Integer.parseInt(strRes[0]) == Integer.parseInt(strRes[0]) && status =="เข้า"){
+//
+//                                    }
 
                                     createPostDate(Integer.parseInt(strRes[0]), formatdate, formattime, " " + status);
 

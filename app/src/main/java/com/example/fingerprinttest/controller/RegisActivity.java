@@ -359,17 +359,22 @@ public class RegisActivity extends AppCompatActivity {
     //GET IMAGE TO IMAGEVIEW
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void  onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_CANCELED) {
             switch (requestCode) {
                 case 0:
                     if (resultCode == RESULT_OK && data != null) {
                         Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
+                        Matrix matrix = new Matrix();
+                        matrix.postRotate(-90);
+                        Bitmap scaledBitmap  = Bitmap.createScaledBitmap(selectedImage,selectedImage.getWidth(),selectedImage.getHeight(),true);
+                        Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap,0,0,scaledBitmap.getWidth(),scaledBitmap.getHeight(),matrix,true);
                         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                        selectedImage.compress(Bitmap.CompressFormat.WEBP, 40, byteArrayOutputStream);
+                        rotatedBitmap.compress(Bitmap.CompressFormat.WEBP, 40, byteArrayOutputStream);
                         byte[] byteArray = byteArrayOutputStream.toByteArray();
                         encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+
                         imageUser.setImageBitmap(selectedImage);
                     }
                     break;

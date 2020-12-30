@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean bstart = false;
     private boolean isRegister = false;
     private int uid = 1;
-    Button debug,inBtn,outbtn;
+    Button debug, inBtn, outbtn;
     private byte[][] regtemparray = new byte[3][2048];  //register template buffer array
     private int enrollidx = 0;
     private byte[] lastRegTemp = new byte[2048];
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     String name;
     TextView dateUser;
     TextView timeUser;
-    String status ;
+    String status;
 
     private JsonPlaceHolderApi jsonPlaceHolderApi;
     private FingerprintSensor fingerprintSensor = null;
@@ -94,9 +94,9 @@ public class MainActivity extends AppCompatActivity {
     };
 
 
-    public void  createPostDate(int id , String date1, String time, String status){
-        Date date = new Date(id," "+date1," "+ time,""+ status);
-        Call<Date>  call = jsonPlaceHolderApi.createPostDate(date);
+    public void createPostDate(int id, String date1, String time, String status) {
+        Date date = new Date(id, " " + date1, " " + time, "" + status);
+        Call<Date> call = jsonPlaceHolderApi.createPostDate(date);
         call.enqueue(new Callback<Date>() {
             @Override
             public void onResponse(Call<Date> call, Response<Date> response) {
@@ -109,9 +109,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
 
 
     //post id to get date
@@ -430,7 +427,7 @@ public class MainActivity extends AppCompatActivity {
                                     timeUser.setText(formattime);
 
 
-                                    createPostDate(Integer.parseInt(strRes[0]),formatdate,formattime," "+status);
+                                    createPostDate(Integer.parseInt(strRes[0]), formatdate, formattime, " " + status);
 
                                 } else {
                                     //ยังไม่เคยสแกนลายนิ้วมือ

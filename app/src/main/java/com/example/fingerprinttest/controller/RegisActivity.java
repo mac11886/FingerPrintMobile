@@ -73,6 +73,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
 import android.graphics.Matrix;
 import android.widget.ImageView;
 
@@ -220,15 +221,12 @@ public class RegisActivity extends AppCompatActivity {
 
                         text += interest[position];
                         text += ",";
-                        textDropdown.setText("" + text);
+                        textDropdown.setText("" + text.substring(0, text.length() - 1));
                         interestText = text;
                     }
                 });
         hintSpinner.init();
 
-        //Image
-//        takeImage();
-//        getImage();
 
         chooseImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -255,6 +253,7 @@ public class RegisActivity extends AppCompatActivity {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                detectValid();
                 createPost();
                 ageText.setText("");
                 nameText.setText("");
@@ -285,6 +284,22 @@ public class RegisActivity extends AppCompatActivity {
         }
     };
 
+
+    private void detectValid() {
+        if (nameText.getText().toString().isEmpty()) {
+            nameText.setError("กรุณาใส่ชื่อ");
+            nameText.requestFocus();
+        }
+
+        if (ageText.getText().toString().isEmpty()) {
+            ageText.setError("กรุณาใส่อายุ");
+            ageText.requestFocus();
+        }
+
+        if (imageUser.getDrawable().isVisible()) ;
+
+
+    }
 
     private void startFingerprintSensor() {
         // Define output log level
@@ -357,9 +372,8 @@ public class RegisActivity extends AppCompatActivity {
 
     //NEW
     //GET IMAGE TO IMAGEVIEW
-
     @Override
-    protected void  onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_CANCELED) {
             switch (requestCode) {
@@ -368,8 +382,8 @@ public class RegisActivity extends AppCompatActivity {
                         Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
                         Matrix matrix = new Matrix();
                         matrix.postRotate(-90);
-                        Bitmap scaledBitmap  = Bitmap.createScaledBitmap(selectedImage,selectedImage.getWidth(),selectedImage.getHeight(),true);
-                        Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap,0,0,scaledBitmap.getWidth(),scaledBitmap.getHeight(),matrix,true);
+                        Bitmap scaledBitmap = Bitmap.createScaledBitmap(selectedImage, selectedImage.getWidth(), selectedImage.getHeight(), true);
+                        Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
                         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                         rotatedBitmap.compress(Bitmap.CompressFormat.WEBP, 40, byteArrayOutputStream);
                         byte[] byteArray = byteArrayOutputStream.toByteArray();
@@ -576,7 +590,7 @@ public class RegisActivity extends AppCompatActivity {
                                     isRegister = false;
                                 } else {
                                     //เมื่อสแกนครั้งแรกเส้ดจะขึ้นให้แสกนอีกกี่ครั้ง
-                                    statusText.setText("กรุณาวางนิ้วอีก  " + (3 - enrollidx) + "ครั้ง ");
+                                    statusText.setText("กรุณาวางนิ้วอีก  " + (3 - enrollidx) + " ครั้ง ");
                                 }
                             } else {
                                 byte[] bufids = new byte[256];

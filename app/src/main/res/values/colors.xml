@@ -11,5 +11,10 @@
     <color name="gmint">#F5FFFA</color>
     <color name="gray">#F6F7F9</color>
     <color name="red25">#ff6961</color>
+    <color name="yellowBG">#F5DF4D</color>
+    <color name="yellowFrame">#F9EC95</color>
+    <color name="blueButton">#1255CF</color>
+    <color name="redButton">#DB3F65</color>
+    <color name="grayBg">#939597</color>
 
 </resources>

@@ -66,12 +66,12 @@ public class MainActivity extends AppCompatActivity {
     List<User> users;
     String userImage;
     ImageView imageUser;
-    TextView textLog, nameUser;
+    TextView  nameUser;
     String name;
     TextView textStatus;
     TextView dateUser;
     TextView timeUser;
-    String status;
+    String status = "เข้า";
 
     private JsonPlaceHolderApi jsonPlaceHolderApi;
     private FingerprintSensor fingerprintSensor = null;
@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Date> call, Response<Date> response) {
                 Date date2 = response.body();
+                //textLog.setText(""+response.message());
             }
 
             @Override
@@ -140,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
                 if (!response.isSuccessful()) {
                     return;
                 }
+
                 users = response.body();
                 for (User user : users) {
                     String content = "";
@@ -153,12 +155,14 @@ public class MainActivity extends AppCompatActivity {
                     content += "Create_at: " + user.getCreated_at() + "\n";
                     userImage = user.getImguser();
 
+
                 }
+//                    textStatus.setText("Respond =  "+response);
             }
 
             @Override
             public void onFailure(Call<List<User>> call, Throwable t) {
-//                textDropdown.setText(t.getMessage());
+                textStatus.setText("error = "+t.getMessage());
             }
         });
 
@@ -213,9 +217,20 @@ public class MainActivity extends AppCompatActivity {
         nameUser = (TextView) findViewById(R.id.nameUser);
         dateUser = (TextView) findViewById(R.id.DateUser);
         timeUser = (TextView) findViewById(R.id.timeUser);
-        Button regisBtn = (Button) findViewById(R.id.registerBtn);
+        ImageView regisBtn = (ImageView) findViewById(R.id.registerBtn);
+        ImageView adminBtn = (ImageView) findViewById(R.id.adminBtn);
         inBtn = (Button) findViewById(R.id.inBtn);
         outbtn = (Button) findViewById(R.id.outBtn);
+        Button goToRegisterBtn = (Button) findViewById(R.id.goToregisterBtn);
+
+        goToRegisterBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
+
         regisBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -228,6 +243,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, DebugFinger.class);
+                startActivity(intent);
+            }
+        });
+
+        adminBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AdminActivity.class);
                 startActivity(intent);
             }
         });

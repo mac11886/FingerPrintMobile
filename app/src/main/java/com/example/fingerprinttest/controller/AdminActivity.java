@@ -9,7 +9,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.example.fingerprinttest.R;
 import com.example.fingerprinttest.model.Payment;
@@ -38,35 +40,45 @@ public class AdminActivity extends AppCompatActivity {
     User user;
     ArrayList copy;
     Button linkBtn;
+    ImageView goToAdmin ,goToRegister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
 
-        //connectApi
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://ta.kisrateam.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-//        getPosts();
 
-//        recycler_view = findViewById(R.id.recycler_view);
-//        setRecyclerView();
-        linkBtn = (Button) findViewById(R.id.linkBtn);
+        goToAdmin = (ImageView) findViewById(R.id.goToAdmin);
+        goToRegister = (ImageView) findViewById(R.id.goToRegister);
 
-        linkBtn.setOnClickListener(new View.OnClickListener() {
+
+
+
+
+        goToRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "http://www.google.com";
-                Intent browserIntent =  new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                startActivity(browserIntent);
+                Intent intent = new Intent(AdminActivity.this,RegisterActivity.class);
+                startActivity(intent);
             }
         });
 
 
 
+        goToAdmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String url = "https://ta.kisrateam.com/login";
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(browserIntent);
+
+
+//                WebView webView = new WebView(v.getContext());
+//                setContentView(webView);
+//                webView.loadUrl("https://ta.kisrateam.com/login");
+            }
+        });
 
 
     }

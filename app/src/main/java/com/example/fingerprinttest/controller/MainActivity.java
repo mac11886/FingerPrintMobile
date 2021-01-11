@@ -9,12 +9,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.net.Uri;
 import android.os.Bundle;
 
 import android.text.format.Time;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -217,39 +219,46 @@ public class MainActivity extends AppCompatActivity {
         nameUser = (TextView) findViewById(R.id.nameUser);
         dateUser = (TextView) findViewById(R.id.DateUser);
         timeUser = (TextView) findViewById(R.id.timeUser);
-        ImageView regisBtn = (ImageView) findViewById(R.id.registerBtn);
+//        ImageView regisBtn = (ImageView) findViewById(R.id.registerBtn);
         ImageView adminBtn = (ImageView) findViewById(R.id.adminBtn);
         inBtn = (Button) findViewById(R.id.inBtn);
         outbtn = (Button) findViewById(R.id.outBtn);
-        Button goToRegisterBtn = (Button) findViewById(R.id.goToregisterBtn);
+//        Button goToRegisterBtn = (Button) findViewById(R.id.goToregisterBtn);
 
-        goToRegisterBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,RegisterActivity.class);
-                startActivity(intent);
-            }
-        });
+//        regisBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this,RegisterActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
-        regisBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, RegisActivity.class);
-                startActivity(intent);
-            }
-        });
-        debug = (Button) findViewById(R.id.debugpage);
-        debug.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, DebugFinger.class);
-                startActivity(intent);
-            }
-        });
+//        goToRegisterBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this, RegisActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+//        debug = (Button) findViewById(R.id.debugpage);
+//        debug.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this, DebugFinger.class);
+//                startActivity(intent);
+//            }
+//        });
 
         adminBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                WebView webView = new WebView(v.getContext());
+//                setContentView(webView);
+//                webView.loadUrl("https://ta.kisrateam.com/login");
+//                String url = "https://ta.kisrateam.com/login" ;
+//                Intent browserIntent =  new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+//                startActivity(browserIntent);
+
                 Intent intent = new Intent(MainActivity.this, AdminActivity.class);
                 startActivity(intent);
             }
@@ -265,6 +274,7 @@ public class MainActivity extends AppCompatActivity {
         InitDevice();
         startFingerprintSensor();
         getPosts();
+        textStatus.setText(status);
         outbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -433,18 +443,19 @@ public class MainActivity extends AppCompatActivity {
                                 // register success เมื่อสแกนอีกรอบจะขึ้นอันนี้
                                 if (ret > 0) {
                                     String strRes[] = new String(bufids).split("\t");
-                                    textView.setText("identify succ, userid:" + strRes[0] + ", score:" + strRes[1]);
-
+//                                    textView.setText("identify succ, userid:" + strRes[0] + ", score:" + strRes[1]);
+                                    textView.setText("สแกนเสร็จสิ้น,ความชัด " + strRes[1] +"%" );
 //                                    createPostId(Integer.parseInt(strRes[0]));
                                     getPosts();
                                     userImage = getUser(Integer.parseInt(strRes[0]) - 1).getImguser();
                                     name = getUser(Integer.parseInt(strRes[0]) - 1).getName();
                                     nameUser.setText("" + name);
-//                                    textLog.setText("str0=" + users.get(Integer.parseInt(strRes[0]) - 1).getId() + "\n size" + users.size());
                                     byte[] decodedString = Base64.decode(userImage, Base64.DEFAULT);
                                     Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                                     imageUser.setImageBitmap(decodedByte);
 
+
+                                    // DATE
                                     Calendar c = Calendar.getInstance();
                                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
                                     SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("HH:mm:ss");
@@ -453,15 +464,11 @@ public class MainActivity extends AppCompatActivity {
                                     dateUser.setText(formatdate);
                                     timeUser.setText(formattime);
 
-//                                    if (Integer.parseInt(strRes[0]) == Integer.parseInt(strRes[0]) && status =="เข้า"){
-//
-//                                    }
-
                                     createPostDate(Integer.parseInt(strRes[0]), formatdate, formattime, " " + status);
 
                                 } else {
                                     //ยังไม่เคยสแกนลายนิ้วมือ
-                                    textView.setText("identify fail");
+                                    textView.setText("กรุณาสแกนใหม่อีกครั้ง");
                                 }
                                 //Base64 Template
                                 //String strBase64 = Base64.encodeToString(tmpBuffer, 0, fingerprintSensor.getLastTempLen(), Base64.NO_WRAP);

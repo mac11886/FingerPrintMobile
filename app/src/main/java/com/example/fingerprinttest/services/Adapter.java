@@ -110,12 +110,10 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                             if (title.getTextColors().getDefaultColor() == Color.RED){
                                 title.setTextColor(Color.BLACK);
                                 content=  content.replaceAll("Photography,","");
-                                Toast.makeText(v.getContext(), "ITEM0 -->  RED " , Toast.LENGTH_LONG).show();
 
                             }else {
                                 title.setTextColor(Color.RED);
                                 content += item0 + ",";
-                                Toast.makeText(v.getContext(), "Click --> " + item0, Toast.LENGTH_LONG).show();
                             }
 
                             System.out.println(""+Color.RED);
@@ -126,60 +124,50 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                             if (title.getTextColors().getDefaultColor() == Color.RED){
                                 title.setTextColor(Color.BLACK);
                                 content=  content.replaceAll("Animals,","");
-                                Toast.makeText(v.getContext(), "ITEM1 -->  RED " , Toast.LENGTH_LONG).show();
 
                             }else {
                                 title.setTextColor(Color.RED);
                                 content += item1 + ",";
-                                Toast.makeText(v.getContext(), "Click --> " + item1, Toast.LENGTH_LONG).show();
                             }
                            break;
                         case 2:
                             if (title.getTextColors().getDefaultColor() == Color.RED){
                                 title.setTextColor(Color.BLACK);
                                 content=  content.replaceAll("Camping,","");
-                                Toast.makeText(v.getContext(), "ITEM2 -->  RED " , Toast.LENGTH_LONG).show();
 
                             }else {
                                 title.setTextColor(Color.RED);
                                 content += item2 + ",";
-                                Toast.makeText(v.getContext(), "Click --> " + item2, Toast.LENGTH_LONG).show();
                             }
                             break;
                         case 3:
                             if (title.getTextColors().getDefaultColor() == Color.RED){
                                 title.setTextColor(Color.BLACK);
                                 content=  content.replaceAll("Sport,","");
-                                Toast.makeText(v.getContext(), "ITEM3 -->  RED " , Toast.LENGTH_LONG).show();
 
                             }else {
                                 title.setTextColor(Color.RED);
                                 content += item3 + ",";
-                                Toast.makeText(v.getContext(), "Click --> " + item3, Toast.LENGTH_LONG).show();
                             }
                             break;
                         case 4:
                             if (title.getTextColors().getDefaultColor() == Color.RED){
                                 title.setTextColor(Color.BLACK);
                                 content=  content.replaceAll("Game,","");
-                                Toast.makeText(v.getContext(), "ITEM4 -->  RED " , Toast.LENGTH_LONG).show();
 
                             }else {
                                 title.setTextColor(Color.RED);
                                 content += item4 + ",";
-                                Toast.makeText(v.getContext(), "Click --> " + item4, Toast.LENGTH_LONG).show();
                             }
                             break;
                         case 5:
                             if (title.getTextColors().getDefaultColor() == Color.RED){
                                 title.setTextColor(Color.BLACK);
                                 content=  content.replaceAll("Car,","");
-                                Toast.makeText(v.getContext(), "ITEM5 -->  RED " , Toast.LENGTH_LONG).show();
 
                             }else {
                                 title.setTextColor(Color.RED);
                                 content += item5 + ",";
-                                Toast.makeText(v.getContext(), "Click --> " + item5, Toast.LENGTH_LONG).show();
                             }
 
                             break;
@@ -187,24 +175,20 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                             if (title.getTextColors().getDefaultColor() == Color.RED){
                                 title.setTextColor(Color.BLACK);
                                 content=  content.replaceAll("Science,","");
-                                Toast.makeText(v.getContext(), "ITEM6 -->  RED " , Toast.LENGTH_LONG).show();
 
                             }else {
                                 title.setTextColor(Color.RED);
                                 content += item6 + ",";
-                                Toast.makeText(v.getContext(), "Click --> " + item6, Toast.LENGTH_LONG).show();
                             }
                             break;
                         case 7:
                             if (title.getTextColors().getDefaultColor() == Color.RED){
                                 title.setTextColor(Color.BLACK);
                                 content=  content.replaceAll("Cooking,","");
-                                Toast.makeText(v.getContext(), "ITEM7 -->  RED " , Toast.LENGTH_LONG).show();
 
                             }else {
                                 title.setTextColor(Color.RED);
                                 content += item7 + ",";
-                                Toast.makeText(v.getContext(), "Click --> " + item7, Toast.LENGTH_LONG).show();
                             }
                             break;
                     }

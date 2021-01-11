@@ -2,6 +2,7 @@ package com.example.fingerprinttest.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -60,6 +61,7 @@ public class RegisterActivity2 extends AppCompatActivity {
     String imgUser;
     String finger;
     String interest;
+    AlertDialog.Builder builder;
     private static final int VID = 6997;
     private static final int PID = 288;
     int dataFinger;
@@ -104,12 +106,36 @@ public class RegisterActivity2 extends AppCompatActivity {
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RegisterActivity2.this, RegisterActivity3.class);
-                intent.putExtra("nameUser", name);
-                intent.putExtra("ageUser", age);
-                intent.putExtra("imgUser", imgUser);
-                intent.putExtra("fingerprint", strBase64);
-                startActivity(intent);
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                if (firstImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle).getConstantState() || firstImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle_error_finger).getConstantState()) {
+                    builder.setMessage("กรุณาสแกนนิ้วให้เสร็จสิ้น").setTitle("ใส่ข้อมูลให้ครบ");
+                    AlertDialog alert = builder.create();
+                    //Setting the title manually
+                    alert.setTitle("แจ้งเตือน");
+                    alert.show();
+                } else if (secondImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle).getConstantState() || secondImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle_error_finger).getConstantState()) {
+                    builder.setMessage("กรุณาสแกนนิ้วให้เสร็จสิ้น").setTitle("ใส่ข้อมูลให้ครบ");
+                    AlertDialog alert = builder.create();
+
+                    //Setting the title manually
+                    alert.setTitle("แจ้งเตือน");
+                    alert.show();
+                } else if (thridImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle).getConstantState() || thridImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle_error_finger).getConstantState()) {
+                    builder.setMessage("กรุณาสแกนนิ้วให้เสร็จสิ้น").setTitle("ใส่ข้อมูลให้ครบ");
+                    AlertDialog alert = builder.create();
+                    alert.setTitle("แจ้งเตือน");
+
+                    //Setting the title manually
+
+                    alert.show();
+                } else {
+                    Intent intent = new Intent(RegisterActivity2.this, RegisterActivity3.class);
+                    intent.putExtra("nameUser", name);
+                    intent.putExtra("ageUser", age);
+                    intent.putExtra("imgUser", imgUser);
+                    intent.putExtra("fingerprint", strBase64);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -203,6 +229,7 @@ public class RegisterActivity2 extends AppCompatActivity {
             if (bstart) return;
             fingerprintSensor.open(0);
             getPosts();
+
             for (User user : users) {
                 byte[] byte2 = Base64.decode(user.getFingerprint(), Base64.NO_WRAP);
                 int ret = ZKFingerService.save(byte2, " " + user.getId());
@@ -262,7 +289,10 @@ public class RegisterActivity2 extends AppCompatActivity {
                                 if (ret > 0) {
                                     String strRes[] = new String(bufids).split("\t");
                                     // finger has registry
-                                    scanText.setText("ลายนิ้วมือนี้ได้ทำการลงทะเบียนแล้วโดย " + strRes[0] + ",ยกเลิกการลงทะเบียน");
+                                    firstImage.setImageResource(R.drawable.shape_rectangle);
+                                    secondImage.setImageResource(R.drawable.shape_rectangle);
+                                    thridImage.setImageResource(R.drawable.shape_rectangle);
+                                    scanText.setText("ลายนิ้วมือนี้ได้ทำการลงทะเบียนแล้ว" + " กดลงทะเบียนใหม่");
                                     isRegister = false;
                                     enrollidx = 0;
                                     return;
@@ -293,7 +323,9 @@ public class RegisterActivity2 extends AppCompatActivity {
                                         //Base64 Template
                                         // register success
                                         strBase64 = Base64.encodeToString(regTemp, 0, ret, Base64.NO_WRAP);
-                                        scanText.setText("ลงทะเบียนเสร็จสิ้น, name :" + "คนที่ " + ZKFingerService.count());
+
+
+                                        scanText.setText("ลงทะเบียนเสร็จสิ้น");
 
 
                                     } else {
@@ -316,7 +348,7 @@ public class RegisterActivity2 extends AppCompatActivity {
                                     }
 
                                     //เมื่อสแกนครั้งแรกเส้ดจะขึ้นให้แสกนอีกกี่ครั้ง
-                                    scanText.setText("กรุณาวางนิ้วอีก  " + (3 - enrollidx) + "ครั้ง ");
+                                    scanText.setText("กรุณาวางนิ้วอีก  " + (3 - enrollidx) + " ครั้ง ");
                                 }
                             } else {
                                 byte[] bufids = new byte[256];

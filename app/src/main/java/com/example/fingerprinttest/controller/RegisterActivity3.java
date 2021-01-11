@@ -12,6 +12,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.fingerprinttest.R;
 import com.example.fingerprinttest.model.User;
@@ -22,7 +23,6 @@ import com.example.fingerprinttest.services.JsonPlaceHolderApi;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,7 +38,7 @@ public class RegisterActivity3 extends AppCompatActivity implements DatatoActivi
     List<Integer> images;
     Adapter adapter;
     Button nextBtn;
-
+    TextView textLog;
     String name ;
     String age ;
     String imgUser;
@@ -52,7 +52,7 @@ public class RegisterActivity3 extends AppCompatActivity implements DatatoActivi
         setContentView(R.layout.activity_register3);
         nextBtn = findViewById(R.id.nextBtn3);
         dataList = findViewById(R.id.dataList);
-
+        textLog = findViewById(R.id.textRegis);
         //regispage 1
          name = getIntent().getStringExtra("nameUser");
          age = getIntent().getStringExtra("ageUser");
@@ -87,7 +87,7 @@ public class RegisterActivity3 extends AppCompatActivity implements DatatoActivi
                 System.out.println("INTEREST: " +adapter.getSentdata());
 //                Log.e("TEST",interest);
                 Intent intent = new Intent(RegisterActivity3.this, MainActivity.class);
-                startActivity(intent);
+//                startActivity(intent);
             }
         });
 
@@ -106,10 +106,10 @@ public class RegisterActivity3 extends AppCompatActivity implements DatatoActivi
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (!response.isSuccessful()) {
-                    //textDropdown.setText("Code ERROR : " + response.code());
+                    textLog.setText("Code ERROR : " + response.code());
                     return;
                 }
-                //textDropdown.setText("success");
+                textLog.setText("" +response.code());
                 //
                 User userPost = response.body();
                 String content = "";

@@ -2,6 +2,7 @@ package com.example.fingerprinttest.controller;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -9,14 +10,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.fingerprinttest.R;
@@ -65,10 +69,12 @@ public class RegisterActivity extends AppCompatActivity {
                     ageText.setError("กรุณาใส่อายุ");
                     ageText.requestFocus();
                 } else if (detectValid() == 3) {
-                    builder.setMessage("กรุณาใส่รูป").setTitle("ใส่ข้อมูลให้ครบ");
                     AlertDialog alert = builder.create();
+                    alert.setIcon(R.drawable.ic_error);
+
                     //Setting the title manually
                     alert.setTitle("แจ้งเตือน");
+                    alert.setMessage("กรุณาใส่รูปภาพ");
                     alert.show();
                 } else {
                     //sent data to post on API
@@ -85,6 +91,34 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void showWarningDialog() {
+        ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.layoutDialog);
+        TextView textTitle = (TextView) findViewById(R.id.titleText);
+        TextView textMessage = (TextView) findViewById(R.id.messageText);
+        Button buttonAction = (Button) findViewById(R.id.buttonAction);
+        ImageView imageIcon = (ImageView) findViewById(R.id.imageIcon);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
+        View view = LayoutInflater.from(this).inflate(
+                R.layout.layout_warning_dialog, constraintLayout);
+        builder.setView(view);
+        textTitle.setText(" ======");
+        textMessage.setText(" HI ");
+        buttonAction.setText("OK");
+        imageIcon.setImageResource(R.drawable.ic_error);
+
+        AlertDialog alertDialog = builder.create();
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        if (alertDialog.getWindow() != null) {
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        }
     }
 
     private int detectValid() {

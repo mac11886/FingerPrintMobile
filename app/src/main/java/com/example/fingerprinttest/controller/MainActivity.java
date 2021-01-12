@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
     TextView dateUser;
     TextView timeUser;
     String status = "เข้า";
-
     private JsonPlaceHolderApi jsonPlaceHolderApi;
     private FingerprintSensor fingerprintSensor = null;
 
@@ -223,6 +222,15 @@ public class MainActivity extends AppCompatActivity {
         ImageView adminBtn = (ImageView) findViewById(R.id.adminBtn);
         inBtn = (Button) findViewById(R.id.inBtn);
         outbtn = (Button) findViewById(R.id.outBtn);
+        Button btn3 = (Button) findViewById(R.id.goToRegister3);
+        btn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,RegisterActivity3.class);
+                startActivity(intent);
+
+            }
+        });
 //        Button goToRegisterBtn = (Button) findViewById(R.id.goToregisterBtn);
 
 //        regisBtn.setOnClickListener(new View.OnClickListener() {

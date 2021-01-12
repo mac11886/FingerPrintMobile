@@ -31,7 +31,13 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     String content = " ";
 
 
+    int countInterest = 0;
+
     String sentdata = "";
+
+    public int getCountInterest() {
+        return countInterest;
+    }
 
     public String getSentdata() {
         return sentdata;
@@ -107,88 +113,98 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
                     switch (getAdapterPosition()) {
                         case 0:
-                            if (title.getTextColors().getDefaultColor() == Color.RED){
+                            if (title.getTextColors().getDefaultColor() == Color.RED) {
                                 title.setTextColor(Color.BLACK);
-                                content=  content.replaceAll("Photography,","");
-
-                            }else {
+                                content = content.replaceAll("Photography,", "");
+                                countInterest -= 1;
+                            } else {
                                 title.setTextColor(Color.RED);
                                 content += item0 + ",";
+                                countInterest += 1;
+
                             }
 
-                            System.out.println(""+Color.RED);
-                            System.out.println(""+title.getTextColors().getDefaultColor());
+                            System.out.println("" + Color.RED);
+                            System.out.println("" + title.getTextColors().getDefaultColor());
                             //itemView.setBackgroundResource(R.color.black);
                             break;
                         case 1:
-                            if (title.getTextColors().getDefaultColor() == Color.RED){
+                            if (title.getTextColors().getDefaultColor() == Color.RED) {
                                 title.setTextColor(Color.BLACK);
-                                content=  content.replaceAll("Animals,","");
-
-                            }else {
+                                content = content.replaceAll("Animals,", "");
+                                countInterest -= 1;
+                            } else {
                                 title.setTextColor(Color.RED);
                                 content += item1 + ",";
-                            }
-                           break;
-                        case 2:
-                            if (title.getTextColors().getDefaultColor() == Color.RED){
-                                title.setTextColor(Color.BLACK);
-                                content=  content.replaceAll("Camping,","");
+                                countInterest += 1;
 
-                            }else {
+                            }
+                            break;
+                        case 2:
+                            if (title.getTextColors().getDefaultColor() == Color.RED) {
+                                title.setTextColor(Color.BLACK);
+                                content = content.replaceAll("Camping,", "");
+                                countInterest -= 1;
+                            } else {
                                 title.setTextColor(Color.RED);
                                 content += item2 + ",";
+                                countInterest += 1;
                             }
                             break;
                         case 3:
-                            if (title.getTextColors().getDefaultColor() == Color.RED){
+                            if (title.getTextColors().getDefaultColor() == Color.RED) {
                                 title.setTextColor(Color.BLACK);
-                                content=  content.replaceAll("Sport,","");
-
-                            }else {
+                                content = content.replaceAll("Sport,", "");
+                                countInterest -= 1;
+                            } else {
                                 title.setTextColor(Color.RED);
                                 content += item3 + ",";
+                                countInterest += 1;
                             }
                             break;
                         case 4:
-                            if (title.getTextColors().getDefaultColor() == Color.RED){
+                            if (title.getTextColors().getDefaultColor() == Color.RED) {
                                 title.setTextColor(Color.BLACK);
-                                content=  content.replaceAll("Game,","");
-
-                            }else {
+                                content = content.replaceAll("Game,", "");
+                                countInterest -= 1;
+                            } else {
                                 title.setTextColor(Color.RED);
                                 content += item4 + ",";
+                                countInterest += 1;
                             }
                             break;
                         case 5:
-                            if (title.getTextColors().getDefaultColor() == Color.RED){
+                            if (title.getTextColors().getDefaultColor() == Color.RED) {
                                 title.setTextColor(Color.BLACK);
-                                content=  content.replaceAll("Car,","");
-
-                            }else {
+                                content = content.replaceAll("Car,", "");
+                                countInterest -= 1;
+                            } else {
                                 title.setTextColor(Color.RED);
                                 content += item5 + ",";
+                                countInterest += 1;
                             }
 
                             break;
                         case 6:
-                            if (title.getTextColors().getDefaultColor() == Color.RED){
+                            if (title.getTextColors().getDefaultColor() == Color.RED) {
                                 title.setTextColor(Color.BLACK);
-                                content=  content.replaceAll("Science,","");
-
-                            }else {
+                                content = content.replaceAll("Science,", "");
+                                countInterest -= 1;
+                            } else {
                                 title.setTextColor(Color.RED);
                                 content += item6 + ",";
+                                countInterest += 1;
                             }
                             break;
                         case 7:
-                            if (title.getTextColors().getDefaultColor() == Color.RED){
+                            if (title.getTextColors().getDefaultColor() == Color.RED) {
                                 title.setTextColor(Color.BLACK);
-                                content=  content.replaceAll("Cooking,","");
-
-                            }else {
+                                content = content.replaceAll("Cooking,", "");
+                                countInterest -= 1;
+                            } else {
                                 title.setTextColor(Color.RED);
                                 content += item7 + ",";
+                                countInterest += 1;
                             }
                             break;
                     }

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -28,6 +29,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
+import android.graphics.Color;
+import android.widget.Toast;
 
 
 public class RegisterActivity3 extends AppCompatActivity implements DatatoActivity {
@@ -39,13 +44,15 @@ public class RegisterActivity3 extends AppCompatActivity implements DatatoActivi
     Adapter adapter;
     Button nextBtn;
     TextView textLog;
-    String name ;
-    String age ;
+    String name;
+    String age;
     String imgUser;
     String finger;
     String interest = "";
-
+    int countInterest;
+    AlertDialog.Builder builder;
     private JsonPlaceHolderApi jsonPlaceHolderApi;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,12 +60,13 @@ public class RegisterActivity3 extends AppCompatActivity implements DatatoActivi
         nextBtn = findViewById(R.id.nextBtn3);
         dataList = findViewById(R.id.dataList);
         textLog = findViewById(R.id.textRegis);
+        builder = new AlertDialog.Builder(this);
         //regispage 1
-         name = getIntent().getStringExtra("nameUser");
-         age = getIntent().getStringExtra("ageUser");
-         imgUser = getIntent().getStringExtra("imgUser");
+        name = getIntent().getStringExtra("nameUser");
+        age = getIntent().getStringExtra("ageUser");
+        imgUser = getIntent().getStringExtra("imgUser");
         //regispage 2
-         finger = getIntent().getStringExtra("fingerprint");
+        finger = getIntent().getStringExtra("fingerprint");
 
 
         interest = getIntent().getStringExtra("interest");
@@ -72,28 +80,52 @@ public class RegisterActivity3 extends AppCompatActivity implements DatatoActivi
         jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
 
-       addCard();
+        addCard();
 
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                SweetAlertDialog pDialog = new SweetAlertDialog(getApplicationContext(), SweetAlertDialog.PROGRESS_TYPE);
-//                pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-//                pDialog.setTitleText("Loading");
-//                pDialog.setCancelable(false);
-//                pDialog.show();
-                createPost();
-                System.out.println("----------------------");
-                System.out.println("INTEREST: " +adapter.getSentdata());
+
+                if (adapter.getCountInterest() > 4 || adapter.getCountInterest() == 0){
+                    new SweetAlertDialog(RegisterActivity3.this)
+                            .setTitleText("เลือกสิ่งที่สนใจได้ 1-4 ตัวเลือก")
+                            .show();
+                }
+                else {
+
+                    new SweetAlertDialog(RegisterActivity3.this)
+                            .setTitleText("SUCCESS YEAH!!!!")
+                            .show();
+                    Log.e("ERROR",""+adapter.getCountInterest());
+//                AlertDialog alert = builder.create();
+//                alert.setIcon(R.drawable.ic_error);
+//                //Setting the title manually
+//                alert.setTitle("แจ้งเตือน");
+//                alert.setMessage("ลงทะเบียนเสร็จสิ้น");
+//                alert.show();
+//                    createPost();
+                    System.out.println("----------------------");
+                    System.out.println("INTEREST: " + adapter.getSentdata());
 //                Log.e("TEST",interest);
-                Intent intent = new Intent(RegisterActivity3.this, MainActivity.class);
+                    Intent intent = new Intent(RegisterActivity3.this, MainActivity.class);
+
+                    getIntent().removeExtra("nameUser");
+                    getIntent().removeExtra("ageUser");
+                    getIntent().removeExtra("imgUser");
+                    getIntent().removeExtra("fingerprint");
+                    getIntent().removeExtra("interest");
 //                startActivity(intent);
+
+
+
+                }
+
+
             }
         });
 
 
     }
-
 
 
     //save API
@@ -109,7 +141,7 @@ public class RegisterActivity3 extends AppCompatActivity implements DatatoActivi
                     textLog.setText("Code ERROR : " + response.code());
                     return;
                 }
-                textLog.setText("" +response.code());
+                textLog.setText("" + response.code());
                 //
                 User userPost = response.body();
                 String content = "";
@@ -133,7 +165,7 @@ public class RegisterActivity3 extends AppCompatActivity implements DatatoActivi
     }
 
 
-    public  void addCard(){
+    public void addCard() {
         titles = new ArrayList<>();
         images = new ArrayList<>();
         titles.add("Photography");
@@ -168,8 +200,8 @@ public class RegisterActivity3 extends AppCompatActivity implements DatatoActivi
 
     @Override
     public void sendData(String string) {
-       Intent intent = new Intent(getApplicationContext(),RegisterActivity3.class);
-            intent.putExtra("interest",string);
+        Intent intent = new Intent(getApplicationContext(), RegisterActivity3.class);
+        intent.putExtra("interest", string);
 //        Handler handler = new Handler(Looper.getMainLooper());
 //      handler.post()
 

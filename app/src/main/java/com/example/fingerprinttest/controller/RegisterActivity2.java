@@ -72,6 +72,7 @@ public class RegisterActivity2 extends AppCompatActivity {
     private byte[][] regtemparray = new byte[3][2048];  //register template buffer array
     private int enrollidx = 0;
     private byte[] lastRegTemp = new byte[2048];
+
     private FingerprintSensor fingerprintSensor = null;
     private final String ACTION_USB_PERMISSION = "com.zkteco.silkiddemo.USB_PERMISSION";
     private JsonPlaceHolderApi jsonPlaceHolderApi;
@@ -81,7 +82,7 @@ public class RegisterActivity2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register2);
-
+        builder = new AlertDialog.Builder(this);
         firstImage = (ImageView) findViewById(R.id.firstImage);
         secondImage = (ImageView) findViewById(R.id.secondImage);
         thridImage = (ImageView) findViewById(R.id.thridImage);
@@ -232,8 +233,7 @@ public class RegisterActivity2 extends AppCompatActivity {
 
             for (User user : users) {
                 byte[] byte2 = Base64.decode(user.getFingerprint(), Base64.NO_WRAP);
-                int ret = ZKFingerService.save(byte2, " " + user.getId());
-
+//                int ret = ZKFingerService.save(byte2, " " + user.getId());
             }
             final FingerprintCaptureListener listener = new FingerprintCaptureListener() {
                 @Override
@@ -323,9 +323,15 @@ public class RegisterActivity2 extends AppCompatActivity {
                                         //Base64 Template
                                         // register success
                                         strBase64 = Base64.encodeToString(regTemp, 0, ret, Base64.NO_WRAP);
+                                        AlertDialog alert = builder.create();
+                                        alert.setIcon(R.drawable.ic_error);
+                                        //Setting the title manually
+                                        alert.setTitle("แจ้งเตือน");
+                                        alert.setMessage("ลงทะเบียนเสร็จสิ้น");
 
+                                        alert.show();
 
-                                        scanText.setText("ลงทะเบียนเสร็จสิ้น");
+                                        //scanText.setText("ลงทะเบียนเสร็จสิ้น");
 
 
                                     } else {

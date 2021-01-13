@@ -47,6 +47,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     List<User> users;
     String userImage;
     ImageView imageUser;
-    TextView  nameUser;
+    TextView nameUser;
     String name;
     TextView textStatus;
     TextView dateUser;
@@ -163,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<User>> call, Throwable t) {
-                textStatus.setText("error = "+t.getMessage());
+                textStatus.setText("error = " + t.getMessage());
             }
         });
 
@@ -226,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
         btn3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,RegisterActivity3.class);
+                Intent intent = new Intent(MainActivity.this, RegisterActivity3.class);
                 startActivity(intent);
 
             }
@@ -452,7 +453,7 @@ public class MainActivity extends AppCompatActivity {
                                 if (ret > 0) {
                                     String strRes[] = new String(bufids).split("\t");
 //                                    textView.setText("identify succ, userid:" + strRes[0] + ", score:" + strRes[1]);
-                                    textView.setText("สแกนเสร็จสิ้น,ความชัด " + strRes[1] +"%" );
+                                    textView.setText("สแกนเสร็จสิ้น,ความชัด " + strRes[1] + "%");
 //                                    createPostId(Integer.parseInt(strRes[0]));
                                     getPosts();
                                     userImage = getUser(Integer.parseInt(strRes[0]) - 1).getImguser();
@@ -471,8 +472,23 @@ public class MainActivity extends AppCompatActivity {
                                     String formattime = simpleTimeFormat.format(c.getTime());
                                     dateUser.setText(formatdate);
                                     timeUser.setText(formattime);
+                                    if (status == "เข้า") {
+                                        new SweetAlertDialog(MainActivity.this, SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+                                                .setTitleText("ยินดีต้อนรับ")
+                                                .setContentText("ตั้งใจทำงานน")
+                                                .setCustomImage(R.drawable.ic_welcome)
+                                                .show();
+                                        createPostDate(Integer.parseInt(strRes[0]), formatdate, formattime, " " + status);
 
-                                    createPostDate(Integer.parseInt(strRes[0]), formatdate, formattime, " " + status);
+                                    }else if(status == "ออก"){
+                                        new SweetAlertDialog(MainActivity.this, SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+                                                .setTitleText("บ้ายบายย")
+                                                .setContentText("กลับดีๆน้าาา")
+                                                .setCustomImage(R.drawable.ic_goodbye)
+                                                .show();
+                                        createPostDate(Integer.parseInt(strRes[0]), formatdate, formattime, " " + status);
+
+                                    }
 
                                 } else {
                                     //ยังไม่เคยสแกนลายนิ้วมือ
@@ -503,9 +519,9 @@ public class MainActivity extends AppCompatActivity {
                 fingerprintSensor.stopCapture(0);
                 bstart = false;
                 fingerprintSensor.close(0);
-                textView.setText("stop capture succ");
+                textView.setText("ปิดเครื่องเสร็จสิ้น");
             } else {
-                textView.setText("already stop");
+                textView.setText("ยังไม่ได้เปิดเครื่อง");
             }
         } catch (FingerprintException e) {
             textView.setText("stop fail, errno=" + e.getErrorCode() + "\nmessage=" + e.getMessage());

@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.fingerprinttest.R;
 import com.example.fingerprinttest.model.User;
@@ -41,6 +42,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -109,33 +111,40 @@ public class RegisterActivity2 extends AppCompatActivity {
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                 if (firstImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle).getConstantState() || firstImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle_error_finger).getConstantState()) {
-                    builder.setMessage("กรุณาสแกนนิ้วให้เสร็จสิ้น").setTitle("ใส่ข้อมูลให้ครบ");
-                    AlertDialog alert = builder.create();
-                    //Setting the title manually
-                    alert.setTitle("แจ้งเตือน");
-                    alert.show();
+//                    builder.setMessage("กรุณาสแกนนิ้วให้เสร็จสิ้น").setTitle("ใส่ข้อมูลให้ครบ");
+//                    AlertDialog alert = builder.create();
+//                    //Setting the title manually
+//                    alert.setTitle("แจ้งเตือน");
+//                    alert.show();
+                    new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Oops...")
+                            .setContentText("Something went wrong!")
+                            .show();
                 } else if (secondImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle).getConstantState() || secondImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle_error_finger).getConstantState()) {
-                    builder.setMessage("กรุณาสแกนนิ้วให้เสร็จสิ้น").setTitle("ใส่ข้อมูลให้ครบ");
-                    AlertDialog alert = builder.create();
-
-                    //Setting the title manually
-                    alert.setTitle("แจ้งเตือน");
-                    alert.show();
+//                    builder.setMessage("กรุณาสแกนนิ้วให้เสร็จสิ้น").setTitle("ใส่ข้อมูลให้ครบ");
+//                    AlertDialog alert = builder.create();
+//
+//                    //Setting the title manually
+//                    alert.setTitle("แจ้งเตือน");
+//                    alert.show();
+                    new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Oops...")
+                            .setContentText("Something went wrong!")
+                            .show();
                 } else if (thridImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle).getConstantState() || thridImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle_error_finger).getConstantState()) {
-                    builder.setMessage("กรุณาสแกนนิ้วให้เสร็จสิ้น").setTitle("ใส่ข้อมูลให้ครบ");
-                    AlertDialog alert = builder.create();
-                    alert.setTitle("แจ้งเตือน");
-
+//                    builder.setMessage("กรุณาสแกนนิ้วให้เสร็จสิ้น").setTitle("ใส่ข้อมูลให้ครบ");
+//                    AlertDialog alert = builder.create();
+//                    alert.setTitle("แจ้งเตือน");
                     //Setting the title manually
 
-                    alert.show();
+//                    alert.show();
+                    new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Oops...")
+                            .setContentText("Something went wrong!")
+                            .show();
+
                 } else {
-                    Intent intent = new Intent(RegisterActivity2.this, RegisterActivity3.class);
-                    intent.putExtra("nameUser", name);
-                    intent.putExtra("ageUser", age);
-                    intent.putExtra("imgUser", imgUser);
-                    intent.putExtra("fingerprint", strBase64);
-                    startActivity(intent);
+
                 }
             }
         });
@@ -292,7 +301,11 @@ public class RegisterActivity2 extends AppCompatActivity {
                                     firstImage.setImageResource(R.drawable.shape_rectangle);
                                     secondImage.setImageResource(R.drawable.shape_rectangle);
                                     thridImage.setImageResource(R.drawable.shape_rectangle);
-                                    scanText.setText("ลายนิ้วมือนี้ได้ทำการลงทะเบียนแล้ว" + " กดลงทะเบียนใหม่");
+                                    new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.ERROR_TYPE)
+                                            .setTitleText("Oops...")
+                                            .setContentText("ลายนิ้วมือนี้ได้ทำการลงทะเบียนแล้ว กดลงทะเบียนใหม่")
+                                            .show();
+                                    scanText.setText("ลายนิ้วมือนี้ได้ทำการลงทะเบียนแล้ว กดลงทะเบียนใหม่");
                                     isRegister = false;
                                     enrollidx = 0;
                                     return;
@@ -302,9 +315,17 @@ public class RegisterActivity2 extends AppCompatActivity {
                                     //เมื่อลงทะเบียน นิ้ว 1 ครั้งละเปลี่ยนนิ้ว จะเข้า if นี้
                                     if (enrollidx == 1) {
                                         secondImage.setImageResource(R.drawable.shape_rectangle_error_finger);
+                                        new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.ERROR_TYPE)
+                                                .setTitleText("กรุณาวางลายนิ้วมือให้เหมือนกัน 3 ครั้ง")
+                                                .setContentText("กรุณาวางนิ้วใหม่อีกครั้ง")
+                                                .show();
                                     }
                                     if (enrollidx == 2) {
                                         thridImage.setImageResource(R.drawable.shape_rectangle_error_finger);
+                                        new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.ERROR_TYPE)
+                                                .setTitleText("กรุณาวางลายนิ้วมือให้เหมือนกัน 3 ครั้ง")
+                                                .setContentText("กรุณาวางนิ้วใหม่อีกครั้ง")
+                                                .show();
                                     }
                                     scanText.setText("กรุณาวางลายนิ้วมือให้เหมือนกัน 3 ครั้ง");
                                     return;
@@ -323,21 +344,38 @@ public class RegisterActivity2 extends AppCompatActivity {
                                         //Base64 Template
                                         // register success
                                         strBase64 = Base64.encodeToString(regTemp, 0, ret, Base64.NO_WRAP);
-                                        AlertDialog alert = builder.create();
-                                        alert.setIcon(R.drawable.ic_error);
-                                        //Setting the title manually
-                                        alert.setTitle("แจ้งเตือน");
-                                        alert.setMessage("ลงทะเบียนเสร็จสิ้น");
+//                                        AlertDialog alert = builder.create();
+//                                        alert.setIcon(R.drawable.ic_error);
+//                                        //Setting the title manually
+//                                        alert.setTitle("แจ้งเตือน");
+//                                        alert.setMessage("ลงทะเบียนเสร็จสิ้น");
+//                                        alert.show();
 
-                                        alert.show();
-
-                                        //scanText.setText("ลงทะเบียนเสร็จสิ้น");
+                                        new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.SUCCESS_TYPE)
+                                                .setTitleText("ลงทะเบียนเสร็จสิ้น").setConfirmButton("next", new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+//                                                Toast.makeText(RegisterActivity2.this,"ok",Toast.LENGTH_SHORT).show();
+                                                Intent intent = new Intent(RegisterActivity2.this, RegisterActivity3.class);
+                                                intent.putExtra("nameUser", name);
+                                                intent.putExtra("ageUser", age);
+                                                intent.putExtra("imgUser", imgUser);
+                                                intent.putExtra("fingerprint", strBase64);
+                                                startActivity(intent);
+                                            }
+                                        }).show();
+                                        scanText.setText(" ");
 
 
                                     } else {
                                         firstImage.setImageResource(R.drawable.shape_rectangle_error_finger);
                                         secondImage.setImageResource(R.drawable.shape_rectangle_error_finger);
                                         thridImage.setImageResource(R.drawable.shape_rectangle_error_finger);
+                                        new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.ERROR_TYPE)
+                                                .setTitleText("ลงทะเบียนไม่สำเร็จ")
+                                                .setContentText("กดลงทะเบียนใหม่อีกครั้ง")
+                                                .show();
+
                                         scanText.setText("ลงทะเบียนไม่สำเร็จ");
                                     }
                                     isRegister = false;

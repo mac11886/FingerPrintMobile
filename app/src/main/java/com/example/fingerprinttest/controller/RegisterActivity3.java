@@ -49,7 +49,6 @@ public class RegisterActivity3 extends AppCompatActivity implements DatatoActivi
     String imgUser;
     String finger;
     String interest = "";
-    int countInterest;
     AlertDialog.Builder builder;
     private JsonPlaceHolderApi jsonPlaceHolderApi;
 
@@ -86,36 +85,55 @@ public class RegisterActivity3 extends AppCompatActivity implements DatatoActivi
             @Override
             public void onClick(View v) {
 
-                if (adapter.getCountInterest() > 4 || adapter.getCountInterest() == 0){
-                    new SweetAlertDialog(RegisterActivity3.this)
-                            .setTitleText("เลือกสิ่งที่สนใจได้ 1-4 ตัวเลือก")
-                            .show();
-                }
-                else {
+                if (adapter.getCountInterest() > 4 || adapter.getCountInterest() == 0) {
+                SweetAlertDialog dialog =    new SweetAlertDialog(RegisterActivity3.this,SweetAlertDialog.WARNING_TYPE);
+                            dialog.setTitle("Oops!");
+                            dialog.setContentText("choose 1-4 option");
+                            dialog.setCancelable(false);
+                            dialog.getProgressHelper().setBarColor(Color.parseColor("#000000"));
+                            dialog.show();
 
-                    new SweetAlertDialog(RegisterActivity3.this)
-                            .setTitleText("SUCCESS YEAH!!!!")
-                            .show();
-                    Log.e("ERROR",""+adapter.getCountInterest());
+//                            Button button = (Button) dialog.findViewById(R.id.conf)
+                } else {
+
+                   SweetAlertDialog dialog = new SweetAlertDialog(RegisterActivity3.this, SweetAlertDialog.SUCCESS_TYPE);
+                            dialog.setTitleText("OK");
+                            dialog.setContentText("SUCCESS JA  ");
+                            dialog.setConfirmText("Confirm!!");
+
+                            dialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sDialog) {
+
+                                    Intent intent = new Intent(RegisterActivity3.this, MainActivity.class);
+                                    getIntent().removeExtra("nameUser");
+                                    getIntent().removeExtra("ageUser");
+                                    getIntent().removeExtra("imgUser");
+                                    getIntent().removeExtra("fingerprint");
+                                    getIntent().removeExtra("interest");
+                                    createPost();
+                                    startActivity(intent);
+                                }
+                            });
+//                            .setCancelButton("Cancel", new SweetAlertDialog.OnSweetClickListener() {
+//                                @Override
+//                                public void onClick(SweetAlertDialog sDialog) {
+//                                    sDialog.dismissWithAnimation();
+//                                }
+//                            })
+                                    dialog.setCancelable(false);
+                            dialog.show();
+
+//                    Log.e("ERROR",""+adapter.getCountInterest());
 //                AlertDialog alert = builder.create();
 //                alert.setIcon(R.drawable.ic_error);
 //                //Setting the title manually
 //                alert.setTitle("แจ้งเตือน");
 //                alert.setMessage("ลงทะเบียนเสร็จสิ้น");
 //                alert.show();
-//                    createPost();
+
                     System.out.println("----------------------");
                     System.out.println("INTEREST: " + adapter.getSentdata());
-//                Log.e("TEST",interest);
-                    Intent intent = new Intent(RegisterActivity3.this, MainActivity.class);
-
-                    getIntent().removeExtra("nameUser");
-                    getIntent().removeExtra("ageUser");
-                    getIntent().removeExtra("imgUser");
-                    getIntent().removeExtra("fingerprint");
-                    getIntent().removeExtra("interest");
-//                startActivity(intent);
-
 
 
                 }

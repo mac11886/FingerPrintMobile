@@ -29,6 +29,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class RegisterActivity extends AppCompatActivity {
 
     ImageView imageUserRegister;
@@ -69,13 +71,18 @@ public class RegisterActivity extends AppCompatActivity {
                     ageText.setError("กรุณาใส่อายุ");
                     ageText.requestFocus();
                 } else if (detectValid() == 3) {
-                    AlertDialog alert = builder.create();
-                    alert.setIcon(R.drawable.ic_error);
+//                    AlertDialog alert = builder.create();
+//                    alert.setIcon(R.drawable.ic_error);
+//
+//                    //Setting the title manually
+//                    alert.setTitle("แจ้งเตือน");
+//                    alert.setMessage("กรุณาใส่รูปภาพ");
+//                    alert.show();
+                    new SweetAlertDialog(RegisterActivity.this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Oops...")
+                            .setContentText("กรุณาใส่รูป")
+                            .show();
 
-                    //Setting the title manually
-                    alert.setTitle("แจ้งเตือน");
-                    alert.setMessage("กรุณาใส่รูปภาพ");
-                    alert.show();
                 } else {
                     //sent data to post on API
                     String imageBase64 = encoded;

@@ -61,4 +61,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/goToRegister"
         app:layout_constraintVertical_bias="0.059" />
+
+    <ImageView
+        android:id="@+id/backBtnAdmin"
+        android:layout_width="131dp"
+        android:layout_height="108dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.887"
+        app:srcCompat="@drawable/ic_goodbye" />
 </androidx.constraintlayout.widget.ConstraintLayout>

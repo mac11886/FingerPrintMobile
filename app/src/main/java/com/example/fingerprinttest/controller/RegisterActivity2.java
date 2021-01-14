@@ -90,7 +90,7 @@ public class RegisterActivity2 extends AppCompatActivity {
         thridImage = (ImageView) findViewById(R.id.thridImage);
         scanText = (TextView) findViewById(R.id.scanText);
         scanBtn = (Button) findViewById(R.id.scanBtn);
-        nextBtn = (Button) findViewById(R.id.nextBtn2);
+//        nextBtn = (Button) findViewById(R.id.nextBtn2);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://ta.kisrateam.com/")
@@ -106,48 +106,48 @@ public class RegisterActivity2 extends AppCompatActivity {
         imgUser = getIntent().getStringExtra("imgUser");
 
 
-        nextBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                if (firstImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle).getConstantState() || firstImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle_error_finger).getConstantState()) {
-//                    builder.setMessage("กรุณาสแกนนิ้วให้เสร็จสิ้น").setTitle("ใส่ข้อมูลให้ครบ");
-//                    AlertDialog alert = builder.create();
+//        nextBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+//                if (firstImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle).getConstantState() || firstImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle_error_finger).getConstantState()) {
+////                    builder.setMessage("กรุณาสแกนนิ้วให้เสร็จสิ้น").setTitle("ใส่ข้อมูลให้ครบ");
+////                    AlertDialog alert = builder.create();
+////                    //Setting the title manually
+////                    alert.setTitle("แจ้งเตือน");
+////                    alert.show();
+//                    new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.ERROR_TYPE)
+//                            .setTitleText("Oops...")
+//                            .setContentText("Something went wrong!")
+//                            .show();
+//                } else if (secondImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle).getConstantState() || secondImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle_error_finger).getConstantState()) {
+////                    builder.setMessage("กรุณาสแกนนิ้วให้เสร็จสิ้น").setTitle("ใส่ข้อมูลให้ครบ");
+////                    AlertDialog alert = builder.create();
+////
+////                    //Setting the title manually
+////                    alert.setTitle("แจ้งเตือน");
+////                    alert.show();
+//                    new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.ERROR_TYPE)
+//                            .setTitleText("Oops...")
+//                            .setContentText("Something went wrong!")
+//                            .show();
+//                } else if (thridImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle).getConstantState() || thridImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle_error_finger).getConstantState()) {
+////                    builder.setMessage("กรุณาสแกนนิ้วให้เสร็จสิ้น").setTitle("ใส่ข้อมูลให้ครบ");
+////                    AlertDialog alert = builder.create();
+////                    alert.setTitle("แจ้งเตือน");
 //                    //Setting the title manually
-//                    alert.setTitle("แจ้งเตือน");
-//                    alert.show();
-                    new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.ERROR_TYPE)
-                            .setTitleText("Oops...")
-                            .setContentText("Something went wrong!")
-                            .show();
-                } else if (secondImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle).getConstantState() || secondImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle_error_finger).getConstantState()) {
-//                    builder.setMessage("กรุณาสแกนนิ้วให้เสร็จสิ้น").setTitle("ใส่ข้อมูลให้ครบ");
-//                    AlertDialog alert = builder.create();
 //
-//                    //Setting the title manually
-//                    alert.setTitle("แจ้งเตือน");
-//                    alert.show();
-                    new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.ERROR_TYPE)
-                            .setTitleText("Oops...")
-                            .setContentText("Something went wrong!")
-                            .show();
-                } else if (thridImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle).getConstantState() || thridImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle_error_finger).getConstantState()) {
-//                    builder.setMessage("กรุณาสแกนนิ้วให้เสร็จสิ้น").setTitle("ใส่ข้อมูลให้ครบ");
-//                    AlertDialog alert = builder.create();
-//                    alert.setTitle("แจ้งเตือน");
-                    //Setting the title manually
-
-//                    alert.show();
-                    new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.ERROR_TYPE)
-                            .setTitleText("Oops...")
-                            .setContentText("Something went wrong!")
-                            .show();
-
-                } else {
-
-                }
-            }
-        });
+////                    alert.show();
+//                    new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.ERROR_TYPE)
+//                            .setTitleText("Oops...")
+//                            .setContentText("Something went wrong!")
+//                            .show();
+//
+//                } else {
+//
+//                }
+//            }
+//        });
 
 
     }
@@ -362,6 +362,11 @@ public class RegisterActivity2 extends AppCompatActivity {
                                                 intent.putExtra("imgUser", imgUser);
                                                 intent.putExtra("fingerprint", strBase64);
                                                 startActivity(intent);
+                                                try {
+                                                    OnBnStop();
+                                                } catch (FingerprintException e) {
+                                                    e.printStackTrace();
+                                                }
                                             }
                                         }).show();
                                         scanText.setText(" ");
@@ -448,7 +453,7 @@ public class RegisterActivity2 extends AppCompatActivity {
     }
 
     //close finger
-    public void OnBnStop(View view) throws FingerprintException {
+    public void OnBnStop() throws FingerprintException {
         try {
             if (bstart) {
                 //stop capture

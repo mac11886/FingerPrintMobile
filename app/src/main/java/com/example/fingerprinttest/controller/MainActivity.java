@@ -12,6 +12,7 @@ import android.hardware.usb.UsbManager;
 import android.net.Uri;
 import android.os.Bundle;
 
+import android.os.CountDownTimer;
 import android.text.format.Time;
 import android.util.Base64;
 import android.util.Log;
@@ -77,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
     String status = "เข้า";
     private JsonPlaceHolderApi jsonPlaceHolderApi;
     private FingerprintSensor fingerprintSensor = null;
+    private int i = -1;
 
     private final String ACTION_USB_PERMISSION = "com.zkteco.silkiddemo.USB_PERMISSION";
 
@@ -149,17 +151,17 @@ public class MainActivity extends AppCompatActivity {
                     String content = "";
                     content += "ID: " + user.getId() + "\n";
                     content += "Name: " + user.getName() + "\n";
-                    content += "Age: " + user.getAge() + "\n";
-                    content += "Interest: " + user.getInterest() + "\n";
-                    content += "ImageUser: " + user.getImguser() + "\n";
-                    content += "Fingeprint: " + user.getFingerprint() + "\n";
-                    content += "update_at: " + user.getUpdated_at() + "\n";
-                    content += "Create_at: " + user.getCreated_at() + "\n";
+//                    content += "Age: " + user.getAge() + "\n";
+//                    content += "Interest: " + user.getInterest() + "\n";
+//                    content += "ImageUser: " + user.getImguser() + "\n";
+//                    content += "Fingeprint: " + user.getFingerprint() + "\n";
+//                    content += "update_at: " + user.getUpdated_at() + "\n";
+//                    content += "Create_at: " + user.getCreated_at() + "\n";
                     userImage = user.getImguser();
 
-
+//                    textStatus.setText("users"+users);
                 }
-//                    textStatus.setText("Respond =  "+response);
+
             }
 
             @Override
@@ -223,50 +225,11 @@ public class MainActivity extends AppCompatActivity {
         ImageView adminBtn = (ImageView) findViewById(R.id.adminBtn);
         inBtn = (Button) findViewById(R.id.inBtn);
         outbtn = (Button) findViewById(R.id.outBtn);
-        Button btn3 = (Button) findViewById(R.id.goToRegister3);
-        btn3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, RegisterActivity3.class);
-                startActivity(intent);
 
-            }
-        });
-//        Button goToRegisterBtn = (Button) findViewById(R.id.goToregisterBtn);
-
-//        regisBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(MainActivity.this,RegisterActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-
-//        goToRegisterBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(MainActivity.this, RegisActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-//        debug = (Button) findViewById(R.id.debugpage);
-//        debug.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(MainActivity.this, DebugFinger.class);
-//                startActivity(intent);
-//            }
-//        });
-
+//
         adminBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                WebView webView = new WebView(v.getContext());
-//                setContentView(webView);
-//                webView.loadUrl("https://ta.kisrateam.com/login");
-//                String url = "https://ta.kisrateam.com/login" ;
-//                Intent browserIntent =  new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-//                startActivity(browserIntent);
 
                 Intent intent = new Intent(MainActivity.this, AdminActivity.class);
                 startActivity(intent);
@@ -355,11 +318,16 @@ public class MainActivity extends AppCompatActivity {
 
     public void OnBnBegin(View view) throws FingerprintException {
         try {
+
             if (bstart) return;
             fingerprintSensor.open(0);
+            int i = 0;
+
             for (User user : users) {
                 byte[] byte2 = Base64.decode(user.getFingerprint(), Base64.NO_WRAP);
-                ZKFingerService.save(byte2, "" + user.getId());
+
+                ZKFingerService.save(byte2, "" + i);
+                i++;
             }
             final FingerprintCaptureListener listener = new FingerprintCaptureListener() {
                 @Override
@@ -456,12 +424,14 @@ public class MainActivity extends AppCompatActivity {
                                     textView.setText("สแกนเสร็จสิ้น,ความชัด " + strRes[1] + "%");
 //                                    createPostId(Integer.parseInt(strRes[0]));
                                     getPosts();
-                                    userImage = getUser(Integer.parseInt(strRes[0]) - 1).getImguser();
-                                    name = getUser(Integer.parseInt(strRes[0]) - 1).getName();
+//                                    textStatus.setText(""+Integer.parseInt(strRes[0]));
+                                    userImage = getUser(Integer.parseInt(strRes[0])).getImguser();
+                                    name = getUser(Integer.parseInt(strRes[0])).getName();
                                     nameUser.setText("" + name);
                                     byte[] decodedString = Base64.decode(userImage, Base64.DEFAULT);
                                     Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                                     imageUser.setImageBitmap(decodedByte);
+
 
 
                                     // DATE
@@ -472,21 +442,25 @@ public class MainActivity extends AppCompatActivity {
                                     String formattime = simpleTimeFormat.format(c.getTime());
                                     dateUser.setText(formatdate);
                                     timeUser.setText(formattime);
-                                    if (status == "เข้า") {
-                                        new SweetAlertDialog(MainActivity.this, SweetAlertDialog.CUSTOM_IMAGE_TYPE)
-                                                .setTitleText("ยินดีต้อนรับ")
-                                                .setContentText("ตั้งใจทำงานน")
-                                                .setCustomImage(R.drawable.ic_welcome)
-                                                .show();
-                                        createPostDate(Integer.parseInt(strRes[0]), formatdate, formattime, " " + status);
 
-                                    }else if(status == "ออก"){
+                                    if (status == "เข้า") {
+                                        SweetAlertDialog dialog;
+                                        dialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.CUSTOM_IMAGE_TYPE);
+
+                                        dialog.setTitleText("ยินดีต้อนรับ" );
+                                        dialog.setContentText("ตั้งใจทำงานน้าาา");
+                                        dialog.setCustomImage(R.drawable.ic_welcome);
+                                        dialog.show();
+//                                        textStatus.setText(""+users.get(Integer.parseInt(strRes[0])).getId());
+                                        createPostDate(users.get(Integer.parseInt(strRes[0])).getId(), formatdate, formattime, " " + status);
+
+                                    } else if (status == "ออก") {
                                         new SweetAlertDialog(MainActivity.this, SweetAlertDialog.CUSTOM_IMAGE_TYPE)
                                                 .setTitleText("บ้ายบายย")
                                                 .setContentText("กลับดีๆน้าาา")
                                                 .setCustomImage(R.drawable.ic_goodbye)
                                                 .show();
-                                        createPostDate(Integer.parseInt(strRes[0]), formatdate, formattime, " " + status);
+                                        createPostDate(users.get(Integer.parseInt(strRes[0])).getId(), formatdate, formattime, " " + status);
 
                                     }
 
@@ -506,9 +480,10 @@ public class MainActivity extends AppCompatActivity {
             fingerprintSensor.setFingerprintCaptureListener(0, listener);
             fingerprintSensor.startCapture(0);
             bstart = true;
-            textView.setText("start capture succ");
+            textView.setText("สแกนนิ้วได้เลย");
         } catch (FingerprintException e) {
-            textView.setText("begin capture fail.errorcode:" + e.getErrorCode() + "err message:" + e.getMessage() + "inner code:" + e.getInternalErrorCode());
+            //textView.setText("begin capture fail.errorcode:" + e.getErrorCode() + "err message:" + e.getMessage() + "inner code:" + e.getInternalErrorCode());
+            textView.setText("กรุณาเชื่อมต่อกับเครื่องสแกน");
         }
     }
 

@@ -40,7 +40,7 @@ public class AdminActivity extends AppCompatActivity {
     User user;
     ArrayList copy;
     Button linkBtn;
-    ImageView goToAdmin ,goToRegister;
+    ImageView goToAdmin, goToRegister, backBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,19 +50,24 @@ public class AdminActivity extends AppCompatActivity {
 
         goToAdmin = (ImageView) findViewById(R.id.goToAdmin);
         goToRegister = (ImageView) findViewById(R.id.goToRegister);
+        backBtn = (ImageView) findViewById(R.id.backBtnAdmin);
 
-
-
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AdminActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         goToRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AdminActivity.this,RegisterActivity.class);
+                Intent intent = new Intent(AdminActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }
         });
-
 
 
         goToAdmin.setOnClickListener(new View.OnClickListener() {

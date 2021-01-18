@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".controller.RegisterActivity2">
-
+    tools:context=".controller.RegisterActivity2"
+    android:background="@color/yellownewbg">
 
 
     <ImageView
@@ -49,25 +49,41 @@
         android:id="@+id/scanText"
         android:layout_width="390dp"
         android:layout_height="100dp"
-        android:text="SCAN"
-        android:textSize="22dp"
+        android:fontFamily="@font/kanit_light"
 
+        android:textSize="22dp"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.431" />
 
-    <Button
-        android:id="@+id/scanBtn"
+    <ImageView
+        android:id="@+id/scanbtn"
+        android:onClick="OnBnEnroll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ลงทะเบียน"
-        android:onClick="OnBnEnroll"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.556"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.587" />
+        app:layout_constraintVertical_bias="0.891"
+        app:srcCompat="@drawable/ic_fingerprint_1" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="กรุณากดเพื่อลงทะเบียน"
+        android:textColor="@color/black"
+        android:textSize="25dp"
+        android:fontFamily="@font/kanit_light"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.529"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.951" />
 </androidx.constraintlayout.widget.ConstraintLayout>

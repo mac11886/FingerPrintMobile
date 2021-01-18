@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".controller.RegisterActivity3">
+    tools:context=".controller.RegisterActivity3"
+    android:background="@color/yellownewbg">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/dataList"
@@ -19,22 +20,12 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
-    <Button
-        android:id="@+id/nextBtn3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Submit"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dataList"
-        app:layout_constraintVertical_bias="0.589" />
-
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="เลือกสิ่งที่สนใจ"
+        android:fontFamily="@font/kanit_light"
         android:textColor="@color/black"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/dataList"
@@ -42,15 +33,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textRegis"
+    <ImageView
+        android:id="@+id/summitBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:layout_marginTop="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.147"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dataList"
-        app:layout_constraintVertical_bias="0.485" />
+        app:srcCompat="@drawable/ic_check__1__1" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

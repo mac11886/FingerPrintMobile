@@ -4,19 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".controller.RegisterActivity">
+    tools:context=".controller.RegisterActivity"
+    android:background="@color/yellownewbg">
 
     <ImageView
         android:id="@+id/imageUserRegister"
-        android:layout_width="172dp"
-        android:layout_height="188dp"
+        android:layout_width="212dp"
+        android:layout_height="241dp"
         android:tag="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.112"
+        app:layout_constraintVertical_bias="0.077"
         tools:srcCompat="@tools:sample/avatars" />
 
     <Button
@@ -24,7 +25,9 @@
         android:layout_width="wrap_content"
         android:tag="false"
         android:layout_height="wrap_content"
-        android:text="Take a Image OR Choose from gallery"
+        android:text="เลือกรูปหรือถ่ายรุป"
+        android:fontFamily="@font/kanit_light"
+        android:backgroundTint="@color/greeennewbtn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,10 +36,16 @@
 
     <EditText
         android:id="@+id/editTextName"
-        android:layout_width="334dp"
-        android:layout_height="57dp"
+        android:layout_width="372dp"
+        android:layout_height="71dp"
+        android:background="@drawable/custom_input"
+        android:drawableStart="@drawable/custom_account_icon"
+        android:drawablePadding="12dp"
         android:ems="10"
-        android:hint="Name"
+        android:hint="กรุณาใส่ชื่อ"
+        android:fontFamily="@font/kanit_light"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -47,11 +56,17 @@
 
     <EditText
         android:id="@+id/editTextAge"
-        android:layout_width="335dp"
-        android:layout_height="52dp"
+        android:layout_width="372dp"
+        android:layout_height="71dp"
+        android:background="@drawable/custom_input"
+        android:drawableStart="@drawable/custom_age_icon"
+        android:drawablePadding="12dp"
         android:ems="10"
+        android:hint="กรุณาใส่อายุ 1-100 ปี"
+        android:fontFamily="@font/kanit_light"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
         android:inputType="number"
-        android:hint="Age"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -59,14 +74,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.658" />
 
-    <Button
+    <ImageView
         android:id="@+id/nextBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Next"
+        android:layout_width="214dp"
+        android:layout_height="170dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.558"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.836" />
+        app:layout_constraintVertical_bias="0.973"
+        app:srcCompat="@drawable/ic_right_arrow" />
 </androidx.constraintlayout.widget.ConstraintLayout>

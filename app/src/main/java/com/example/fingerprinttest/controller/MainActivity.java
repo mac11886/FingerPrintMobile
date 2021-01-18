@@ -7,17 +7,15 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
-import android.net.Uri;
 import android.os.Bundle;
 
-import android.os.CountDownTimer;
-import android.text.format.Time;
+import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,7 +23,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fingerprinttest.R;
-import com.example.fingerprinttest.model.Date;
+import com.example.fingerprinttest.model.Attendance;
 import com.example.fingerprinttest.model.User;
 import com.example.fingerprinttest.services.JsonPlaceHolderApi;
 import com.zkteco.android.biometric.core.device.ParameterHelper;
@@ -42,10 +40,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView imageUser;
     TextView nameUser;
     String name;
-    TextView textStatus;
+//    TextView textStatus;
     TextView dateUser;
     TextView timeUser;
     String status = "เข้า";
@@ -100,17 +101,17 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void createPostDate(int id, String date1, String time, String status) {
-        Date date = new Date(id, " " + date1, " " + time, "" + status);
-        Call<Date> call = jsonPlaceHolderApi.createPostDate(date);
-        call.enqueue(new Callback<Date>() {
+        Attendance attendance = new Attendance(id, " " + date1, " " + time, "" + status);
+        Call<Attendance> call = jsonPlaceHolderApi.createPostDate(attendance);
+        call.enqueue(new Callback<Attendance>() {
             @Override
-            public void onResponse(Call<Date> call, Response<Date> response) {
-                Date date2 = response.body();
+            public void onResponse(Call<Attendance> call, Response<Attendance> response) {
+                Attendance attendance2 = response.body();
                 //textLog.setText(""+response.message());
             }
 
             @Override
-            public void onFailure(Call<Date> call, Throwable t) {
+            public void onFailure(Call<Attendance> call, Throwable t) {
 
             }
         });
@@ -166,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<User>> call, Throwable t) {
-                textStatus.setText("error = " + t.getMessage());
+//                textStatus.setText("error = " + t.getMessage());
             }
         });
 
@@ -217,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.statusText);
         imageView = (ImageView) findViewById(R.id.imageView);
         imageUser = (ImageView) findViewById(R.id.imageUser);
-        textStatus = (TextView) findViewById(R.id.textLog);
+//        textStatus = (TextView) findViewById(R.id.textLog);
         nameUser = (TextView) findViewById(R.id.nameUser);
         dateUser = (TextView) findViewById(R.id.DateUser);
         timeUser = (TextView) findViewById(R.id.timeUser);
@@ -242,24 +243,49 @@ public class MainActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-
+//       SHOW DATE AND TIME
+        dateUser.setText(new SimpleDateFormat("dd-MM-yyyy",Locale.US).format(new Date()));
+        final Handler someHandler = new Handler(getMainLooper());
+        someHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                timeUser.setText(new SimpleDateFormat("HH:mm:ss", Locale.US).format(new Date()));
+                someHandler.postDelayed(this, 1000);
+            }
+        }, 10);
         InitDevice();
         startFingerprintSensor();
         getPosts();
-        textStatus.setText(status);
+//        textStatus.setText(status);
         outbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                status = "ออก";
-                textStatus.setText("ออก");
+
+                try {
+                    OnBnBegin();
+                    status = "ออก";
+                    outbtn.setBackgroundColor(Color.parseColor("#207720"));
+                    inBtn.setBackgroundColor(Color.parseColor("#f82d2d"));
+//                    textStatus.setText("ออก");
+                } catch (FingerprintException e) {
+                    e.printStackTrace();
+                }
             }
 
         });
         inBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                status = "เข้า";
-                textStatus.setText("เข้า");
+                try {
+                    OnBnBegin();
+                    status = "เข้า";
+                    inBtn.setBackgroundColor(Color.parseColor("#207720"));
+                    outbtn.setBackgroundColor(Color.parseColor("#f82d2d"));
+//                    textStatus.setText("เข้า");
+                } catch (FingerprintException e) {
+                    e.printStackTrace();
+                }
+
             }
         });
 
@@ -316,7 +342,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void OnBnBegin(View view) throws FingerprintException {
+    public void OnBnBegin() throws FingerprintException {
         try {
 
             if (bstart) return;
@@ -433,7 +459,6 @@ public class MainActivity extends AppCompatActivity {
                                     imageUser.setImageBitmap(decodedByte);
 
 
-
                                     // DATE
                                     Calendar c = Calendar.getInstance();
                                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -447,7 +472,7 @@ public class MainActivity extends AppCompatActivity {
                                         SweetAlertDialog dialog;
                                         dialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.CUSTOM_IMAGE_TYPE);
 
-                                        dialog.setTitleText("ยินดีต้อนรับ" );
+                                        dialog.setTitleText("ยินดีต้อนรับ");
                                         dialog.setContentText("ตั้งใจทำงานน้าาา");
                                         dialog.setCustomImage(R.drawable.ic_welcome);
                                         dialog.show();

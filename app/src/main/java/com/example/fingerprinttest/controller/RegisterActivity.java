@@ -33,8 +33,8 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    ImageView imageUserRegister;
-    Button takeOrchooseBtn, nextBtn;
+    ImageView imageUserRegister, nextBtn;
+    Button takeOrchooseBtn;
     EditText nameText, ageText;
     String encoded;
     AlertDialog.Builder builder;
@@ -45,7 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         imageUserRegister = (ImageView) findViewById(R.id.imageUserRegister);
         takeOrchooseBtn = (Button) findViewById(R.id.takeOrchooseBtn);
-        nextBtn = (Button) findViewById(R.id.nextBtn);
+        nextBtn = (ImageView) findViewById(R.id.nextBtn);
         nameText = (EditText) findViewById(R.id.editTextName);
         ageText = (EditText) findViewById(R.id.editTextAge);
 
@@ -83,7 +83,11 @@ public class RegisterActivity extends AppCompatActivity {
                             .setContentText("กรุณาใส่รูป")
                             .show();
 
-                } else {
+                }else if (detectValid() ==4){
+                    ageText.setError("จำกัดอายุแค่ 1-100 ");
+                    ageText.requestFocus();
+                }
+                else {
                     //sent data to post on API
                     String imageBase64 = encoded;
                     String name = nameText.getText().toString();
@@ -129,12 +133,18 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private int detectValid() {
+        int min = 1;
+        int max = 100;
         if (nameText.getText().toString().isEmpty()) {
 
             return 1;
         }
         if (ageText.getText().toString().isEmpty()) {
             return 2;
+        }
+        int getAgeInt = Integer.parseInt(ageText.getText().toString());
+        if(getAgeInt < min || getAgeInt >max ){
+            return 4;
         }
         if (imageUserRegister.getDrawable() == null) {
 

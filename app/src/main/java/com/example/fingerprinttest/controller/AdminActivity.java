@@ -1,4 +1,4 @@
-package com.example.fingerprinttest.controller;
+    package com.example.fingerprinttest.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;

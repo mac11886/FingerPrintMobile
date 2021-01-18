@@ -16,5 +16,9 @@
     <color name="blueButton">#1255CF</color>
     <color name="redButton">#DB3F65</color>
     <color name="grayBg">#939597</color>
+    <color name="yellownewbg">#F3C35D</color>
+    <color name="rednewbtn">#F53434</color>
+    <color name="greeennewbtn">#00AF91</color>
+
 
 </resources>

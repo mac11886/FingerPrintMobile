@@ -4,33 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gmint"
+    android:background="@color/yellownewbg"
     tools:context=".controller.MainActivity">
 
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="414dp"
-        android:layout_height="92dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ic_wavegreentea" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="380dp"
-        android:layout_height="372dp"
-        android:background="@drawable/shape_rectangle"
-        android:elevation="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.483"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.988"
-        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/statusText"
@@ -43,48 +19,15 @@
         android:layout_alignParentRight="true"
         android:fontFamily="@font/kanit_light"
         android:text="Status"
+        android:textColor="@color/black"
+        android:textSize="20dp"
         android:translationZ="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.23"
+        app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.558" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:backgroundTint="@color/greentea"
-        android:fontFamily="@font/kanit_light"
-        android:onClick="OnBnBegin"
-        android:text="เปิดเครื่อง"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.887"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.563" />
-
-    <Button
-        android:id="@+id/saveDataBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/button"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:backgroundTint="@color/red25"
-        android:fontFamily="@font/kanit_light"
-        android:onClick="OnBnStop"
-        android:text="ปิดเครื่อง"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.889"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.663" />
+        app:layout_constraintVertical_bias="0.898" />
 
     <ImageView
         android:id="@+id/imageUser"
@@ -95,96 +38,56 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.24"
+        app:layout_constraintVertical_bias="0.625"
         tools:srcCompat="@tools:sample/avatars" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="32dp"
-        android:layout_height="25dp"
-        android:fontFamily="@font/kanit_light"
-        android:text="ชื่อ:"
-        android:textSize="24dp"
-        android:translationZ="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.131"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.674" />
-
 
     <TextView
         android:id="@+id/nameUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/kanit_light"
+        android:text="name"
         android:textSize="24dp"
         android:translationZ="5dp"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.316"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.682" />
+        app:layout_constraintVertical_bias="0.797" />
 
     <TextView
         android:id="@+id/DateUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/kanit_light"
-        android:textSize="24dp"
+        android:text="date"
+        android:textColor="@color/black"
+        android:textSize="32dp"
         android:translationZ="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.316"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.75" />
+        app:layout_constraintVertical_bias="0.128" />
 
     <TextView
         android:id="@+id/timeUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/kanit_light"
-        android:textSize="24dp"
+        android:text="time"
+        android:textSize="32dp"
         android:translationZ="5dp"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.316"
+        app:layout_constraintHorizontal_bias="0.511"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.826" />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/kanit_light"
-        android:text="วันที่:"
-        android:textSize="24dp"
-        android:translationZ="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.132"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.749" />
-
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/kanit_light"
-        android:text="เวลา:"
-        android:textSize="24dp"
-        android:translationZ="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.133"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.825" />
+        app:layout_constraintVertical_bias="0.226" />
 
     <TextView
         android:id="@+id/item"
@@ -192,8 +95,9 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/kanit_light"
         android:text="หน้าหลัก"
-        android:textColor="@color/white"
-        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:textSize="36sp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -201,54 +105,46 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.022" />
 
-    <TextView
-        android:id="@+id/textLog"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/kanit_light"
-        android:textSize="20dp"
-        android:translationZ="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.948" />
-
     <Button
         android:id="@+id/inBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="134dp"
+        android:layout_height="78dp"
+        android:fontFamily="@font/kanit_light"
         android:text="เข้างาน"
+        android:textSize="25dp"
+
+        app:backgroundTint="@color/greeennewbtn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.13"
+        app:layout_constraintHorizontal_bias="0.04"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.976" />
+        app:layout_constraintVertical_bias="0.359" />
 
     <Button
         android:id="@+id/outBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="134dp"
+        android:layout_height="78dp"
+        android:fontFamily="@font/kanit_light"
         android:text="ออกงาน"
+        android:textSize="25dp"
+        app:backgroundTint="@color/greeennewbtn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.857"
+        app:layout_constraintHorizontal_bias="0.938"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.976" />
+        app:layout_constraintVertical_bias="0.359" />
 
     <ImageView
         android:id="@+id/adminBtn"
         android:layout_width="81dp"
         android:layout_height="71dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView4"
+        android:layout_marginTop="696dp"
+        android:layout_marginEnd="312dp"
+        android:layout_marginRight="312dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.048"
-        app:layout_constraintStart_toStartOf="@+id/imageView3"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.022"
-        app:srcCompat="@drawable/ic_admin" />
+        app:srcCompat="@drawable/ic_settings" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

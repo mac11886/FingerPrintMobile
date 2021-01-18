@@ -53,9 +53,9 @@ import static com.example.fingerprinttest.controller.RegisActivity.COLOR_PALEGOL
 
 public class RegisterActivity2 extends AppCompatActivity {
 
-    ImageView firstImage, secondImage, thridImage;
+    ImageView firstImage, secondImage, thridImage,scanbtn;
     TextView scanText;
-    Button scanBtn, nextBtn;
+
     List<User> users;
     public static final int COLOR_PALEGOLDENROD = 0xff000000;
     String name;
@@ -89,9 +89,8 @@ public class RegisterActivity2 extends AppCompatActivity {
         secondImage = (ImageView) findViewById(R.id.secondImage);
         thridImage = (ImageView) findViewById(R.id.thridImage);
         scanText = (TextView) findViewById(R.id.scanText);
-        scanBtn = (Button) findViewById(R.id.scanBtn);
+        scanbtn = (ImageView) findViewById(R.id.scanbtn);
 //        nextBtn = (Button) findViewById(R.id.nextBtn2);
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://ta.kisrateam.com/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -100,6 +99,7 @@ public class RegisterActivity2 extends AppCompatActivity {
         getPosts();
         startFingerprintSensor();
         initDevice();
+
         //recieve from page 1
         name = getIntent().getStringExtra("nameUser");
         age = getIntent().getStringExtra("ageUser");

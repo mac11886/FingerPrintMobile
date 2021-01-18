@@ -1,7 +1,7 @@
 package com.example.fingerprinttest.model;
 
-public class Date {
-    public Date(int id, String date, String time, String status) {
+public class Attendance {
+    public Attendance(int id, String date, String time, String status) {
         this.id = id;
         this.date = date;
         this.time = time;

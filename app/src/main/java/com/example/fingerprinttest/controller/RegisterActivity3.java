@@ -13,6 +13,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.fingerprinttest.R;
@@ -41,6 +42,7 @@ public class RegisterActivity3 extends AppCompatActivity implements DatatoActivi
     User user;
     List<String> titles;
     List<Integer> images;
+    ImageView submitBtn;
     Adapter adapter;
     Button nextBtn;
     TextView textLog;
@@ -56,9 +58,9 @@ public class RegisterActivity3 extends AppCompatActivity implements DatatoActivi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register3);
-        nextBtn = findViewById(R.id.nextBtn3);
+
         dataList = findViewById(R.id.dataList);
-        textLog = findViewById(R.id.textRegis);
+        submitBtn = (ImageView) findViewById(R.id.summitBtn);
         builder = new AlertDialog.Builder(this);
         //regispage 1
         name = getIntent().getStringExtra("nameUser");
@@ -81,48 +83,47 @@ public class RegisterActivity3 extends AppCompatActivity implements DatatoActivi
 
         addCard();
 
-        nextBtn.setOnClickListener(new View.OnClickListener() {
+       submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 if (adapter.getCountInterest() > 4 || adapter.getCountInterest() == 0) {
-                SweetAlertDialog dialog =    new SweetAlertDialog(RegisterActivity3.this,SweetAlertDialog.WARNING_TYPE);
-                            dialog.setTitle("Oops!");
-                            dialog.setContentText("choose 1-4 option");
-                            dialog.setCancelable(false);
-                            dialog.getProgressHelper().setBarColor(Color.parseColor("#000000"));
-                            dialog.show();
+                    SweetAlertDialog dialog = new SweetAlertDialog(RegisterActivity3.this, SweetAlertDialog.WARNING_TYPE);
+                    dialog.setTitle("Oops!");
+                    dialog.setContentText("เลือกได้ 1-4 ตัวเลือก");
+                    dialog.getProgressHelper().setBarColor(Color.parseColor("#000000"));
+                    dialog.show();
 
 //                            Button button = (Button) dialog.findViewById(R.id.conf)
                 } else {
 
-                   SweetAlertDialog dialog = new SweetAlertDialog(RegisterActivity3.this, SweetAlertDialog.SUCCESS_TYPE);
-                            dialog.setTitleText("OK");
-                            dialog.setContentText("SUCCESS JA  ");
-                            dialog.setConfirmText("Confirm!!");
+                    SweetAlertDialog dialog = new SweetAlertDialog(RegisterActivity3.this, SweetAlertDialog.SUCCESS_TYPE);
+                    dialog.setTitleText("แจ้งเตือน");
+                    dialog.setContentText("ข้อมูลได้ถูกบันทึกแล้ว");
+                    dialog.setConfirmText("OK!!");
 
-                            dialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                @Override
-                                public void onClick(SweetAlertDialog sDialog) {
+                    dialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
 
-                                    Intent intent = new Intent(RegisterActivity3.this, MainActivity.class);
-                                    getIntent().removeExtra("nameUser");
-                                    getIntent().removeExtra("ageUser");
-                                    getIntent().removeExtra("imgUser");
-                                    getIntent().removeExtra("fingerprint");
-                                    getIntent().removeExtra("interest");
-                                    createPost();
-                                    startActivity(intent);
-                                }
-                            });
+                            Intent intent = new Intent(RegisterActivity3.this, MainActivity.class);
+                            getIntent().removeExtra("nameUser");
+                            getIntent().removeExtra("ageUser");
+                            getIntent().removeExtra("imgUser");
+                            getIntent().removeExtra("fingerprint");
+                            getIntent().removeExtra("interest");
+                            createPost();
+                            startActivity(intent);
+                        }
+                    });
 //                            .setCancelButton("Cancel", new SweetAlertDialog.OnSweetClickListener() {
 //                                @Override
 //                                public void onClick(SweetAlertDialog sDialog) {
 //                                    sDialog.dismissWithAnimation();
 //                                }
 //                            })
-                                    dialog.setCancelable(false);
-                            dialog.show();
+                    dialog.setCancelable(false);
+                    dialog.show();
 
 //                    Log.e("ERROR",""+adapter.getCountInterest());
 //                AlertDialog alert = builder.create();
@@ -195,10 +196,10 @@ public class RegisterActivity3 extends AppCompatActivity implements DatatoActivi
         titles.add("Science");
         titles.add("Cooking");
         images.add(R.drawable.ic_photography);
-        images.add(R.drawable.ic_lion);
+        images.add(R.drawable.ic_koala_1);
         images.add(R.drawable.ic_tent);
         images.add(R.drawable.ic_football_players);
-        images.add(R.drawable.ic_joystick);
+        images.add(R.drawable.ic_joystick_2);
         images.add(R.drawable.ic_car);
         images.add(R.drawable.ic_chemistry);
         images.add(R.drawable.ic_cooking);

@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView imageUser;
     TextView nameUser;
     String name;
-//    TextView textStatus;
+    //    TextView textStatus;
     TextView dateUser;
     TextView timeUser;
     String status = "เข้า";
@@ -152,22 +152,21 @@ public class MainActivity extends AppCompatActivity {
                     String content = "";
                     content += "ID: " + user.getId() + "\n";
                     content += "Name: " + user.getName() + "\n";
-//                    content += "Age: " + user.getAge() + "\n";
-//                    content += "Interest: " + user.getInterest() + "\n";
-//                    content += "ImageUser: " + user.getImguser() + "\n";
-//                    content += "Fingeprint: " + user.getFingerprint() + "\n";
-//                    content += "update_at: " + user.getUpdated_at() + "\n";
-//                    content += "Create_at: " + user.getCreated_at() + "\n";
+
                     userImage = user.getImguser();
 
 //                    textStatus.setText("users"+users);
                 }
-
+//                textView.setText(""+response.toString());
             }
 
             @Override
             public void onFailure(Call<List<User>> call, Throwable t) {
-//                textStatus.setText("error = " + t.getMessage());
+                textView.setText("SERVER ERROR" );
+                new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("แจ้งเตือน")
+                        .setContentText("SERVER ERROR")
+                        .show();
             }
         });
 
@@ -244,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 //       SHOW DATE AND TIME
-        dateUser.setText(new SimpleDateFormat("dd-MM-yyyy",Locale.US).format(new Date()));
+        dateUser.setText(new SimpleDateFormat("dd-MM-yyyy", Locale.US).format(new Date()));
         final Handler someHandler = new Handler(getMainLooper());
         someHandler.postDelayed(new Runnable() {
             @Override
@@ -255,13 +254,20 @@ public class MainActivity extends AppCompatActivity {
         }, 10);
         InitDevice();
         startFingerprintSensor();
-        getPosts();
+        try {
+            getPosts();
+        } catch (Exception e) {
+            textView.setText("SERVERERROR");
+            e.printStackTrace();
+        }
+
 //        textStatus.setText(status);
         outbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 try {
+
                     OnBnBegin();
                     status = "ออก";
                     outbtn.setBackgroundColor(Color.parseColor("#207720"));
@@ -278,13 +284,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     OnBnBegin();
-                    status = "เข้า";
-                    inBtn.setBackgroundColor(Color.parseColor("#207720"));
-                    outbtn.setBackgroundColor(Color.parseColor("#f82d2d"));
-//                    textStatus.setText("เข้า");
                 } catch (FingerprintException e) {
-                    e.printStackTrace();
+                    textView.setText("SERVER ERROR"+e.getMessage());
                 }
+                status = "เข้า";
+                inBtn.setBackgroundColor(Color.parseColor("#207720"));
+                outbtn.setBackgroundColor(Color.parseColor("#f82d2d"));
+//                    textStatus.setText("เข้า");
 
             }
         });
@@ -348,10 +354,8 @@ public class MainActivity extends AppCompatActivity {
             if (bstart) return;
             fingerprintSensor.open(0);
             int i = 0;
-
             for (User user : users) {
                 byte[] byte2 = Base64.decode(user.getFingerprint(), Base64.NO_WRAP);
-
                 ZKFingerService.save(byte2, "" + i);
                 i++;
             }
@@ -448,9 +452,12 @@ public class MainActivity extends AppCompatActivity {
                                     String strRes[] = new String(bufids).split("\t");
 //                                    textView.setText("identify succ, userid:" + strRes[0] + ", score:" + strRes[1]);
                                     textView.setText("สแกนเสร็จสิ้น,ความชัด " + strRes[1] + "%");
-//                                    createPostId(Integer.parseInt(strRes[0]));
-                                    getPosts();
-//                                    textStatus.setText(""+Integer.parseInt(strRes[0]));
+                                    try {
+                                        getPosts();
+                                    } catch (Exception e) {
+                                      textView.setText("server Error" + e.getMessage());
+                                    }
+
                                     userImage = getUser(Integer.parseInt(strRes[0])).getImguser();
                                     name = getUser(Integer.parseInt(strRes[0])).getName();
                                     nameUser.setText("" + name);

@@ -195,7 +195,7 @@ public class RegisterActivity3 extends AppCompatActivity implements DatatoActivi
         titles.add("Car");
         titles.add("Science");
         titles.add("Cooking");
-        images.add(R.drawable.ic_photography);
+        images.add(R.drawable.ic_photograph_1);
         images.add(R.drawable.ic_koala_1);
         images.add(R.drawable.ic_tent);
         images.add(R.drawable.ic_football_players);

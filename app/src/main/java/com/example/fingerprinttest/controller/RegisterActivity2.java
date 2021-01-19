@@ -180,7 +180,10 @@ public class RegisterActivity2 extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<User>> call, Throwable t) {
-//                textDropdown.setText(t.getMessage());
+                new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("แจ้งเตือน")
+                        .setContentText("SERVER ERROR")
+                        .show();
             }
         });
 

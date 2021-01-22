@@ -1,16 +1,21 @@
 package com.example.fingerprinttest.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -36,7 +41,7 @@ import android.graphics.Color;
 import android.widget.Toast;
 
 
-public class RegisterActivity3 extends AppCompatActivity implements DatatoActivity {
+public class RegisterActivity3 extends AppCompatActivity {
 
     RecyclerView dataList;
     User user;
@@ -45,7 +50,7 @@ public class RegisterActivity3 extends AppCompatActivity implements DatatoActivi
     ImageView submitBtn;
     Adapter adapter;
     Button nextBtn;
-    TextView textLog;
+
     String name;
     String age;
     String imgUser;
@@ -83,36 +88,98 @@ public class RegisterActivity3 extends AppCompatActivity implements DatatoActivi
 
         addCard();
 
-       submitBtn.setOnClickListener(new View.OnClickListener() {
+        submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 if (adapter.getCountInterest() > 4 || adapter.getCountInterest() == 0) {
-                    SweetAlertDialog dialog = new SweetAlertDialog(RegisterActivity3.this, SweetAlertDialog.WARNING_TYPE);
-                    dialog.setTitle("Oops!");
-                    dialog.setContentText("เลือกได้ 1-4 ตัวเลือก");
-                    dialog.getProgressHelper().setBarColor(Color.parseColor("#000000"));
-                    dialog.show();
+                    SweetAlertDialog loading = new SweetAlertDialog(RegisterActivity3.this, SweetAlertDialog.WARNING_TYPE);
+                    loading.setTitleText("แจ้งเตือน");
+                    loading.setContentText("เลือกได้ 1-4 ตัวเลือก");
+                    loading.getProgressHelper().setBarColor(RegisterActivity3.this.getResources().getColor(R.color.greentea));
+                    loading.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialog) {
+                            SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
+                            Typeface face = ResourcesCompat.getFont(RegisterActivity3.this, R.font.kanit_light);
+                            TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
+                            TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
+                            textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                            textCon.setTextColor(getResources().getColor(R.color.black));
+                            textCon.setTypeface(face);
+                            textCon.setGravity(Gravity.CENTER);
+                            text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+                            text.setTextColor(getResources().getColor(R.color.red25));
+                            text.setTypeface(face);
+                            text.setGravity(Gravity.CENTER);
 
-//                            Button button = (Button) dialog.findViewById(R.id.conf)
+                        }
+                    });
+
+                    loading.show();
                 } else {
-
+//                    SweetAlertDialog loading = new SweetAlertDialog(RegisterActivity3.this, SweetAlertDialog.SUCCESS_TYPE);
+//                    loading.setTitleText("แจ้งเตือน");
+//                    loading.setContentText("ข้อมูลได้ถูกบันทึกแล้ว");
+//                    loading.setConfirmText("OK");
+//                    loading.setOnShowListener(new DialogInterface.OnShowListener() {
+//                        @Override
+//                        public void onShow(DialogInterface dialog) {
+//                            SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
+//                            Typeface face = ResourcesCompat.getFont(RegisterActivity3.this, R.font.kanit_light);
+//                            TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
+//                            TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
+//                            textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+//                            textCon.setTextColor(getResources().getColor(R.color.black));
+//                            textCon.setTypeface(face);
+//                            textCon.setGravity(Gravity.CENTER);
+//                            text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+//                            text.setTextColor(getResources().getColor(R.color.red25));
+//                            text.setTypeface(face);
+//                            text.setGravity(Gravity.CENTER);
+//                        }
+//                    });
+//                    loading.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+//                        @Override
+//                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+//                            createPost();
+//                            getIntent().removeExtra("nameUser");
+//                            getIntent().removeExtra("ageUser");
+//                            getIntent().removeExtra("imgUser");
+//                            getIntent().removeExtra("fingerprint");
+//                            getIntent().removeExtra("interest");
+//                            Intent intent = new Intent(RegisterActivity3.this, AdminActivity.class);
+//                            startActivity(intent);
+//                        }
+//                    });
+//                    loading.setCancelable(false);
+//                    loading.show();
                     SweetAlertDialog dialog = new SweetAlertDialog(RegisterActivity3.this, SweetAlertDialog.SUCCESS_TYPE);
                     dialog.setTitleText("แจ้งเตือน");
                     dialog.setContentText("ข้อมูลได้ถูกบันทึกแล้ว");
                     dialog.setConfirmText("OK!!");
-
+                    dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialog) {
+                            SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
+                            Typeface face = ResourcesCompat.getFont(RegisterActivity3.this, R.font.kanit_light);
+                            TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
+                            TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
+                            textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                            textCon.setTextColor(getResources().getColor(R.color.black));
+                            textCon.setTypeface(face);
+                            textCon.setGravity(Gravity.CENTER);
+                            text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+                            text.setTextColor(getResources().getColor(R.color.red25));
+                            text.setTypeface(face);
+                            text.setGravity(Gravity.CENTER);
+                        }
+                    });
                     dialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                         @Override
                         public void onClick(SweetAlertDialog sDialog) {
 
                             Intent intent = new Intent(RegisterActivity3.this, MainActivity.class);
-                            getIntent().removeExtra("nameUser");
-                            getIntent().removeExtra("ageUser");
-                            getIntent().removeExtra("imgUser");
-                            getIntent().removeExtra("fingerprint");
-                            getIntent().removeExtra("interest");
-                            createPost();
                             startActivity(intent);
                         }
                     });
@@ -124,22 +191,14 @@ public class RegisterActivity3 extends AppCompatActivity implements DatatoActivi
 //                            })
                     dialog.setCancelable(false);
                     dialog.show();
-
-//                    Log.e("ERROR",""+adapter.getCountInterest());
-//                AlertDialog alert = builder.create();
-//                alert.setIcon(R.drawable.ic_error);
-//                //Setting the title manually
-//                alert.setTitle("แจ้งเตือน");
-//                alert.setMessage("ลงทะเบียนเสร็จสิ้น");
-//                alert.show();
-
-                    System.out.println("----------------------");
-                    System.out.println("INTEREST: " + adapter.getSentdata());
-
+                    createPost();
+                    getIntent().removeExtra("nameUser");
+                    getIntent().removeExtra("ageUser");
+                    getIntent().removeExtra("imgUser");
+                    getIntent().removeExtra("fingerprint");
+                    getIntent().removeExtra("interest");
 
                 }
-
-
             }
         });
 
@@ -157,10 +216,10 @@ public class RegisterActivity3 extends AppCompatActivity implements DatatoActivi
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (!response.isSuccessful()) {
-                    textLog.setText("Code ERROR : " + response.code());
+//                    textLog.setText("Code ERROR : " + response.code());
                     return;
                 }
-                textLog.setText("" + response.code());
+//                textLog.setText("" + response.code());
                 //
                 User userPost = response.body();
                 String content = "";
@@ -177,6 +236,7 @@ public class RegisterActivity3 extends AppCompatActivity implements DatatoActivi
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
+
             }
 
 
@@ -212,17 +272,5 @@ public class RegisterActivity3 extends AppCompatActivity implements DatatoActivi
     }
 
 
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
 
-    }
-
-    @Override
-    public void sendData(String string) {
-        Intent intent = new Intent(getApplicationContext(), RegisterActivity3.class);
-        intent.putExtra("interest", string);
-//        Handler handler = new Handler(Looper.getMainLooper());
-//      handler.post()
-
-    }
 }

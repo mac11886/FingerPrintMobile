@@ -1,5 +1,6 @@
 package com.example.fingerprinttest.services;
 
+import com.example.fingerprinttest.model.Admin;
 import com.example.fingerprinttest.model.Attendance;
 import com.example.fingerprinttest.model.User;
 
@@ -14,6 +15,9 @@ public interface JsonPlaceHolderApi {
 
     @GET("api/get-data")
     Call<List<User>> getPost();
+
+    @POST("api/usersAdmin")
+    Call<Admin> checkUsers(@Body Admin admin);
 
     @POST("api/date")
     Call<Attendance> createPostDate(@Body Attendance attendance);

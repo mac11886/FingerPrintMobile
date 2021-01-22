@@ -3,6 +3,7 @@ package com.example.fingerprinttest.controller;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.res.ResourcesCompat;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -10,11 +11,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -71,17 +75,36 @@ public class RegisterActivity extends AppCompatActivity {
                     ageText.setError("กรุณาใส่อายุ");
                     ageText.requestFocus();
                 } else if (detectValid() == 3) {
-//                    AlertDialog alert = builder.create();
-//                    alert.setIcon(R.drawable.ic_error);
-//
-//                    //Setting the title manually
-//                    alert.setTitle("แจ้งเตือน");
-//                    alert.setMessage("กรุณาใส่รูปภาพ");
-//                    alert.show();
-                    new SweetAlertDialog(RegisterActivity.this, SweetAlertDialog.ERROR_TYPE)
-                            .setTitleText("Oops...")
-                            .setContentText("กรุณาใส่รูป")
-                            .show();
+                  SweetAlertDialog loading = new SweetAlertDialog(RegisterActivity.this, SweetAlertDialog.WARNING_TYPE);
+                                        loading.setTitleText("แจ้งเตือน");
+                                        loading.setContentText("กรุณาใส่รูปภาพ");
+                                        loading.getProgressHelper().setBarColor(RegisterActivity.this.getResources().getColor(R.color.greentea));
+                                        loading.setOnShowListener(new DialogInterface.OnShowListener() {
+                                            @Override
+                                            public void onShow(DialogInterface dialog) {
+                                                SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
+                                                Typeface face =  ResourcesCompat.getFont(RegisterActivity.this, R.font.kanit_light);
+                                                TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
+                                                TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
+                                                textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                                                textCon.setTextColor(getResources().getColor(R.color.black));
+                                                textCon.setTypeface(face);
+//                                              title
+                                                textCon.setGravity(Gravity.CENTER);
+                                                text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
+                                                text.setTextColor(getResources().getColor(R.color.red25));
+                                                text.setTypeface(face);
+//                                                text.setTypeface(ImFonts.getProximanova());
+                                                text.setGravity(Gravity.CENTER);
+
+                                            }
+                                        });
+
+                                        loading.show();
+//                    new SweetAlertDialog(RegisterActivity.this, SweetAlertDialog.ERROR_TYPE)
+//                            .setTitleText("Oops...")
+//                            .setContentText("กรุณาใส่รูป")
+//                            .show();
 
                 }else if (detectValid() ==4){
                     ageText.setError("จำกัดอายุแค่ 1-100 ");
@@ -168,8 +191,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("เลือกรูปภาพของคุณ");
-
-
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {

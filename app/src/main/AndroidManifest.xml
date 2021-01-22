@@ -5,14 +5,16 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+
     <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
         android:resizeable="true"
         android:smallScreens="true"
-        android:largeScreens="true"
-        android:xlargeScreens="true"
-        android:normalScreens="true"
-        android:anyDensity="true"/>
+        android:xlargeScreens="true" />
+
     <uses-feature
         android:name="android.hardware.camera2"
         android:required="false" />
@@ -26,13 +28,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FingerprintTEST"
         android:usesCleartextTraffic="true">
-        <activity android:name=".controller.RegisterActivity"></activity>
+        <activity android:name=".controller.LoginActivity"></activity>
+        <activity android:name=".controller.RegisterActivity" />
         <activity android:name=".controller.RegisterActivity3" />
         <activity android:name=".controller.RegisterActivity2" />
-        <activity android:name=".controller.ProfileAdminActivity" />
         <activity android:name=".controller.AdminActivity" />
         <activity android:name=".controller.DebugFinger" />
-        <activity android:name=".controller.RegisActivity" />
         <activity android:name=".controller.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -42,12 +43,11 @@
             <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
             </intent-filter>
+
             <meta-data
                 android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
                 android:resource="@xml/device_filter" />
         </activity>
-
-
 
         <meta-data
             android:name="preloaded_fonts"

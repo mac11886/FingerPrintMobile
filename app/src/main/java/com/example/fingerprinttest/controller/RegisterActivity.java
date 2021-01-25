@@ -25,7 +25,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.fingerprinttest.R;
 
@@ -38,7 +37,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class RegisterActivity extends AppCompatActivity {
 
     ImageView imageUserRegister, nextBtn;
-    Button takeOrchooseBtn;
+    Button takeOrChooseBtn;
     EditText nameText, ageText;
     String encoded;
     AlertDialog.Builder builder;
@@ -48,14 +47,14 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         imageUserRegister = (ImageView) findViewById(R.id.imageUserRegister);
-        takeOrchooseBtn = (Button) findViewById(R.id.takeOrchooseBtn);
+        takeOrChooseBtn = (Button) findViewById(R.id.takeOrchooseBtn);
         nextBtn = (ImageView) findViewById(R.id.nextBtn);
         nameText = (EditText) findViewById(R.id.editTextName);
         ageText = (EditText) findViewById(R.id.editTextAge);
 
         builder = new AlertDialog.Builder(this);
         //take or choose image function
-        takeOrchooseBtn.setOnClickListener(new View.OnClickListener() {
+        takeOrChooseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 imageUserRegister.setTag(true);

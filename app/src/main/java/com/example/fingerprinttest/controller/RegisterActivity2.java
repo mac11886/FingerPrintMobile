@@ -110,50 +110,6 @@ public class RegisterActivity2 extends AppCompatActivity {
         imgUser = getIntent().getStringExtra("imgUser");
 
 
-//        nextBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-//                if (firstImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle).getConstantState() || firstImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle_error_finger).getConstantState()) {
-////                    builder.setMessage("กรุณาสแกนนิ้วให้เสร็จสิ้น").setTitle("ใส่ข้อมูลให้ครบ");
-////                    AlertDialog alert = builder.create();
-////                    //Setting the title manually
-////                    alert.setTitle("แจ้งเตือน");
-////                    alert.show();
-//                    new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.ERROR_TYPE)
-//                            .setTitleText("Oops...")
-//                            .setContentText("Something went wrong!")
-//                            .show();
-//                } else if (secondImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle).getConstantState() || secondImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle_error_finger).getConstantState()) {
-////                    builder.setMessage("กรุณาสแกนนิ้วให้เสร็จสิ้น").setTitle("ใส่ข้อมูลให้ครบ");
-////                    AlertDialog alert = builder.create();
-////
-////                    //Setting the title manually
-////                    alert.setTitle("แจ้งเตือน");
-////                    alert.show();
-//                    new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.ERROR_TYPE)
-//                            .setTitleText("Oops...")
-//                            .setContentText("Something went wrong!")
-//                            .show();
-//                } else if (thridImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle).getConstantState() || thridImage.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.shape_rectangle_error_finger).getConstantState()) {
-////                    builder.setMessage("กรุณาสแกนนิ้วให้เสร็จสิ้น").setTitle("ใส่ข้อมูลให้ครบ");
-////                    AlertDialog alert = builder.create();
-////                    alert.setTitle("แจ้งเตือน");
-//                    //Setting the title manually
-//
-////                    alert.show();
-//                    new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.ERROR_TYPE)
-//                            .setTitleText("Oops...")
-//                            .setContentText("Something went wrong!")
-//                            .show();
-//
-//                } else {
-//
-//                }
-//            }
-//        });
-
-
     }
 
     //get API
@@ -610,7 +566,32 @@ public class RegisterActivity2 extends AppCompatActivity {
             enrollidx = 0;
             scanText.setText("กรุณาวางนิ้ว 3 ครั้งบนทีสแกน");
         } else {
-            scanText.setText("กรุณาเชื่อมต่อกับเครื่อง");
+            SweetAlertDialog loading = new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.WARNING_TYPE);
+            loading.setTitleText("แจ้งเตือน");
+            loading.setContentText("" +
+                    "กรุณาเชื่อมต่อกับเครื่องสแกนนิ้ว");
+            loading.getProgressHelper().setBarColor(RegisterActivity2.this.getResources().getColor(R.color.greentea));
+            loading.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialog) {
+                    SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
+                    Typeface face = ResourcesCompat.getFont(RegisterActivity2.this, R.font.kanit_light);
+                    TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
+                    TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
+                    textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                    textCon.setTextColor(getResources().getColor(R.color.black));
+                    textCon.setTypeface(face);
+                    textCon.setGravity(Gravity.CENTER);
+                    text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+                    text.setTextColor(getResources().getColor(R.color.red25));
+                    text.setTypeface(face);
+                    text.setGravity(Gravity.CENTER);
+
+                }
+            });
+
+            loading.show();
+            scanText.setText("กรุณาเชื่อมต่อกับเครื่องสแกนนิ้ว");
         }
     }
 

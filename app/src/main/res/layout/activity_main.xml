@@ -22,7 +22,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:fontFamily="@font/kanit_light"
-        android:text="กรุณาเลือกสถานะเข้าหรือออก"
+
         android:textColor="@color/black"
         android:textSize="@dimen/textSizeDimen"
         android:translationZ="5dp"
@@ -35,8 +35,8 @@
 
     <ImageView
         android:id="@+id/imageUser"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="359dp"
+        android:layout_height="242dp"
         android:layout_marginTop="35dp"
         android:layout_marginBottom="20dp"
         android:rotation="90"
@@ -174,7 +174,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="20dp" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

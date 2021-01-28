@@ -74,42 +74,41 @@ public class RegisterActivity extends AppCompatActivity {
                     ageText.setError("กรุณาใส่อายุ");
                     ageText.requestFocus();
                 } else if (detectValid() == 3) {
-                  SweetAlertDialog loading = new SweetAlertDialog(RegisterActivity.this, SweetAlertDialog.WARNING_TYPE);
-                                        loading.setTitleText("แจ้งเตือน");
-                                        loading.setContentText("กรุณาใส่รูปภาพ");
-                                        loading.getProgressHelper().setBarColor(RegisterActivity.this.getResources().getColor(R.color.greentea));
-                                        loading.setOnShowListener(new DialogInterface.OnShowListener() {
-                                            @Override
-                                            public void onShow(DialogInterface dialog) {
-                                                SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
-                                                Typeface face =  ResourcesCompat.getFont(RegisterActivity.this, R.font.kanit_light);
-                                                TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
-                                                TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
-                                                textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                                                textCon.setTextColor(getResources().getColor(R.color.black));
-                                                textCon.setTypeface(face);
+                    SweetAlertDialog loading = new SweetAlertDialog(RegisterActivity.this, SweetAlertDialog.WARNING_TYPE);
+                    loading.setTitleText("แจ้งเตือน");
+                    loading.setContentText("กรุณาใส่รูปภาพ");
+                    loading.getProgressHelper().setBarColor(RegisterActivity.this.getResources().getColor(R.color.greentea));
+                    loading.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialog) {
+                            SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
+                            Typeface face = ResourcesCompat.getFont(RegisterActivity.this, R.font.kanit_light);
+                            TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
+                            TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
+                            textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                            textCon.setTextColor(getResources().getColor(R.color.black));
+                            textCon.setTypeface(face);
 //                                              title
-                                                textCon.setGravity(Gravity.CENTER);
-                                                text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
-                                                text.setTextColor(getResources().getColor(R.color.red25));
-                                                text.setTypeface(face);
+                            textCon.setGravity(Gravity.CENTER);
+                            text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
+                            text.setTextColor(getResources().getColor(R.color.red25));
+                            text.setTypeface(face);
 //                                                text.setTypeface(ImFonts.getProximanova());
-                                                text.setGravity(Gravity.CENTER);
+                            text.setGravity(Gravity.CENTER);
 
-                                            }
-                                        });
+                        }
+                    });
 
-                                        loading.show();
+                    loading.show();
 //                    new SweetAlertDialog(RegisterActivity.this, SweetAlertDialog.ERROR_TYPE)
 //                            .setTitleText("Oops...")
 //                            .setContentText("กรุณาใส่รูป")
 //                            .show();
 
-                }else if (detectValid() ==4){
+                } else if (detectValid() == 4) {
                     ageText.setError("จำกัดอายุแค่ 1-100 ");
                     ageText.requestFocus();
-                }
-                else {
+                } else {
                     //sent data to post on API
                     String imageBase64 = encoded;
                     String name = nameText.getText().toString();
@@ -126,33 +125,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    private void showWarningDialog() {
-        ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.layoutDialog);
-        TextView textTitle = (TextView) findViewById(R.id.titleText);
-        TextView textMessage = (TextView) findViewById(R.id.messageText);
-        Button buttonAction = (Button) findViewById(R.id.buttonAction);
-        ImageView imageIcon = (ImageView) findViewById(R.id.imageIcon);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
-        View view = LayoutInflater.from(this).inflate(
-                R.layout.layout_warning_dialog, constraintLayout);
-        builder.setView(view);
-        textTitle.setText(" ======");
-        textMessage.setText(" HI ");
-        buttonAction.setText("OK");
-        imageIcon.setImageResource(R.drawable.ic_error);
-
-        AlertDialog alertDialog = builder.create();
-
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alertDialog.dismiss();
-            }
-        });
-        if (alertDialog.getWindow() != null) {
-            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
-        }
-    }
 
     private int detectValid() {
         int min = 1;
@@ -165,7 +137,7 @@ public class RegisterActivity extends AppCompatActivity {
             return 2;
         }
         int getAgeInt = Integer.parseInt(ageText.getText().toString());
-        if(getAgeInt < min || getAgeInt >max ){
+        if (getAgeInt < min || getAgeInt > max) {
             return 4;
         }
         if (imageUserRegister.getDrawable() == null) {
@@ -173,14 +145,6 @@ public class RegisterActivity extends AppCompatActivity {
             return 3;
         }
         return 0;
-//        if ((Boolean) imageUserRegister.getTag()) {
-//            takeOrchooseBtn.setEnabled(false);
-//
-//        } else {
-//            takeOrchooseBtn.setEnabled(true);
-//        }
-
-        // if (imageUser.getDrawable().isVisible()) ;
 
 
     }
@@ -196,6 +160,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if (options[item].equals("ถ่ายรูป")) {
                     Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
                     startActivityForResult(takePicture, 0);
                 } else if (options[item].equals("เลือกจาก Gallery")) {
                     Intent intent = new Intent(Intent.ACTION_PICK);
@@ -223,7 +188,7 @@ public class RegisterActivity extends AppCompatActivity {
                     if (resultCode == RESULT_OK && data != null) {
                         Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
                         Matrix matrix = new Matrix();
-                        matrix.postRotate(-90);
+                        matrix.postRotate(0);
                         Bitmap scaledBitmap = Bitmap.createScaledBitmap(selectedImage, selectedImage.getWidth(), selectedImage.getHeight(), true);
                         Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
                         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -243,13 +208,18 @@ public class RegisterActivity extends AppCompatActivity {
                             Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                             bitmap.compress(Bitmap.CompressFormat.WEBP, 40, byteArrayOutputStream);
-
+//                            bitmap.createScaledBitmap(bitmap,120,140,true);
+                            Matrix matrix = new Matrix();
+                            matrix.postRotate(0);
+                            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight(), true);
+                            Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
 
                             byte[] byteArray = byteArrayOutputStream.toByteArray();
                             encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
 //                textDropdown.setText("encode"+encoded.length()+"\n byte"+byteArray.length);
-                            imageUserRegister.setRotation(90);
                             imageUserRegister.setImageBitmap(bitmap);
+
+                            imageUserRegister.setRotation(90);
 
 //                imageUser.setImageBitmap(bitmap);
 

@@ -167,10 +167,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<User>> call, Throwable t) {
-                textView.setText("SERVER ERROR");
+                textView.setText("เกิดข้อผิดพลาดเกี่ยวกับ Internet");
                 SweetAlertDialog loading = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE);
-                loading.setTitleText("แจ้งเตือน");
-                loading.setContentText("SERVER ERROR");
+                loading.setTitleText("เกิดข้อผิดพลาดเกี่ยวกับ Internet");
+                loading.setContentText("กรุณาเปิดแอพใหม่อีกครั้ง");
                 loading.getProgressHelper().setBarColor(MainActivity.this.getResources().getColor(R.color.greentea));
                 loading.setOnShowListener((DialogInterface.OnShowListener) dialog -> {
                     SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
                     textCon.setTypeface(face);
 //                                                text.setTypeface(ImFonts.getProximanova());
                     textCon.setGravity(Gravity.CENTER);
-                    text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
+                    text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     text.setTextColor(getResources().getColor(R.color.red25));
                     text.setTypeface(face);
 //                                                text.setTypeface(ImFonts.getProximanova());
@@ -477,6 +477,7 @@ public class MainActivity extends AppCompatActivity {
                                     nameUser.setText("" + name);
                                     byte[] decodedString = Base64.decode(userImage, Base64.DEFAULT);
                                     Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                                    imageUser.setRotation(0);
                                     imageUser.setImageBitmap(decodedByte);
 
 

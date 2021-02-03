@@ -30,7 +30,11 @@ import androidx.core.content.res.ResourcesCompat;
 import com.example.fingerprinttest.R;
 import com.example.fingerprinttest.model.Attendance;
 import com.example.fingerprinttest.model.User;
+import com.example.fingerprinttest.services.AnalyticsApplication;
 import com.example.fingerprinttest.services.JsonPlaceHolderApi;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import com.zkteco.android.biometric.core.device.ParameterHelper;
 import com.zkteco.android.biometric.core.device.TransportType;
 import com.zkteco.android.biometric.core.utils.LogHelper;
@@ -45,7 +49,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.DateFormat;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -61,7 +65,14 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 public class MainActivity extends AppCompatActivity {
+
+
+
+    private Tracker mTracker;
     private static final int VID = 6997;
     private static final int PID = 288;
     private TextView textView = null;
@@ -76,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
     List<User> users;
     String userImage;
     ImageView imageUser;
-    TextView nameUser, goToRegis3;
+    TextView nameUser;
     String name;
     //    TextView textStatus;
     TextView dateUser;
@@ -180,12 +191,12 @@ public class MainActivity extends AppCompatActivity {
                     textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                     textCon.setTextColor(getResources().getColor(R.color.black));
                     textCon.setTypeface(face);
-//                                                text.setTypeface(ImFonts.getProximanova());
+
                     textCon.setGravity(Gravity.CENTER);
                     text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     text.setTextColor(getResources().getColor(R.color.red25));
                     text.setTypeface(face);
-//                                                text.setTypeface(ImFonts.getProximanova());
+
                     text.setGravity(Gravity.CENTER);
 
                 });
@@ -201,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-//    //get Image to ImageView
+    //    //get Image to ImageView
 //    @Override
 //    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        super.onActivityResult(requestCode, resultCode, data);
@@ -232,7 +243,6 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //    }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -249,7 +259,6 @@ public class MainActivity extends AppCompatActivity {
         ImageView adminBtn = (ImageView) findViewById(R.id.adminBtn);
         inBtn = (Button) findViewById(R.id.inBtn);
         outbtn = (Button) findViewById(R.id.outBtn);
-
 
 
         adminBtn.setOnClickListener(v -> {
@@ -279,23 +288,34 @@ public class MainActivity extends AppCompatActivity {
 
         getPosts();
 
-
-//        textStatus.setText(status);
+//
+//        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+//        mTracker =((AnalyticsApplication) getApplication()).getDefaultTracker();
         outbtn.setOnClickListener(v -> {
 
             try {
-
+//                mTracker.send(new HitBuilders.EventBuilder()
+//                        .setCategory("CheckIn-Out")
+//                        .setAction("click")
+//                        .setLabel("CheckOut")
+//                        .build());
                 OnBnBegin();
                 status = "ออก";
                 outbtn.setBackgroundColor(Color.parseColor("#207720"));
                 inBtn.setBackgroundColor(Color.parseColor("#00AF91"));
-//                    textStatus.setText("ออก");
             } catch (FingerprintException e) {
                 e.printStackTrace();
             }
         });
         inBtn.setOnClickListener(v -> {
+
             try {
+//                mTracker.send(new HitBuilders.EventBuilder()
+//                        .setCategory("CheckIn-Out")
+//                        .setAction("click")
+//                        .setLabel("checkIn")
+//                        .build());
+
                 OnBnBegin();
                 inBtn.setBackgroundColor(Color.parseColor("#207720"));
                 outbtn.setBackgroundColor(Color.parseColor("#00AF91"));
@@ -304,8 +324,6 @@ public class MainActivity extends AppCompatActivity {
             }
             status = "เข้า";
 
-
-//                    textStatus.setText("เข้า");
 
         });
 
@@ -363,6 +381,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void OnBnBegin() throws FingerprintException {
+
         try {
 
             if (bstart) return;
@@ -417,6 +436,7 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void extractOK(final byte[] fpTemplate) {
+
                     final byte[] tmpBuffer = fpTemplate;
                     runOnUiThread(new Runnable() {
                         @Override
@@ -465,7 +485,7 @@ public class MainActivity extends AppCompatActivity {
                                 if (ret > 0) {
                                     String strRes[] = new String(bufids).split("\t");
 //                                    textView.setText("identify succ, userid:" + strRes[0] + ", score:" + strRes[1]);
-                                    textView.setText("สแกนเสร็จสิ้น,ความชัด " + strRes[1] + "%");
+                                    textView.setText("สแกนเสร็จสิ้น,ความชัด " + strRes[1] + " %");
                                     try {
                                         getPosts();
                                     } catch (Exception e) {
@@ -494,6 +514,7 @@ public class MainActivity extends AppCompatActivity {
                                         SweetAlertDialog loading = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.NORMAL_TYPE);
                                         loading.setTitleText("ยินดีต้อนรับ");
                                         loading.setContentText("สวัสดีจ้า");
+
                                         loading.getProgressHelper().setBarColor(MainActivity.this.getResources().getColor(R.color.greentea));
                                         loading.setOnShowListener(new DialogInterface.OnShowListener() {
                                             @Override
@@ -530,13 +551,8 @@ public class MainActivity extends AppCompatActivity {
 
                                         loading.show();
                                         loading.setCancelable(false);
-//                                        SweetAlertDialog dialog;
-//                                        dialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.NORMAL_TYPE);
-//
-//                                        dialog.setTitleText("ยินดีต้อนรับ");
-//                                        dialog.setContentText("ตั้งใจทำงานน้าาา").getProgressHelper().setProgres;
-//                                        dialog.show();
-//                                        textStatus.setText(""+users.get(Integer.parseInt(strRes[0])).getId());
+
+
                                         createPostDate(users.get(Integer.parseInt(strRes[0])).getId(), formatdate, formattime, " " + status);
                                         try {
                                             outbtn.setBackgroundColor(Color.parseColor("#00AF91"));
@@ -550,6 +566,7 @@ public class MainActivity extends AppCompatActivity {
                                         loading.setTitleText("บ้ายบายยย");
                                         loading.setContentText("กลับบ้านดีๆ");
                                         loading.getProgressHelper().setBarColor(MainActivity.this.getResources().getColor(R.color.greentea));
+
                                         loading.setOnShowListener(new DialogInterface.OnShowListener() {
                                             @Override
                                             public void onShow(DialogInterface dialog) {
@@ -560,12 +577,12 @@ public class MainActivity extends AppCompatActivity {
                                                 textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                                                 textCon.setTextColor(getResources().getColor(R.color.blueButton));
                                                 textCon.setTypeface(face);
-//                                                text.setTypeface(ImFonts.getProximanova());
+
                                                 textCon.setGravity(Gravity.CENTER);
                                                 text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
                                                 text.setTextColor(getResources().getColor(R.color.blueButton));
                                                 text.setTypeface(face);
-//                                                text.setTypeface(ImFonts.getProximanova());
+
                                                 text.setGravity(Gravity.CENTER);
 
                                             }
@@ -574,6 +591,7 @@ public class MainActivity extends AppCompatActivity {
                                             @Override
                                             public void onClick(SweetAlertDialog sweetAlertDialog) {
                                                 try {
+
                                                     outbtn.setBackgroundColor(Color.parseColor("#00AF91"));
                                                     inBtn.setBackgroundColor(Color.parseColor("#00AF91"));
                                                     OnBnStop();
@@ -584,11 +602,8 @@ public class MainActivity extends AppCompatActivity {
                                             }
                                         });
                                         loading.show();
-//                                        new SweetAlertDialog(MainActivity.this, SweetAlertDialog.CUSTOM_IMAGE_TYPE)
-//                                                .setTitleText("บ้ายบายย")
-//                                                .setContentText("กลับดีๆน้าาา")
-//                                                .setCustomImage(R.drawable.ic_goodbye)
-//                                                .show();
+
+
                                         createPostDate(users.get(Integer.parseInt(strRes[0])).getId(), formatdate, formattime, " " + status);
                                         try {
                                             outbtn.setBackgroundColor(Color.parseColor("#00AF91"));

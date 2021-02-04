@@ -11,6 +11,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
@@ -18,6 +19,9 @@ import androidx.core.content.res.ResourcesCompat;
 import com.example.fingerprinttest.R;
 import com.example.fingerprinttest.model.Admin;
 import com.example.fingerprinttest.services.JsonPlaceHolderApi;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 
 
 import java.io.IOException;
@@ -47,14 +51,17 @@ public class LoginActivity extends AppCompatActivity {
         passwordText = findViewById(R.id.password_admin);
         signIn = findViewById(R.id.sign_in);
 
-        emailText.setText("adminmac@admin.com");
-        passwordText.setText("1234");
-        String email = emailText.getText().toString();
-        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+        emailText.setText("admin@email.com");
+
+        String emailPattern = "^[A-Za-z0-9+_.-]+@(.+)$";
         signIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String email = emailText.getText().toString();
+
                 int i = 0;
+                System.out.println("CHECKKK:" + email);
+                Log.e("EMAIL",""+email);
                 if (email.matches(emailPattern)) {
                     checkUser();
                 } else {
@@ -114,6 +121,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     loading.show();
 
+//                    Toast.makeText(LoginActivity.this,"response"+response.body().getEmail(),Toast.LENGTH_SHORT).show();
 
                     return;
                 }
@@ -143,15 +151,13 @@ public class LoginActivity extends AppCompatActivity {
                     public void onClick(SweetAlertDialog sDialog) {
 
                         Intent intent = new Intent(LoginActivity.this, AdminActivity.class);
+                        intent.putExtra("token",response.body().getEmail());
                         startActivity(intent);
+
+                        Log.e("message",response.message());
                     }
                 });
-//                            .setCancelButton("Cancel", new SweetAlertDialog.OnSweetClickListener() {
-//                                @Override
-//                                public void onClick(SweetAlertDialog sDialog) {
-//                                    sDialog.dismissWithAnimation();
-//                                }
-//                            })
+//                Toast.makeText(LoginActivity.this,"response "+response.body().getEmail(),Toast.LENGTH_SHORT).show();
                 dialog.setCancelable(false);
                 dialog.show();
 

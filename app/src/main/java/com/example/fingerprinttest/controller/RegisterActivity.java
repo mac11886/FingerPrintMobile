@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.fingerprinttest.R;
 
@@ -52,6 +53,10 @@ public class RegisterActivity extends AppCompatActivity {
         nameText = (EditText) findViewById(R.id.editTextName);
         ageText = (EditText) findViewById(R.id.editTextAge);
 
+
+        String token;
+        token = getIntent().getStringExtra("token");
+        Toast.makeText(this,"token:"+token,Toast.LENGTH_SHORT).show();
         builder = new AlertDialog.Builder(this);
         //take or choose image function
         takeOrChooseBtn.setOnClickListener(new View.OnClickListener() {
@@ -67,6 +72,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int a = 0;
+
                 if (detectValid() == 1) {
                     nameText.setError("กรุณาใส่ชื่อ");
                     nameText.requestFocus();
@@ -117,6 +123,7 @@ public class RegisterActivity extends AppCompatActivity {
                     intent.putExtra("nameUser", name);
                     intent.putExtra("ageUser", age);
                     intent.putExtra("imgUser", imageBase64);
+                    intent.putExtra("token",token);
                     startActivity(intent);
                 }
             }

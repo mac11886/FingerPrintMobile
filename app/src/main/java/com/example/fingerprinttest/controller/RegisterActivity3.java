@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.fingerprinttest.R;
+import com.example.fingerprinttest.model.Token;
 import com.example.fingerprinttest.model.User;
 import com.example.fingerprinttest.services.Adapter;
 import com.example.fingerprinttest.services.DatatoActivity;
@@ -42,7 +43,7 @@ import android.widget.Toast;
 
 
 public class RegisterActivity3 extends AppCompatActivity {
-
+    String token;
     RecyclerView dataList;
     User user;
     List<String> titles;
@@ -74,7 +75,8 @@ public class RegisterActivity3 extends AppCompatActivity {
         //regispage 2
         finger = getIntent().getStringExtra("fingerprint");
 
-
+        token = getIntent().getStringExtra("token");
+        Toast.makeText(this,"token:"+token,Toast.LENGTH_SHORT).show();
         interest = getIntent().getStringExtra("interest");
 
 
@@ -118,46 +120,14 @@ public class RegisterActivity3 extends AppCompatActivity {
 
                     loading.show();
                 } else {
-//                    SweetAlertDialog loading = new SweetAlertDialog(RegisterActivity3.this, SweetAlertDialog.SUCCESS_TYPE);
-//                    loading.setTitleText("แจ้งเตือน");
-//                    loading.setContentText("ข้อมูลได้ถูกบันทึกแล้ว");
-//                    loading.setConfirmText("OK");
-//                    loading.setOnShowListener(new DialogInterface.OnShowListener() {
-//                        @Override
-//                        public void onShow(DialogInterface dialog) {
-//                            SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
-//                            Typeface face = ResourcesCompat.getFont(RegisterActivity3.this, R.font.kanit_light);
-//                            TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
-//                            TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
-//                            textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-//                            textCon.setTextColor(getResources().getColor(R.color.black));
-//                            textCon.setTypeface(face);
-//                            textCon.setGravity(Gravity.CENTER);
-//                            text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
-//                            text.setTextColor(getResources().getColor(R.color.red25));
-//                            text.setTypeface(face);
-//                            text.setGravity(Gravity.CENTER);
-//                        }
-//                    });
-//                    loading.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-//                        @Override
-//                        public void onClick(SweetAlertDialog sweetAlertDialog) {
-//                            createPost();
-//                            getIntent().removeExtra("nameUser");
-//                            getIntent().removeExtra("ageUser");
-//                            getIntent().removeExtra("imgUser");
-//                            getIntent().removeExtra("fingerprint");
-//                            getIntent().removeExtra("interest");
-//                            Intent intent = new Intent(RegisterActivity3.this, AdminActivity.class);
-//                            startActivity(intent);
-//                        }
-//                    });
-//                    loading.setCancelable(false);
-//                    loading.show();
+//
+
+
                     SweetAlertDialog dialog = new SweetAlertDialog(RegisterActivity3.this, SweetAlertDialog.SUCCESS_TYPE);
                     dialog.setTitleText("แจ้งเตือน");
                     dialog.setContentText("ข้อมูลได้ถูกบันทึกแล้ว");
                     dialog.setConfirmText("OK!!");
+
                     dialog.setOnShowListener(new DialogInterface.OnShowListener() {
                         @Override
                         public void onShow(DialogInterface dialog) {
@@ -178,7 +148,24 @@ public class RegisterActivity3 extends AppCompatActivity {
                     dialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                         @Override
                         public void onClick(SweetAlertDialog sDialog) {
+                            Retrofit retrofit = new Retrofit.Builder()
+                                    .baseUrl("https://ta.kisrateam.com/")
+                                    .addConverterFactory(GsonConverterFactory.create())
+                                    .build();
+                            jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+                            Token token1 = new Token(token);
+                            Call call = jsonPlaceHolderApi.deleteToken(token1);
+                            call.enqueue(new Callback() {
+                                @Override
+                                public void onResponse(Call call, Response response) {
 
+                                }
+
+                                @Override
+                                public void onFailure(Call call, Throwable t) {
+
+                                }
+                            });
                             Intent intent = new Intent(RegisterActivity3.this, MainActivity.class);
                             startActivity(intent);
                         }

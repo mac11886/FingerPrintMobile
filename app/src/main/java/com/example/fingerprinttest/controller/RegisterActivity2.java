@@ -59,7 +59,7 @@ public class RegisterActivity2 extends AppCompatActivity {
 
     ImageView firstImage, secondImage, thridImage, scanbtn;
     TextView scanText;
-
+    String token;
     List<User> users;
     public static final int COLOR_PALEGOLDENROD = 0xff000000;
     String name;
@@ -95,6 +95,8 @@ public class RegisterActivity2 extends AppCompatActivity {
         scanText = (TextView) findViewById(R.id.scanText);
         scanbtn = (ImageView) findViewById(R.id.scanbtn);
 //        nextBtn = (Button) findViewById(R.id.nextBtn2);
+
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://ta.kisrateam.com/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -108,7 +110,8 @@ public class RegisterActivity2 extends AppCompatActivity {
         name = getIntent().getStringExtra("nameUser");
         age = getIntent().getStringExtra("ageUser");
         imgUser = getIntent().getStringExtra("imgUser");
-
+        token = getIntent().getStringExtra("token");
+        Toast.makeText(this,"token:"+token,Toast.LENGTH_SHORT).show();
 
     }
 
@@ -442,6 +445,7 @@ public class RegisterActivity2 extends AppCompatActivity {
                                                 intent.putExtra("ageUser", age);
                                                 intent.putExtra("imgUser", imgUser);
                                                 intent.putExtra("fingerprint", strBase64);
+                                                intent.putExtra("token",token);
                                                 startActivity(intent);
                                                 try {
                                                     OnBnStop();

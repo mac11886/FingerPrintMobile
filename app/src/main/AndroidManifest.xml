@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
 
     <supports-screens
@@ -29,7 +29,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FingerprintTEST"
         android:usesCleartextTraffic="true">
-        <activity android:name=".controller.LoginActivity"></activity>
+        <activity android:name=".controller.WebActivity"></activity>
+        <activity android:name=".controller.LoginActivity" />
         <activity android:name=".controller.RegisterActivity" />
         <activity android:name=".controller.RegisterActivity3" />
         <activity android:name=".controller.RegisterActivity2" />

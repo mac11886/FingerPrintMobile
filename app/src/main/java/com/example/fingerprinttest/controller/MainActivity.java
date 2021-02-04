@@ -179,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<User>> call, Throwable t) {
                 textView.setText("เกิดข้อผิดพลาดเกี่ยวกับ Internet");
+                textView.setTextSize(15);
                 SweetAlertDialog loading = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE);
                 loading.setTitleText("เกิดข้อผิดพลาดเกี่ยวกับ Internet");
                 loading.setContentText("กรุณาเปิดแอพใหม่อีกครั้ง");
@@ -326,6 +327,11 @@ public class MainActivity extends AppCompatActivity {
 
 
         });
+
+    }
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
 
     }
 
@@ -617,6 +623,11 @@ public class MainActivity extends AppCompatActivity {
                                 } else {
                                     //ยังไม่เคยสแกนลายนิ้วมือ
                                     textView.setText("กรุณาสแกนใหม่อีกครั้ง");
+                                    try {
+                                        textView.wait(1000);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                                 //Base64 Template
                                 //String strBase64 = Base64.encodeToString(tmpBuffer, 0, fingerprintSensor.getLastTempLen(), Base64.NO_WRAP);

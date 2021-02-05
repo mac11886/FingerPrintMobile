@@ -34,6 +34,8 @@ public class WebActivity extends AppCompatActivity {
 //        WebSettings webSettings = myWebView.getSettings();
 //        webSettings.setJavaScriptEnabled(true);
         myWebView.setWebChromeClient(new WebChromeClient());
+        // web test datePicker ja
+//        myWebView.loadUrl("https://jqueryui.com/datepicker/");
         myWebView.loadUrl("https://ta.kisrateam.com/login?token="+token);
         System.out.println("token :"+token);
 

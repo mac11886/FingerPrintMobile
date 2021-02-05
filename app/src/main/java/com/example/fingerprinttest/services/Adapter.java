@@ -43,16 +43,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         return sentdata;
     }
 
-    DatatoActivity datatoActivity = new DatatoActivity() {
-        @Override
-        public void sendData(String string) {
-            sentdata = string;
-        }
-    };
-
-    public Adapter(DatatoActivity datatoActivity) {
-        this.datatoActivity = datatoActivity;
-    }
 
     public Adapter(Context ctx, List<String> titles, List<Integer> images) {
         this.titles = titles;
@@ -74,7 +64,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         holder.title.setText(titles.get(position));
         holder.gridIcon.setImageResource(images.get(position));
 
-//        holder.title.setTextColor(Color.parseColor("000000"));
 
 
     }
@@ -126,7 +115,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
                             System.out.println("" + Color.RED);
                             System.out.println("" + title.getTextColors().getDefaultColor());
-                            //itemView.setBackgroundResource(R.color.black);
                             break;
                         case 1:
                             if (title.getTextColors().getDefaultColor() == Color.RED) {
@@ -212,11 +200,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                     sentdata = content;
 
                     makeInterest(sentdata);
-                    //datatoActivity.sendData(sentdata);
                     String content1 = content;
                     Log.e("error", sentdata);
 
-//                    System.out.println(content1.substring(0,content1.length()-1));
                 }
             });
 

@@ -128,29 +128,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Attendance> call, Throwable t) {
-
             }
         });
     }
 
 
-    //post id to get date
-//    public void createPostId(int id) {
-//
-//        User user = new User(id);
-//        Call<User> call = jsonPlaceHolderApi.createPostId(user);
-//        call.enqueue(new Callback<User>() {
-//            @Override
-//            public void onResponse(Call<User> call, Response<User> response) {
-//                User user1 = response.body();
-//            }
-//
-//            @Override
-//            public void onFailure(Call<User> call, Throwable t) {
-//
-//            }
-//        });
-//    }
 
 
     //get API
@@ -192,7 +174,6 @@ public class MainActivity extends AppCompatActivity {
                     textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                     textCon.setTextColor(getResources().getColor(R.color.black));
                     textCon.setTypeface(face);
-
                     textCon.setGravity(Gravity.CENTER);
                     text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     text.setTextColor(getResources().getColor(R.color.red25));
@@ -213,36 +194,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    //    //get Image to ImageView
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-//            Uri uri  =data.getData();
-//            try {
-//
-//
-//                Bitmap bitmap  = MediaStore.Images.Media.getBitmap(getContentResolver(),uri);
-//                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//                bitmap.compress(Bitmap.CompressFormat.WEBP, 40, byteArrayOutputStream);
-//                byte[] byteArray = byteArrayOutputStream .toByteArray();
-//
-//                encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
-//                byte[] decodedString = Base64.decode(encoded, Base64.DEFAULT);
-//                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-//
-////                textDropdown.setText("encode"+encoded.length()+"\n byte"+byteArray.length);
-//                imageUser.setImageBitmap(decodedByte);
-//
-//
-//            } catch (FileNotFoundException e) {
-//                e.printStackTrace();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//
-//        }
-//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -623,11 +574,6 @@ public class MainActivity extends AppCompatActivity {
                                 } else {
                                     //ยังไม่เคยสแกนลายนิ้วมือ
                                     textView.setText("กรุณาสแกนใหม่อีกครั้ง");
-                                    try {
-                                        textView.wait(1000);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
                                 }
                                 //Base64 Template
                                 //String strBase64 = Base64.encodeToString(tmpBuffer, 0, fingerprintSensor.getLastTempLen(), Base64.NO_WRAP);

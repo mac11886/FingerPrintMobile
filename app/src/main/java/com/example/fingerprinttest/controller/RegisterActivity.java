@@ -71,7 +71,7 @@ public class RegisterActivity extends AppCompatActivity {
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int a = 0;
+
 
                 if (detectValid() == 1) {
                     nameText.setError("กรุณาใส่ชื่อ");
@@ -99,17 +99,14 @@ public class RegisterActivity extends AppCompatActivity {
                             text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
                             text.setTextColor(getResources().getColor(R.color.red25));
                             text.setTypeface(face);
-//                                                text.setTypeface(ImFonts.getProximanova());
+
                             text.setGravity(Gravity.CENTER);
 
                         }
                     });
 
                     loading.show();
-//                    new SweetAlertDialog(RegisterActivity.this, SweetAlertDialog.ERROR_TYPE)
-//                            .setTitleText("Oops...")
-//                            .setContentText("กรุณาใส่รูป")
-//                            .show();
+
 
                 } else if (detectValid() == 4) {
                     ageText.setError("จำกัดอายุแค่ 1-100 ");
@@ -174,8 +171,6 @@ public class RegisterActivity extends AppCompatActivity {
                     intent.setType("image/*");
                     startActivityForResult(intent, 1);
 
-//                    Intent pickPicture = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                    startActivityForResult(pickPicture, 1);
                 } else if (options[item].equals("ยกเลิก")) {
                     dialog.dismiss();
                 }
@@ -223,12 +218,10 @@ public class RegisterActivity extends AppCompatActivity {
 
                             byte[] byteArray = byteArrayOutputStream.toByteArray();
                             encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
-//                textDropdown.setText("encode"+encoded.length()+"\n byte"+byteArray.length);
+
                             imageUserRegister.setImageBitmap(bitmap);
 
                             imageUserRegister.setRotation(90);
-
-//                imageUser.setImageBitmap(bitmap);
 
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
@@ -237,7 +230,7 @@ public class RegisterActivity extends AppCompatActivity {
                         }
 
 
-//
+
                     }
                     break;
             }

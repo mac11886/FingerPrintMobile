@@ -94,7 +94,6 @@ public class RegisterActivity2 extends AppCompatActivity {
         thridImage = (ImageView) findViewById(R.id.thridImage);
         scanText = (TextView) findViewById(R.id.scanText);
         scanbtn = (ImageView) findViewById(R.id.scanbtn);
-//        nextBtn = (Button) findViewById(R.id.nextBtn2);
 
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -122,7 +121,6 @@ public class RegisterActivity2 extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
                 if (!response.isSuccessful()) {
-//                    textDropdown.setText("Code : " + response.code());
                     return;
                 }
                 users = response.body();
@@ -136,7 +134,6 @@ public class RegisterActivity2 extends AppCompatActivity {
                     content += "Fingeprint: " + user.getFingerprint() + "\n";
                     content += "update_at: " + user.getUpdated_at() + "\n";
                     content += "Create_at: " + user.getCreated_at() + "\n";
-                    //textDropdown.setText(content);
 
                 }
             }
@@ -157,12 +154,10 @@ public class RegisterActivity2 extends AppCompatActivity {
                         textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                         textCon.setTextColor(getResources().getColor(R.color.black));
                         textCon.setTypeface(face);
-//                                                text.setTypeface(ImFonts.getProximanova());
                         textCon.setGravity(Gravity.CENTER);
                         text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
                         text.setTextColor(getResources().getColor(R.color.red25));
                         text.setTypeface(face);
-//                                                text.setTypeface(ImFonts.getProximanova());
                         text.setGravity(Gravity.CENTER);
 
                     }
@@ -303,22 +298,17 @@ public class RegisterActivity2 extends AppCompatActivity {
                                             textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                                             textCon.setTextColor(getResources().getColor(R.color.black));
                                             textCon.setTypeface(face);
-//                                                text.setTypeface(ImFonts.getProximanova());
                                             textCon.setGravity(Gravity.CENTER);
                                             text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 27);
                                             text.setTextColor(getResources().getColor(R.color.red25));
                                             text.setTypeface(face);
-//                                                text.setTypeface(ImFonts.getProximanova());
                                             text.setGravity(Gravity.CENTER);
 
                                         }
                                     });
 
                                     loading.show();
-//                                    new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.ERROR_TYPE)
-//                                            .setTitleText("Oops...")
-//                                            .setContentText("ลายนิ้วมือนี้ได้ทำการลงทะเบียนแล้ว กดลงทะเบียนใหม่")
-//                                            .show();
+
                                     scanText.setText("ลายนิ้วมือนี้ได้ทำการลงทะเบียนแล้ว กดลงทะเบียนใหม่");
                                     isRegister = false;
                                     enrollidx = 0;
@@ -353,10 +343,7 @@ public class RegisterActivity2 extends AppCompatActivity {
                                         });
 
                                         loading.show();
-//                                        new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.ERROR_TYPE)
-//                                                .setTitleText("กรุณาวางลายนิ้วมือให้เหมือนกัน 3 ครั้ง")
-//                                                .setContentText("กรุณาวางนิ้วใหม่อีกครั้ง")
-//                                                .show();
+
                                     }
                                     if (enrollidx == 2) {
                                         thridImage.setImageResource(R.drawable.shape_rectangle_error_finger);
@@ -384,10 +371,7 @@ public class RegisterActivity2 extends AppCompatActivity {
                                         });
 
                                         loading.show();
-//                                        new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.ERROR_TYPE)
-//                                                .setTitleText("กรุณาวางลายนิ้วมือให้เหมือนกัน 3 ครั้ง")
-//                                                .setContentText("กรุณาวางนิ้วใหม่อีกครั้ง")
-//                                                .show();
+
                                     }
                                     scanText.setText("กรุณาวางลายนิ้วมือให้เหมือนกัน 3 ครั้ง");
                                     return;
@@ -406,12 +390,7 @@ public class RegisterActivity2 extends AppCompatActivity {
                                         //Base64 Template
                                         // register success
                                         strBase64 = Base64.encodeToString(regTemp, 0, ret, Base64.NO_WRAP);
-//                                        AlertDialog alert = builder.create();
-//                                        alert.setIcon(R.drawable.ic_error);
-//                                        //Setting the title manually
-//                                        alert.setTitle("แจ้งเตือน");
-//                                        alert.setMessage("ลงทะเบียนเสร็จสิ้น");
-//                                        alert.show();
+
                                         SweetAlertDialog loading = new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.SUCCESS_TYPE);
                                         loading.setTitleText("ลงทะเบียนลายนิ้วมือเสร็จสิ้น");
                                         loading.setContentText("ข้อมูลได้ถูกบันทึกแล้ว");
@@ -457,24 +436,7 @@ public class RegisterActivity2 extends AppCompatActivity {
                                         });
 //                                        loading.setCancelable(false);
                                         loading.show();
-//                                        new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.SUCCESS_TYPE)
-//                                                .setTitleText("ลงทะเบียนเสร็จสิ้น").setConfirmButton("next", new SweetAlertDialog.OnSweetClickListener() {
-//                                            @Override
-//                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-////                                                Toast.makeText(RegisterActivity2.this,"ok",Toast.LENGTH_SHORT).show();
-//                                                Intent intent = new Intent(RegisterActivity2.this, RegisterActivity3.class);
-//                                                intent.putExtra("nameUser", name);
-//                                                intent.putExtra("ageUser", age);
-//                                                intent.putExtra("imgUser", imgUser);
-//                                                intent.putExtra("fingerprint", strBase64);
-//                                                startActivity(intent);
-//                                                try {
-//                                                    OnBnStop();
-//                                                } catch (FingerprintException e) {
-//                                                    e.printStackTrace();
-//                                                }
-//                                            }
-//                                        }).show();
+
                                         scanText.setText(" ");
 
 
@@ -507,10 +469,6 @@ public class RegisterActivity2 extends AppCompatActivity {
                                         });
 
                                         loading.show();
-//                                        new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.ERROR_TYPE)
-//                                                .setTitleText("ลงทะเบียนไม่สำเร็จ")
-//                                                .setContentText("กดลงทะเบียนใหม่อีกครั้ง")
-//                                                .show();
 
                                         scanText.setText("ลงทะเบียนไม่สำเร็จ");
                                     }
@@ -556,7 +514,6 @@ public class RegisterActivity2 extends AppCompatActivity {
             scanText.setText("วางนิ้วมือลงบนที่สแกนได้");
         } catch (FingerprintException e) {
             scanText.setText("กรุณาเชื่อมต่อกับที่สแกนนิ้ว");
-//            statusText.setText("begin capture fail.errorcode:"+ e.getErrorCode() + "err message:" + e.getMessage() + "inner code:" + e.getInternalErrorCode());
         }
     }
 

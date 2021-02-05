@@ -35,7 +35,6 @@
         <activity android:name=".controller.RegisterActivity3" />
         <activity android:name=".controller.RegisterActivity2" />
         <activity android:name=".controller.AdminActivity" />
-        <activity android:name=".controller.DebugFinger" />
         <activity android:name=".controller.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

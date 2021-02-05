@@ -121,7 +121,6 @@ public class LoginActivity extends AppCompatActivity {
 
                     loading.show();
 
-//                    Toast.makeText(LoginActivity.this,"response"+response.body().getEmail(),Toast.LENGTH_SHORT).show();
 
                     return;
                 }
@@ -156,9 +155,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         Log.e("message",response.message());
                     }
-                });
-//                Toast.makeText(LoginActivity.this,"response "+response.body().getEmail(),Toast.LENGTH_SHORT).show();
-                dialog.setCancelable(false);
+                }); dialog.setCancelable(false);
                 dialog.show();
 
 

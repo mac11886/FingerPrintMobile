@@ -37,10 +37,7 @@ public class AdminActivity extends AppCompatActivity {
 
     String token;
     List<User> users;
-    List<User> ListUser;
-    User user;
-    ArrayList copy;
-    Button linkBtn;
+
     ImageView goToAdmin, goToRegister, backBtn;
 
     @Override
@@ -94,14 +91,6 @@ public class AdminActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-//                String url = "https://ta.kisrateam.com/login";
-//                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-//                startActivity(browserIntent);
-
-//
-//                WebView webView = new WebView(v.getContext());
-//                setContentView(webView);
-//                webView.loadUrl("https://ta.kisrateam.com/login");
 
                 Intent intent = new Intent(AdminActivity.this, WebActivity.class);
                 intent.putExtra("token", token);

@@ -8,12 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -25,7 +21,6 @@ import com.example.fingerprinttest.R;
 import com.example.fingerprinttest.model.Token;
 import com.example.fingerprinttest.model.User;
 import com.example.fingerprinttest.services.Adapter;
-import com.example.fingerprinttest.services.DatatoActivity;
 import com.example.fingerprinttest.services.JsonPlaceHolderApi;
 
 import java.util.ArrayList;
@@ -38,7 +33,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-import android.graphics.Color;
 import android.widget.Toast;
 
 
@@ -170,12 +164,7 @@ public class RegisterActivity3 extends AppCompatActivity {
                             startActivity(intent);
                         }
                     });
-//                            .setCancelButton("Cancel", new SweetAlertDialog.OnSweetClickListener() {
-//                                @Override
-//                                public void onClick(SweetAlertDialog sDialog) {
-//                                    sDialog.dismissWithAnimation();
-//                                }
-//                            })
+
                     dialog.setCancelable(false);
                     dialog.show();
                     createPost();
@@ -206,7 +195,6 @@ public class RegisterActivity3 extends AppCompatActivity {
 //                    textLog.setText("Code ERROR : " + response.code());
                     return;
                 }
-//                textLog.setText("" + response.code());
                 //
                 User userPost = response.body();
                 String content = "";
@@ -218,7 +206,6 @@ public class RegisterActivity3 extends AppCompatActivity {
                 content += "Fingeprint: " + userPost.getFingerprint() + "\n";
                 content += "update_at: " + userPost.getUpdated_at() + "\n";
                 content += "Create_at: " + userPost.getCreated_at() + "\n";
-                // textDropdown.setText(response.body().toString());
             }
 
             @Override

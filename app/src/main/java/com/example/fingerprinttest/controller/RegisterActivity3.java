@@ -21,7 +21,10 @@ import com.example.fingerprinttest.R;
 import com.example.fingerprinttest.model.Token;
 import com.example.fingerprinttest.model.User;
 import com.example.fingerprinttest.services.Adapter;
+import com.example.fingerprinttest.services.AnalyticsApplication;
 import com.example.fingerprinttest.services.JsonPlaceHolderApi;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +40,7 @@ import android.widget.Toast;
 
 
 public class RegisterActivity3 extends AppCompatActivity {
+    Tracker mTracker;
     String token;
     RecyclerView dataList;
     User user;
@@ -178,7 +182,10 @@ public class RegisterActivity3 extends AppCompatActivity {
             }
         });
 
-
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker =application.getDefaultTracker();
+        mTracker.setScreenName("RegisterActivity3");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
 

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.XmlResourceParser;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -35,6 +36,7 @@ import com.example.fingerprinttest.services.JsonPlaceHolderApi;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.zkteco.android.biometric.core.device.ParameterHelper;
 import com.zkteco.android.biometric.core.device.TransportType;
 import com.zkteco.android.biometric.core.utils.LogHelper;
@@ -214,7 +216,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         adminBtn.setOnClickListener(v -> {
-
+            Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
+            t.send(new HitBuilders.EventBuilder()
+                    .setCategory("Intent")
+                    .setAction("click")
+                    .setLabel("LoginPage")
+                    .build());
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
         });
@@ -226,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 //       SHOW DATE AND TIME
-        dateUser.setText(new SimpleDateFormat("dd-MM-yyyy", Locale.US).format(new Date()));
+        dateUser.setText(new SimpleDateFormat("dd-MMM-yyyy", Locale.US).format(new Date()));
         final Handler someHandler = new Handler(getMainLooper());
         someHandler.postDelayed(new Runnable() {
             @Override
@@ -239,18 +246,24 @@ public class MainActivity extends AppCompatActivity {
         startFingerprintSensor();
 
         getPosts();
-
+        if (!checkConfiguration()) {
+            View contentView = findViewById(android.R.id.content);
+            Snackbar.make(contentView, R.string.bad_config, Snackbar.LENGTH_INDEFINITE).show();
+        }
 //
-//        AnalyticsApplication application = (AnalyticsApplication) getApplication();
-//        mTracker =((AnalyticsApplication) getApplication()).getDefaultTracker();
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker =application.getDefaultTracker();
+        mTracker.setScreenName("MainActivity");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         outbtn.setOnClickListener(v -> {
 
             try {
-//                mTracker.send(new HitBuilders.EventBuilder()
-//                        .setCategory("CheckIn-Out")
-//                        .setAction("click")
-//                        .setLabel("CheckOut")
-//                        .build());
+                Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
+                t.send(new HitBuilders.EventBuilder()
+                        .setCategory("CheckIn-Out")
+                        .setAction("click")
+                        .setLabel("CheckOut")
+                        .build());
                 OnBnBegin();
                 status = "ออก";
                 outbtn.setBackgroundColor(Color.parseColor("#207720"));
@@ -262,11 +275,12 @@ public class MainActivity extends AppCompatActivity {
         inBtn.setOnClickListener(v -> {
 
             try {
-//                mTracker.send(new HitBuilders.EventBuilder()
-//                        .setCategory("CheckIn-Out")
-//                        .setAction("click")
-//                        .setLabel("checkIn")
-//                        .build());
+                Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
+                t.send(new HitBuilders.EventBuilder()
+                        .setCategory("CheckIn-Out")
+                        .setAction("click")
+                        .setLabel("checkIn")
+                        .build());
 
                 OnBnBegin();
                 inBtn.setBackgroundColor(Color.parseColor("#207720"));
@@ -279,6 +293,36 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+    }
+
+
+    private boolean checkConfiguration() {
+        XmlResourceParser parser = getResources().getXml(R.xml.global_tracker);
+
+        boolean foundTag = false;
+        try {
+            while (parser.getEventType() != XmlResourceParser.END_DOCUMENT) {
+                if (parser.getEventType() == XmlResourceParser.START_TAG) {
+                    String tagName = parser.getName();
+                    String nameAttr = parser.getAttributeValue(null, "name");
+
+                    foundTag = "string".equals(tagName) && "ga_trackingId".equals(nameAttr);
+                }
+
+                if (parser.getEventType() == XmlResourceParser.TEXT) {
+                    if (foundTag && parser.getText().contains("REPLACE_ME")) {
+                        return false;
+                    }
+                }
+
+                parser.next();
+            }
+        } catch (Exception e) {
+            Log.w("okok", "checkConfiguration", e);
+            return false;
+        }
+
+        return true;
     }
     @Override
     public void onBackPressed() {
@@ -460,7 +504,7 @@ public class MainActivity extends AppCompatActivity {
 
                                     // DATE
                                     Calendar c = Calendar.getInstance();
-                                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
                                     SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("HH:mm:ss");
                                     String formatdate = simpleDateFormat.format(c.getTime());
                                     String formattime = simpleTimeFormat.format(c.getTime());
@@ -509,7 +553,12 @@ public class MainActivity extends AppCompatActivity {
                                         loading.show();
                                         loading.setCancelable(false);
 
-
+                                        Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
+                                        t.send(new HitBuilders.EventBuilder()
+                                                .setCategory("Scanner")
+                                                .setAction("Scan")
+                                                .setLabel("CheckIn")
+                                                .build());
                                         createPostDate(users.get(Integer.parseInt(strRes[0])).getId(), formatdate, formattime, " " + status);
                                         try {
                                             outbtn.setBackgroundColor(Color.parseColor("#00AF91"));
@@ -560,7 +609,12 @@ public class MainActivity extends AppCompatActivity {
                                         });
                                         loading.show();
 
-
+                                        Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
+                                        t.send(new HitBuilders.EventBuilder()
+                                                .setCategory("Scannx`er")
+                                                .setAction("Scan")
+                                                .setLabel("CheckOut")
+                                                .build());
                                         createPostDate(users.get(Integer.parseInt(strRes[0])).getId(), formatdate, formattime, " " + status);
                                         try {
                                             outbtn.setBackgroundColor(Color.parseColor("#00AF91"));

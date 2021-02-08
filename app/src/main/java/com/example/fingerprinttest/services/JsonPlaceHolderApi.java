@@ -29,8 +29,6 @@ public interface JsonPlaceHolderApi {
     @POST("api/date")
     Call<Attendance> createPostDate(@Body Attendance attendance);
 
-
-
     @POST("api/save")
     Call<User> createPost(@Body  User user);
 

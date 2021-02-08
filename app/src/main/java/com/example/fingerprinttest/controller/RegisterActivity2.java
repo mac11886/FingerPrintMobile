@@ -29,7 +29,10 @@ import android.widget.Toast;
 
 import com.example.fingerprinttest.R;
 import com.example.fingerprinttest.model.User;
+import com.example.fingerprinttest.services.AnalyticsApplication;
 import com.example.fingerprinttest.services.JsonPlaceHolderApi;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.zkteco.android.biometric.core.device.ParameterHelper;
 import com.zkteco.android.biometric.core.device.TransportType;
 import com.zkteco.android.biometric.core.utils.LogHelper;
@@ -56,7 +59,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class RegisterActivity2 extends AppCompatActivity {
-
+    Tracker mTracker;
     ImageView firstImage, secondImage, thridImage, scanbtn;
     TextView scanText;
     String token;
@@ -111,7 +114,10 @@ public class RegisterActivity2 extends AppCompatActivity {
         imgUser = getIntent().getStringExtra("imgUser");
         token = getIntent().getStringExtra("token");
         Toast.makeText(this,"token:"+token,Toast.LENGTH_SHORT).show();
-
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker =application.getDefaultTracker();
+        mTracker.setScreenName("RegisterActivity2");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     //get API

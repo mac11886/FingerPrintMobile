@@ -28,6 +28,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.fingerprinttest.R;
+import com.example.fingerprinttest.services.AnalyticsApplication;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -36,7 +39,7 @@ import java.io.IOException;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class RegisterActivity extends AppCompatActivity {
-
+    Tracker mTracker;
     ImageView imageUserRegister, nextBtn;
     Button takeOrChooseBtn;
     EditText nameText, ageText;
@@ -125,6 +128,10 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker =application.getDefaultTracker();
+        mTracker.setScreenName("RegisterActivity");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
 
     }
@@ -163,15 +170,32 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int item) {
 
                 if (options[item].equals("ถ่ายรูป")) {
+                    Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
+                    t.send(new HitBuilders.EventBuilder()
+                            .setCategory("Image")
+                            .setAction("take")
+                            .setLabel("takeImage")
+                            .build());
                     Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
                     startActivityForResult(takePicture, 0);
                 } else if (options[item].equals("เลือกจาก Gallery")) {
+                    Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
+                    t.send(new HitBuilders.EventBuilder()
+                            .setCategory("Image")
+                            .setAction("choose")
+                            .setLabel("chooseImage")
+                            .build());
                     Intent intent = new Intent(Intent.ACTION_PICK);
                     intent.setType("image/*");
                     startActivityForResult(intent, 1);
 
                 } else if (options[item].equals("ยกเลิก")) {
+                    Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
+                    t.send(new HitBuilders.EventBuilder()
+                            .setCategory("Image")
+                            .setAction("cancel")
+                            .setLabel("cancelImage")
+                            .build());
                     dialog.dismiss();
                 }
             }

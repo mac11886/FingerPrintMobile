@@ -16,7 +16,10 @@ import android.widget.Toast;
 import com.example.fingerprinttest.R;
 import com.example.fingerprinttest.model.Token;
 import com.example.fingerprinttest.model.User;
+import com.example.fingerprinttest.services.AnalyticsApplication;
 import com.example.fingerprinttest.services.JsonPlaceHolderApi;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,7 +34,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static java.lang.Thread.sleep;
 
 public class AdminActivity extends AppCompatActivity {
-
+    private Tracker mTracker;
     private JsonPlaceHolderApi jsonPlaceHolderApi;
     RecyclerView recycler_view;
 
@@ -71,15 +74,30 @@ public class AdminActivity extends AppCompatActivity {
 
                     }
                 });
+                Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
+                t.send(new HitBuilders.EventBuilder()
+                        .setCategory("Intent")
+                        .setAction("click")
+                        .setLabel("BackToMainPage")
+                        .build());
                 Intent intent = new Intent(AdminActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         });
-
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker =application.getDefaultTracker();
+        mTracker.setScreenName("AdminActivity");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
         goToRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
+                t.send(new HitBuilders.EventBuilder()
+                        .setCategory("Intent")
+                        .setAction("click")
+                        .setLabel("RegisterPage")
+                        .build());
                 Intent intent = new Intent(AdminActivity.this, RegisterActivity.class);
                 intent.putExtra("token", token);
                 startActivity(intent);
@@ -90,7 +108,12 @@ public class AdminActivity extends AppCompatActivity {
         goToAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
+                t.send(new HitBuilders.EventBuilder()
+                        .setCategory("Intent")
+                        .setAction("click")
+                        .setLabel("WebPage")
+                        .build());
 
                 Intent intent = new Intent(AdminActivity.this, WebActivity.class);
                 intent.putExtra("token", token);

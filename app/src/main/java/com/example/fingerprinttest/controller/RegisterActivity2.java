@@ -113,9 +113,9 @@ public class RegisterActivity2 extends AppCompatActivity {
         age = getIntent().getStringExtra("ageUser");
         imgUser = getIntent().getStringExtra("imgUser");
         token = getIntent().getStringExtra("token");
-        Toast.makeText(this,"token:"+token,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "token:" + token, Toast.LENGTH_SHORT).show();
         AnalyticsApplication application = (AnalyticsApplication) getApplication();
-        mTracker =application.getDefaultTracker();
+        mTracker = application.getDefaultTracker();
         mTracker.setScreenName("RegisterActivity2");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
@@ -287,6 +287,12 @@ public class RegisterActivity2 extends AppCompatActivity {
                                 if (ret > 0) {
                                     String strRes[] = new String(bufids).split("\t");
                                     // finger has registry
+                                    Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
+                                    t.send(new HitBuilders.EventBuilder()
+                                            .setCategory("EnrollNotFinish")
+                                            .setAction("error")
+                                            .setLabel("alreadyFinger")
+                                            .build());
                                     firstImage.setImageResource(R.drawable.shape_rectangle);
                                     secondImage.setImageResource(R.drawable.shape_rectangle);
                                     thridImage.setImageResource(R.drawable.shape_rectangle);
@@ -325,6 +331,12 @@ public class RegisterActivity2 extends AppCompatActivity {
                                     //เมื่อลงทะเบียน นิ้ว 1 ครั้งละเปลี่ยนนิ้ว จะเข้า if นี้
                                     if (enrollidx == 1) {
                                         secondImage.setImageResource(R.drawable.shape_rectangle_error_finger);
+                                        Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
+                                        t.send(new HitBuilders.EventBuilder()
+                                                .setCategory("EnrollNotFinish")
+                                                .setAction("error")
+                                                .setLabel("differentFinger")
+                                                .build());
                                         SweetAlertDialog loading = new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.ERROR_TYPE);
                                         loading.setTitleText("กรุณาวางลายนิ้วมือให้เหมือนกัน 3 ครั้ง");
                                         loading.setContentText("กรุณาวางนิ้วใหม่อีกครั้ง");
@@ -354,6 +366,12 @@ public class RegisterActivity2 extends AppCompatActivity {
                                     if (enrollidx == 2) {
                                         thridImage.setImageResource(R.drawable.shape_rectangle_error_finger);
                                         SweetAlertDialog loading = new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.ERROR_TYPE);
+                                        Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
+                                        t.send(new HitBuilders.EventBuilder()
+                                                .setCategory("EnrollNotFinish")
+                                                .setAction("error")
+                                                .setLabel("differentFinger")
+                                                .build());
                                         loading.setTitleText("กรุณาวางลายนิ้วมือให้เหมือนกัน 3 ครั้ง");
                                         loading.setContentText("กรุณาวางนิ้วใหม่อีกครั้ง");
                                         loading.getProgressHelper().setBarColor(RegisterActivity2.this.getResources().getColor(R.color.greentea));
@@ -396,7 +414,12 @@ public class RegisterActivity2 extends AppCompatActivity {
                                         //Base64 Template
                                         // register success
                                         strBase64 = Base64.encodeToString(regTemp, 0, ret, Base64.NO_WRAP);
-
+                                        Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
+                                        t.send(new HitBuilders.EventBuilder()
+                                                .setCategory("EnrollFinish")
+                                                .setAction("finish")
+                                                .setLabel("enrollFinish")
+                                                .build());
                                         SweetAlertDialog loading = new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.SUCCESS_TYPE);
                                         loading.setTitleText("ลงทะเบียนลายนิ้วมือเสร็จสิ้น");
                                         loading.setContentText("ข้อมูลได้ถูกบันทึกแล้ว");
@@ -430,7 +453,7 @@ public class RegisterActivity2 extends AppCompatActivity {
                                                 intent.putExtra("ageUser", age);
                                                 intent.putExtra("imgUser", imgUser);
                                                 intent.putExtra("fingerprint", strBase64);
-                                                intent.putExtra("token",token);
+                                                intent.putExtra("token", token);
                                                 startActivity(intent);
                                                 try {
                                                     OnBnStop();
@@ -450,6 +473,13 @@ public class RegisterActivity2 extends AppCompatActivity {
                                         firstImage.setImageResource(R.drawable.shape_rectangle_error_finger);
                                         secondImage.setImageResource(R.drawable.shape_rectangle_error_finger);
                                         thridImage.setImageResource(R.drawable.shape_rectangle_error_finger);
+                                        Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
+                                        t.send(new HitBuilders.EventBuilder()
+                                                .setCategory("EnrollNotFinish")
+                                                .setAction("error")
+                                                .setLabel("enrollNotFinish")
+                                                .build());
+
                                         SweetAlertDialog loading = new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.ERROR_TYPE);
                                         loading.setTitleText("ลงทะเบียนไม่สำเร็จ");
                                         loading.setContentText("กดลงทะเบียนใหม่อีกครั้ง");
@@ -519,6 +549,12 @@ public class RegisterActivity2 extends AppCompatActivity {
             bstart = true;
             scanText.setText("วางนิ้วมือลงบนที่สแกนได้");
         } catch (FingerprintException e) {
+            Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
+            t.send(new HitBuilders.EventBuilder()
+                    .setCategory("Device")
+                    .setAction("click")
+                    .setLabel("notDetectDevice")
+                    .build());
             scanText.setText("กรุณาเชื่อมต่อกับที่สแกนนิ้ว");
         }
     }
@@ -527,16 +563,28 @@ public class RegisterActivity2 extends AppCompatActivity {
         firstImage.setImageResource(R.drawable.shape_rectangle);
         secondImage.setImageResource(R.drawable.shape_rectangle);
         thridImage.setImageResource(R.drawable.shape_rectangle);
+        Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
+        t.send(new HitBuilders.EventBuilder()
+                .setCategory("Enroll")
+                .setAction("click")
+                .setLabel("EnrollScan")
+                .build());
         OnBnBegin();
         if (bstart) {
             isRegister = true;
             enrollidx = 0;
             scanText.setText("กรุณาวางนิ้ว 3 ครั้งบนทีสแกน");
         } else {
+
             SweetAlertDialog loading = new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.WARNING_TYPE);
             loading.setTitleText("แจ้งเตือน");
             loading.setContentText("" +
                     "กรุณาเชื่อมต่อกับเครื่องสแกนนิ้ว");
+            t.send(new HitBuilders.EventBuilder()
+                    .setCategory("Device")
+                    .setAction("click")
+                    .setLabel("notDetectDevice")
+                    .build());
             loading.getProgressHelper().setBarColor(RegisterActivity2.this.getResources().getColor(R.color.greentea));
             loading.setOnShowListener(new DialogInterface.OnShowListener() {
                 @Override
@@ -579,7 +627,6 @@ public class RegisterActivity2 extends AppCompatActivity {
                 fingerprintSensor.stopCapture(0);
                 bstart = false;
                 fingerprintSensor.close(0);
-                //scanText.setText("ปิดการสแกน");
             } else {
                 scanText.setText("เครื่องยังไม่ถูกเปิดใช้งาน");
             }

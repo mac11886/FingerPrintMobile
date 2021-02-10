@@ -65,9 +65,5 @@ dependencies {
     // [START gms_compile]
     implementation 'com.google.android.gms:play-services-analytics:15.0.0'
     // [END gms_compile]
-    // Import the Firebase BoM (see: https://firebase.google.com/docs/android/learn-more#bom)
-//    implementation platform('com.google.firebase:firebase-bom:26.1.1')
-//
-//    // Firebase Analytics (Java)
-//    implementation 'com.google.firebase:firebase-analytics'
+
 }

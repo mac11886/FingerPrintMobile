@@ -20,8 +20,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fingerprinttest.R;
 import com.example.fingerprinttest.controller.RegisterActivity3;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
-import java.util.List;
+import java.util.List;import com.example.fingerprinttest.services.AnalyticsApplication;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
@@ -103,6 +105,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                     switch (getAdapterPosition()) {
                         case 0:
                             if (title.getTextColors().getDefaultColor() == Color.RED) {
+
                                 title.setTextColor(Color.BLACK);
                                 content = content.replaceAll("Photography,", "");
                                 countInterest -= 1;

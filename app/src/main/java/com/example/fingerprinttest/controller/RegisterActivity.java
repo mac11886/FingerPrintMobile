@@ -3,20 +3,27 @@ package com.example.fingerprinttest.controller;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.FileProvider;
 import androidx.core.content.res.ResourcesCompat;
 
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -33,18 +40,22 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Date;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class RegisterActivity extends AppCompatActivity {
+public class
+RegisterActivity extends AppCompatActivity {
     Tracker mTracker;
     ImageView imageUserRegister, nextBtn;
     Button takeOrChooseBtn;
     EditText nameText, ageText;
     String encoded;
     AlertDialog.Builder builder;
+    String currentPhotoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +70,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         String token;
         token = getIntent().getStringExtra("token");
-        Toast.makeText(this,"token:"+token,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "token:" + token, Toast.LENGTH_SHORT).show();
         builder = new AlertDialog.Builder(this);
         //take or choose image function
         takeOrChooseBtn.setOnClickListener(new View.OnClickListener() {
@@ -77,12 +88,30 @@ public class RegisterActivity extends AppCompatActivity {
 
 
                 if (detectValid() == 1) {
+                    Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
+                    t.send(new HitBuilders.EventBuilder()
+                            .setCategory("Detect")
+                            .setAction("error")
+                            .setLabel("ValidName")
+                            .build());
                     nameText.setError("กรุณาใส่ชื่อ");
                     nameText.requestFocus();
                 } else if (detectValid() == 2) {
+                    Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
+                    t.send(new HitBuilders.EventBuilder()
+                            .setCategory("Detect")
+                            .setAction("error")
+                            .setLabel("ValidAge")
+                            .build());
                     ageText.setError("กรุณาใส่อายุ");
                     ageText.requestFocus();
                 } else if (detectValid() == 3) {
+                    Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
+                    t.send(new HitBuilders.EventBuilder()
+                            .setCategory("Detect")
+                            .setAction("error")
+                            .setLabel("ValidImage")
+                            .build());
                     SweetAlertDialog loading = new SweetAlertDialog(RegisterActivity.this, SweetAlertDialog.WARNING_TYPE);
                     loading.setTitleText("แจ้งเตือน");
                     loading.setContentText("กรุณาใส่รูปภาพ");
@@ -123,13 +152,13 @@ public class RegisterActivity extends AppCompatActivity {
                     intent.putExtra("nameUser", name);
                     intent.putExtra("ageUser", age);
                     intent.putExtra("imgUser", imageBase64);
-                    intent.putExtra("token",token);
+                    intent.putExtra("token", token);
                     startActivity(intent);
                 }
             }
         });
         AnalyticsApplication application = (AnalyticsApplication) getApplication();
-        mTracker =application.getDefaultTracker();
+        mTracker = application.getDefaultTracker();
         mTracker.setScreenName("RegisterActivity");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
@@ -160,6 +189,27 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        }
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".png",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    Uri photoURI;
+
     private void selectImage(Context context) {
         final CharSequence[] options = {"ถ่ายรูป", "เลือกจาก Gallery", "ยกเลิก"};
 
@@ -176,8 +226,28 @@ public class RegisterActivity extends AppCompatActivity {
                             .setAction("take")
                             .setLabel("takeImage")
                             .build());
-                    Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(takePicture, 0);
+//                    Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                    startActivityForResult(takePicture, 0);
+                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    // Ensure that there's a camera activity to handle the intent
+                    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                        // Create the File where the photo should go
+                        File photoFile = null;
+                        try {
+                            photoFile = createImageFile();
+                        } catch (IOException ex) {
+                            // Error occurred while creating the File
+
+                        }
+                        // Continue only if the File was successfully created
+                        if (photoFile != null) {
+                            photoURI = FileProvider.getUriForFile(RegisterActivity.this,
+                                    "com.example.android.fileprovider",
+                                    photoFile);
+                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                            startActivityForResult(takePictureIntent, 0);
+                        }
+                    }
                 } else if (options[item].equals("เลือกจาก Gallery")) {
                     Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
                     t.send(new HitBuilders.EventBuilder()
@@ -211,18 +281,20 @@ public class RegisterActivity extends AppCompatActivity {
         if (resultCode != RESULT_CANCELED) {
             switch (requestCode) {
                 case 0:
-                    if (resultCode == RESULT_OK && data != null) {
-                        Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
-                        Matrix matrix = new Matrix();
-                        matrix.postRotate(0);
-                        Bitmap scaledBitmap = Bitmap.createScaledBitmap(selectedImage, selectedImage.getWidth(), selectedImage.getHeight(), true);
-                        Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
-                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                        rotatedBitmap.compress(Bitmap.CompressFormat.WEBP, 40, byteArrayOutputStream);
-                        byte[] byteArray = byteArrayOutputStream.toByteArray();
-                        encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    Log.e("CHECKER", "OUTSIDE");
 
-                        imageUserRegister.setImageBitmap(selectedImage);
+
+
+                    if (resultCode == RESULT_OK) {
+                        Log.e("CHECKER", "ERRORRRRRRRRRRRRRRRRINSIDE");
+                        galleryAddPic();
+                        setPic();
+//                        Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
+//                        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+
+//                        imageUserRegister.setImageBitmap();
+
+
                     }
                     break;
                 case 1:
@@ -254,11 +326,54 @@ public class RegisterActivity extends AppCompatActivity {
                         }
 
 
-
                     }
                     break;
             }
         }
+
+    }
+
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(currentPhotoPath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
+    }
+
+    private void setPic() {
+        // Get the dimensions of the View
+        int targetW = imageUserRegister.getWidth();
+        int targetH = imageUserRegister.getHeight();
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+
+        BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.max(1, Math.min(photoW / targetW, photoH / targetH));
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90);
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight(), true);
+        Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        rotatedBitmap.compress(Bitmap.CompressFormat.WEBP, 40, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+        imageUserRegister.setImageBitmap(rotatedBitmap);
 
     }
 }

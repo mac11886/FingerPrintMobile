@@ -498,7 +498,7 @@ public class MainActivity extends AppCompatActivity {
                                     nameUser.setText("" + name);
                                     byte[] decodedString = Base64.decode(userImage, Base64.DEFAULT);
                                     Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                                    imageUser.setRotation(0);
+//                                    imageUser.setRotation(-90);
                                     imageUser.setImageBitmap(decodedByte);
 
 

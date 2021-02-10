@@ -18,8 +18,8 @@
         android:xlargeScreens="true" />
 
     <uses-feature
-        android:name="android.hardware.camera2"
-        android:required="false" />
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <application
         android:name=".services.AnalyticsApplication"
@@ -40,7 +40,7 @@
         <activity android:name=".controller.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="android.media.action.IMAGE_CAPTURE" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
@@ -55,6 +55,15 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.android.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"></meta-data>
+        </provider>
     </application>
 
 </manifest>

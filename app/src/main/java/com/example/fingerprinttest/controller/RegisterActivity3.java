@@ -48,7 +48,7 @@ public class RegisterActivity3 extends AppCompatActivity {
     List<Integer> images;
     ImageView submitBtn;
     Adapter adapter;
-    Button nextBtn;
+
 
     String name;
     String age;
@@ -74,7 +74,7 @@ public class RegisterActivity3 extends AppCompatActivity {
         finger = getIntent().getStringExtra("fingerprint");
 
         token = getIntent().getStringExtra("token");
-        Toast.makeText(this,"token:"+token,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "token:" + token, Toast.LENGTH_SHORT).show();
         interest = getIntent().getStringExtra("interest");
 
 
@@ -118,7 +118,7 @@ public class RegisterActivity3 extends AppCompatActivity {
 
                     loading.show();
                 } else {
-//
+
 
 
                     SweetAlertDialog dialog = new SweetAlertDialog(RegisterActivity3.this, SweetAlertDialog.SUCCESS_TYPE);
@@ -164,6 +164,13 @@ public class RegisterActivity3 extends AppCompatActivity {
 
                                 }
                             });
+
+                            Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
+                            t.send(new HitBuilders.EventBuilder()
+                                    .setCategory("User")
+                                    .setAction("send")
+                                    .setLabel("newUser")
+                                    .build());
                             Intent intent = new Intent(RegisterActivity3.this, MainActivity.class);
                             startActivity(intent);
                         }
@@ -183,7 +190,7 @@ public class RegisterActivity3 extends AppCompatActivity {
         });
 
         AnalyticsApplication application = (AnalyticsApplication) getApplication();
-        mTracker =application.getDefaultTracker();
+        mTracker = application.getDefaultTracker();
         mTracker.setScreenName("RegisterActivity3");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
@@ -251,7 +258,6 @@ public class RegisterActivity3 extends AppCompatActivity {
 
 
     }
-
 
 
 }

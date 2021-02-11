@@ -24,6 +24,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
@@ -55,6 +56,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -71,7 +73,6 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 public class MainActivity extends AppCompatActivity {
-
 
 
     private Tracker mTracker;
@@ -135,8 +136,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     //get API
     public void getPosts() {
         Call<List<User>> call = jsonPlaceHolderApi.getPost();
@@ -180,7 +179,6 @@ public class MainActivity extends AppCompatActivity {
                     text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     text.setTextColor(getResources().getColor(R.color.red25));
                     text.setTypeface(face);
-
                     text.setGravity(Gravity.CENTER);
 
                 });
@@ -194,7 +192,6 @@ public class MainActivity extends AppCompatActivity {
     public User getUser(int id) {
         return users.get(id);
     }
-
 
 
     @Override
@@ -214,6 +211,18 @@ public class MainActivity extends AppCompatActivity {
         inBtn = (Button) findViewById(R.id.inBtn);
         outbtn = (Button) findViewById(R.id.outBtn);
 
+        TextView main = (TextView) findViewById(R.id.item);
+        main.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               try {
+                   testError();
+               }catch (Exception exception){
+                   Toast.makeText(MainActivity.this,"DONT DO THIS ",Toast.LENGTH_SHORT).show();
+               }
+
+            }
+        });
 
         adminBtn.setOnClickListener(v -> {
             Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
@@ -252,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
         }
 //
         AnalyticsApplication application = (AnalyticsApplication) getApplication();
-        mTracker =application.getDefaultTracker();
+        mTracker = application.getDefaultTracker();
         mTracker.setScreenName("MainActivity");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         outbtn.setOnClickListener(v -> {
@@ -296,6 +305,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void testError()  {
+        throw  new EmptyStackException();
+    }
+
     private boolean checkConfiguration() {
         XmlResourceParser parser = getResources().getXml(R.xml.global_tracker);
 
@@ -324,6 +337,7 @@ public class MainActivity extends AppCompatActivity {
 
         return true;
     }
+
     @Override
     public void onBackPressed() {
 //        super.onBackPressed();
@@ -563,6 +577,7 @@ public class MainActivity extends AppCompatActivity {
                                         try {
                                             outbtn.setBackgroundColor(Color.parseColor("#00AF91"));
                                             inBtn.setBackgroundColor(Color.parseColor("#00AF91"));
+
                                             OnBnStop();
                                         } catch (FingerprintException e) {
                                             e.printStackTrace();
@@ -611,7 +626,7 @@ public class MainActivity extends AppCompatActivity {
 
                                         Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
                                         t.send(new HitBuilders.EventBuilder()
-                                                .setCategory("Scannx`er")
+                                                .setCategory("Scanner")
                                                 .setAction("Scan")
                                                 .setLabel("CheckOut")
                                                 .build());

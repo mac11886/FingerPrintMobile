@@ -11,7 +11,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
@@ -21,8 +20,6 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,7 +27,7 @@ import android.widget.Toast;
 import com.example.fingerprinttest.R;
 import com.example.fingerprinttest.model.User;
 import com.example.fingerprinttest.services.AnalyticsApplication;
-import com.example.fingerprinttest.services.JsonPlaceHolderApi;
+import com.example.fingerprinttest.services.Api;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.zkteco.android.biometric.core.device.ParameterHelper;
@@ -43,12 +40,9 @@ import com.zkteco.android.biometric.module.fingerprintreader.FingprintFactory;
 import com.zkteco.android.biometric.module.fingerprintreader.ZKFingerService;
 import com.zkteco.android.biometric.module.fingerprintreader.exception.FingerprintException;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
@@ -70,6 +64,9 @@ public class RegisterActivity2 extends AppCompatActivity {
     String imgUser;
     String finger;
     String interest;
+    String birthday ;
+    String group,job;
+
     AlertDialog.Builder builder;
     private static final int VID = 6997;
     private static final int PID = 288;
@@ -84,7 +81,7 @@ public class RegisterActivity2 extends AppCompatActivity {
 
     private FingerprintSensor fingerprintSensor = null;
     private final String ACTION_USB_PERMISSION = "com.zkteco.silkiddemo.USB_PERMISSION";
-    private JsonPlaceHolderApi jsonPlaceHolderApi;
+    private Api api;
 
 
     @Override
@@ -103,17 +100,21 @@ public class RegisterActivity2 extends AppCompatActivity {
                 .baseUrl("https://ta.kisrateam.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        api = retrofit.create(Api.class);
         getPosts();
         startFingerprintSensor();
         initDevice();
 
         //recieve from page 1
         name = getIntent().getStringExtra("nameUser");
+        birthday =getIntent().getStringExtra("birthday");
+        group = getIntent().getStringExtra("group");
+        job = getIntent().getStringExtra("job");
+
         age = getIntent().getStringExtra("ageUser");
         imgUser = getIntent().getStringExtra("imgUser");
         token = getIntent().getStringExtra("token");
-        Toast.makeText(this, "token:" + token, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "token:" + birthday, Toast.LENGTH_SHORT).show();
         AnalyticsApplication application = (AnalyticsApplication) getApplication();
         mTracker = application.getDefaultTracker();
         mTracker.setScreenName("RegisterActivity2");
@@ -122,7 +123,7 @@ public class RegisterActivity2 extends AppCompatActivity {
 
     //get API
     public void getPosts() {
-        Call<List<User>> call = jsonPlaceHolderApi.getPost();
+        Call<List<User>> call = api.getPost();
         call.enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
@@ -134,7 +135,7 @@ public class RegisterActivity2 extends AppCompatActivity {
                     String content = "";
                     content += "ID: " + user.getId() + "\n";
                     content += "Name: " + user.getName() + "\n";
-                    content += "Age: " + user.getAge() + "\n";
+//                    content += "Age: " + user.getAge() + "\n";
                     content += "Interest: " + user.getInterest() + "\n";
                     content += "ImageUser: " + user.getImguser() + "\n";
                     content += "Fingeprint: " + user.getFingerprint() + "\n";
@@ -450,7 +451,9 @@ public class RegisterActivity2 extends AppCompatActivity {
                                             public void onClick(SweetAlertDialog sweetAlertDialog) {
                                                 Intent intent = new Intent(RegisterActivity2.this, RegisterActivity3.class);
                                                 intent.putExtra("nameUser", name);
-                                                intent.putExtra("ageUser", age);
+                                                intent.putExtra("birthday",birthday);
+                                                intent.putExtra("group",group);
+                                                intent.putExtra("job",job);
                                                 intent.putExtra("imgUser", imgUser);
                                                 intent.putExtra("fingerprint", strBase64);
                                                 intent.putExtra("token", token);

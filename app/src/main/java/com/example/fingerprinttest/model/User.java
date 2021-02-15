@@ -1,10 +1,5 @@
 package com.example.fingerprinttest.model;
 
-import android.text.Editable;
-
-import com.google.gson.annotations.SerializedName;
-
-import java.io.File;
 import java.sql.Timestamp;
 
 public class User {
@@ -14,67 +9,109 @@ public class User {
 
     private int id;
     private String name;
-    private int age;
-    private String interest;
-    private String imguser;
-    private String fingerprint;
-    private Timestamp updated_at;
-    private Timestamp created_at;
+    private String birthday ;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
+    public String getJobposition() {
+        return jobposition;
+    }
+
+    public void setJobposition(String jobposition) {
+        this.jobposition = jobposition;
+    }
+
+    public String getInterest() {
+        return interest;
+    }
+
+    public void setInterest(String interest) {
+        this.interest = interest;
+    }
 
     public String getImguser() {
         return imguser;
+    }
+
+    public void setImguser(String imguser) {
+        this.imguser = imguser;
     }
 
     public String getFingerprint() {
         return fingerprint;
     }
 
+    public void setFingerprint(String fingerprint) {
+        this.fingerprint = fingerprint;
+    }
+
     public Timestamp getUpdated_at() {
         return updated_at;
+    }
+
+    public void setUpdated_at(Timestamp updated_at) {
+        this.updated_at = updated_at;
     }
 
     public Timestamp getCreated_at() {
         return created_at;
     }
 
-    public int getId() {
-        return id;
+    public void setCreated_at(Timestamp created_at) {
+        this.created_at = created_at;
     }
 
-
-    public String getName() {
-        return name;
-    }
-
-
-    public int getAge() {
-        return age;
-    }
-
-
-    public String getInterest() {
-        return interest;
-    }
-
-    public User(String name, int age, String interest, String imguser, String fingerprint) {
+    private String group ;
+    private String jobposition;
+    private String interest;
+    private String imguser;
+    private String fingerprint;
+    private Timestamp updated_at;
+    private Timestamp created_at;
+    public User(String name, String birthday, String group, String jobposition, String interest, String imguser, String fingerprint) {
         this.name = name;
-        this.age = age;
+        this.birthday = birthday;
+        this.group = group;
+        this.jobposition = jobposition;
         this.interest = interest;
         this.imguser = imguser;
         this.fingerprint = fingerprint;
-
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                ", interest='" + interest + '\'' +
-                ", imguser='" + imguser + '\'' +
-                ", fingerprint='" + fingerprint + '\'' +
-                '}';
-    }
+
+
+
+
+
+
 }

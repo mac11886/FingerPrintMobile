@@ -4,14 +4,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
@@ -19,17 +17,12 @@ import androidx.core.content.res.ResourcesCompat;
 import com.example.fingerprinttest.R;
 import com.example.fingerprinttest.model.Admin;
 import com.example.fingerprinttest.services.AnalyticsApplication;
-import com.example.fingerprinttest.services.JsonPlaceHolderApi;
+import com.example.fingerprinttest.services.Api;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 
 
-import java.io.IOException;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
@@ -42,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     Tracker mTracker;
     EditText emailText, passwordText;
     TextView signIn;
-    private JsonPlaceHolderApi jsonPlaceHolderApi;
+    private Api api;
     static int code;
     List<Admin> admins;
 
@@ -90,10 +83,10 @@ public class LoginActivity extends AppCompatActivity {
                 .baseUrl("https://ta.kisrateam.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        api = retrofit.create(Api.class);
 
         Admin admin = new Admin(emailText.getText().toString(), passwordText.getText().toString());
-        Call<Admin> call = jsonPlaceHolderApi.checkUsers(admin);
+        Call<Admin> call = api.checkUsers(admin);
         call.enqueue(new Callback<Admin>() {
 
             @Override

@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,7 +21,7 @@ import com.example.fingerprinttest.model.Token;
 import com.example.fingerprinttest.model.User;
 import com.example.fingerprinttest.services.Adapter;
 import com.example.fingerprinttest.services.AnalyticsApplication;
-import com.example.fingerprinttest.services.JsonPlaceHolderApi;
+import com.example.fingerprinttest.services.Api;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
@@ -49,6 +48,7 @@ public class RegisterActivity3 extends AppCompatActivity {
     ImageView submitBtn;
     Adapter adapter;
 
+    String birthday , group,job;
 
     String name;
     String age;
@@ -56,7 +56,7 @@ public class RegisterActivity3 extends AppCompatActivity {
     String finger;
     String interest = "";
     AlertDialog.Builder builder;
-    private JsonPlaceHolderApi jsonPlaceHolderApi;
+    private Api api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,13 +68,15 @@ public class RegisterActivity3 extends AppCompatActivity {
         builder = new AlertDialog.Builder(this);
         //regispage 1
         name = getIntent().getStringExtra("nameUser");
-        age = getIntent().getStringExtra("ageUser");
+        birthday = getIntent().getStringExtra("birthday");
+        group = getIntent().getStringExtra("group");
+        job = getIntent().getStringExtra("job");
         imgUser = getIntent().getStringExtra("imgUser");
         //regispage 2
         finger = getIntent().getStringExtra("fingerprint");
 
         token = getIntent().getStringExtra("token");
-        Toast.makeText(this, "token:" + token, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "token:" + token, Toast.LENGTH_SHORT).show();
         interest = getIntent().getStringExtra("interest");
 
 
@@ -83,7 +85,7 @@ public class RegisterActivity3 extends AppCompatActivity {
                 .baseUrl("https://ta.kisrateam.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        api = retrofit.create(Api.class);
 
 
         addCard();
@@ -150,9 +152,9 @@ public class RegisterActivity3 extends AppCompatActivity {
                                     .baseUrl("https://ta.kisrateam.com/")
                                     .addConverterFactory(GsonConverterFactory.create())
                                     .build();
-                            jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+                            api = retrofit.create(Api.class);
                             Token token1 = new Token(token);
-                            Call call = jsonPlaceHolderApi.deleteToken(token1);
+                            Call call = api.deleteToken(token1);
                             call.enqueue(new Callback() {
                                 @Override
                                 public void onResponse(Call call, Response response) {
@@ -198,10 +200,10 @@ public class RegisterActivity3 extends AppCompatActivity {
 
     //save API
     public void createPost() {
-        int ageEdit = Integer.parseInt(age);
-        user = new User(" " + name, ageEdit, "" + adapter.getSentdata(), "" + imgUser,
+
+        user = new User(" " + name, birthday,group,job, "" + adapter.getSentdata(), "" + imgUser,
                 "" + finger);
-        Call<User> call = jsonPlaceHolderApi.createPost(user);
+        Call<User> call = api.createPost(user);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
@@ -214,7 +216,7 @@ public class RegisterActivity3 extends AppCompatActivity {
                 String content = "";
                 content += "ID: " + userPost.getId() + "\n";
                 content += "Name: " + userPost.getName() + "\n";
-                content += "Age: " + userPost.getAge() + "\n";
+//                content += "Age: " + userPost.getAge() + "\n";
                 content += "Interest: " + userPost.getInterest() + "\n";
                 content += "ImageUser: " + userPost.getImguser() + "\n";
                 content += "Fingeprint: " + userPost.getFingerprint() + "\n";

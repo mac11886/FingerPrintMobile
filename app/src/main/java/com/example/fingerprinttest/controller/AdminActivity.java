@@ -1,15 +1,11 @@
 package com.example.fingerprinttest.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.webkit.WebView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -17,12 +13,10 @@ import com.example.fingerprinttest.R;
 import com.example.fingerprinttest.model.Token;
 import com.example.fingerprinttest.model.User;
 import com.example.fingerprinttest.services.AnalyticsApplication;
-import com.example.fingerprinttest.services.JsonPlaceHolderApi;
+import com.example.fingerprinttest.services.Api;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -35,7 +29,7 @@ import static java.lang.Thread.sleep;
 
 public class AdminActivity extends AppCompatActivity {
     private Tracker mTracker;
-    private JsonPlaceHolderApi jsonPlaceHolderApi;
+    private Api api;
     RecyclerView recycler_view;
 
     String token;
@@ -52,7 +46,7 @@ public class AdminActivity extends AppCompatActivity {
         goToRegister = (ImageView) findViewById(R.id.goToRegister);
         backBtn = (ImageView) findViewById(R.id.backBtnAdmin);
         token = getIntent().getStringExtra("token");
-        Toast.makeText(this,"token:"+token,Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this,"token:"+token,Toast.LENGTH_SHORT).show();
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,9 +54,9 @@ public class AdminActivity extends AppCompatActivity {
                         .baseUrl("https://ta.kisrateam.com/")
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
-                jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+                api = retrofit.create(Api.class);
                 Token token1 = new Token(token);
-                Call call = jsonPlaceHolderApi.deleteToken(token1);
+                Call call = api.deleteToken(token1);
                 call.enqueue(new Callback() {
                     @Override
                     public void onResponse(Call call, Response response) {
@@ -139,7 +133,7 @@ public class AdminActivity extends AppCompatActivity {
 
     //get API   type synchronous
     public void getPosts() {
-        Call<List<User>> call = jsonPlaceHolderApi.getPost();
+        Call<List<User>> call = api.getPost();
         try {
             Response<List<User>> response = call.execute();
             if (!response.isSuccessful()) {

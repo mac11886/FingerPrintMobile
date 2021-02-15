@@ -1,14 +1,15 @@
 package com.example.fingerprinttest.controller;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
 import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
-import android.content.ContentValues;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,9 +17,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -26,11 +27,12 @@ import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,9 +45,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import me.srodrigo.androidhintspinner.HintAdapter;
+import me.srodrigo.androidhintspinner.HintSpinner;
 
 public class
 RegisterActivity extends AppCompatActivity {
@@ -56,6 +63,27 @@ RegisterActivity extends AppCompatActivity {
     String encoded;
     AlertDialog.Builder builder;
     String currentPhotoPath;
+    Spinner spinnerGroup, spinnerJobPosition;
+    String textGroup, textJob,date;
+    EditText edittext;
+
+    String[] dc_one = {"DC ONE"};
+    String[] developer = {"Technical Leader", "Developer", "Supervisor Quality Assuarance", "Software Tester"};
+    String[] accounting = {"accounting", "Customer Relationship"};
+    String[] se = {"Software Engineering"};
+    String[] coordinat = {"Project coordinat"};
+    String[] deploy = {"Manager", "Barista"};
+    String[] admin = {"Administrator", "IT Administrator"};
+    String[] secretary = {"Secretary"};
+    String[] boss = {"CEO", "CTO"};
+    String[] acc = {"ACC"};
+    String[] ba = {"Business Analysyt"};
+    String[] graphic = {"Graphic Design"};
+    String[] nj = {"NJ"};
+
+    final Calendar myCalendar = Calendar.getInstance();
+    SimpleDateFormat sdf = null;
+    String[] job_position = new String[]{};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,13 +93,77 @@ RegisterActivity extends AppCompatActivity {
         takeOrChooseBtn = (Button) findViewById(R.id.takeOrchooseBtn);
         nextBtn = (ImageView) findViewById(R.id.nextBtn);
         nameText = (EditText) findViewById(R.id.editTextName);
-        ageText = (EditText) findViewById(R.id.editTextAge);
-
-
+//        ageText = (EditText) findViewById(R.id.editTextAge);
+        spinnerGroup = (Spinner) findViewById(R.id.spinnerGroup);
+        spinnerJobPosition = findViewById(R.id.spinnerJobPosition);
         String token;
         token = getIntent().getStringExtra("token");
-        Toast.makeText(this, "token:" + token, Toast.LENGTH_SHORT).show();
         builder = new AlertDialog.Builder(this);
+        String[] group = {"Development", "Engineering", "Graphic Design", "Coordinat", "Deploy Space café", "Administrative", "Secretary"
+                , "Business Analysyt", "BOSS", "ACC","Accounting","DC ONE","NJ"};
+
+        HintSpinner<String> hintSpinner = new HintSpinner<>(
+                spinnerGroup,
+                // Default layout - You don't need to pass in any layout id, just your hint text and
+                // your list data
+                new HintAdapter<String>(this, "เลือกตำแหน่ง", Arrays.asList(group)),
+                new HintSpinner.Callback<String>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onItemSelected(int position, String itemAtPosition) {
+                        // Here you handle the on item selected event (this skips the hint selected event)
+                        textGroup = group[position];
+
+                        switch (textGroup) {
+                            case "Development":
+                                job_position = developer;
+                                break;
+
+                            case "Engineering":
+                                job_position = se;
+                                break;
+                            case "Graphic Design":
+                                job_position = graphic;
+                                break;
+                            case "Deploy Space café":
+                                job_position = deploy;
+                                break;
+                            case "Administrative":
+                                job_position = admin;
+                                break;
+                            case "Secretary":
+                                job_position = secretary;
+                                break;
+                            case "Business Analysyt":
+                                job_position = ba;
+                                break;
+                            case "BOSS":
+                                job_position = boss;
+                                break;
+                            case "ACC":
+                                job_position = acc;
+                                break;
+                            case  "Coordinat":
+                                job_position =coordinat;
+                                break;
+
+                            case  "Accounting":
+                                job_position =accounting;
+                                break;
+                            case  "DC ONE":
+                                job_position =dc_one;
+                                break;
+                            case  "NJ":
+                                job_position =nj;
+                                break;
+                        }
+                        createJobSpinner(job_position);
+                    }
+                });
+        hintSpinner.init();
+        createJobSpinner(job_position);
+
+        chooseDatePicker();
         //take or choose image function
         takeOrChooseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,6 +175,7 @@ RegisterActivity extends AppCompatActivity {
 
         //go to the next page
         nextBtn.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
 
@@ -96,15 +189,6 @@ RegisterActivity extends AppCompatActivity {
                             .build());
                     nameText.setError("กรุณาใส่ชื่อ");
                     nameText.requestFocus();
-                } else if (detectValid() == 2) {
-                    Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
-                    t.send(new HitBuilders.EventBuilder()
-                            .setCategory("Detect")
-                            .setAction("error")
-                            .setLabel("ValidAge")
-                            .build());
-                    ageText.setError("กรุณาใส่อายุ");
-                    ageText.requestFocus();
                 } else if (detectValid() == 3) {
                     Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
                     t.send(new HitBuilders.EventBuilder()
@@ -140,20 +224,100 @@ RegisterActivity extends AppCompatActivity {
                     loading.show();
 
 
+                } else if (detectValid() == 2) {
+                    SweetAlertDialog loading = new SweetAlertDialog(RegisterActivity.this, SweetAlertDialog.WARNING_TYPE);
+                    loading.setTitleText("แจ้งเตือน");
+                    loading.setContentText("กรุณาเลือกวันเกิด");
+                    loading.getProgressHelper().setBarColor(RegisterActivity.this.getResources().getColor(R.color.greentea));
+                    loading.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialog) {
+                            SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
+                            Typeface face = ResourcesCompat.getFont(RegisterActivity.this, R.font.kanit_light);
+                            TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
+                            TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
+                            textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                            textCon.setTextColor(getResources().getColor(R.color.black));
+                            textCon.setTypeface(face);
+//                                              title
+                            textCon.setGravity(Gravity.CENTER);
+                            text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
+                            text.setTextColor(getResources().getColor(R.color.red25));
+                            text.setTypeface(face);
+
+                            text.setGravity(Gravity.CENTER);
+
+                        }
+                    });
+
+                    loading.show();
                 } else if (detectValid() == 4) {
-                    ageText.setError("จำกัดอายุแค่ 1-100 ");
-                    ageText.requestFocus();
+                    SweetAlertDialog loading = new SweetAlertDialog(RegisterActivity.this, SweetAlertDialog.WARNING_TYPE);
+                    loading.setTitleText("แจ้งเตือน");
+                    loading.setContentText("กรุณาเลือกแผนก");
+                    loading.getProgressHelper().setBarColor(RegisterActivity.this.getResources().getColor(R.color.greentea));
+                    loading.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialog) {
+                            SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
+                            Typeface face = ResourcesCompat.getFont(RegisterActivity.this, R.font.kanit_light);
+                            TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
+                            TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
+                            textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                            textCon.setTextColor(getResources().getColor(R.color.black));
+                            textCon.setTypeface(face);
+//                                              title
+                            textCon.setGravity(Gravity.CENTER);
+                            text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
+                            text.setTextColor(getResources().getColor(R.color.red25));
+                            text.setTypeface(face);
+
+                            text.setGravity(Gravity.CENTER);
+
+                        }
+                    });
+
+                    loading.show();
+                } else if (detectValid() == 5) {
+                    SweetAlertDialog loading = new SweetAlertDialog(RegisterActivity.this, SweetAlertDialog.WARNING_TYPE);
+                    loading.setTitleText("แจ้งเตือน");
+                    loading.setContentText("กรุณาเลือกตำแหน่ง");
+                    loading.getProgressHelper().setBarColor(RegisterActivity.this.getResources().getColor(R.color.greentea));
+                    loading.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialog) {
+                            SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
+                            Typeface face = ResourcesCompat.getFont(RegisterActivity.this, R.font.kanit_light);
+                            TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
+                            TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
+                            textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                            textCon.setTextColor(getResources().getColor(R.color.black));
+                            textCon.setTypeface(face);
+//                                              title
+                            textCon.setGravity(Gravity.CENTER);
+                            text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
+                            text.setTextColor(getResources().getColor(R.color.red25));
+                            text.setTypeface(face);
+
+                            text.setGravity(Gravity.CENTER);
+
+                        }
+                    });
+
+                    loading.show();
                 } else {
                     //sent data to post on API
                     String imageBase64 = encoded;
                     String name = nameText.getText().toString();
-                    String age = ageText.getText().toString();
                     Intent intent = new Intent(RegisterActivity.this, RegisterActivity2.class);
                     intent.putExtra("nameUser", name);
-                    intent.putExtra("ageUser", age);
+                    intent.putExtra("birthday", date);
+                    intent.putExtra("group", textGroup);
+                    intent.putExtra("job", textJob);
                     intent.putExtra("imgUser", imageBase64);
                     intent.putExtra("token", token);
                     startActivity(intent);
+                    Toast.makeText(RegisterActivity.this,"date:"+date,Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -162,9 +326,76 @@ RegisterActivity extends AppCompatActivity {
         mTracker.setScreenName("RegisterActivity");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
-
     }
 
+
+    public void createJobSpinner(String[] job_position) {
+        HintSpinner<String> hintSpinnerJob = new HintSpinner<>(
+                spinnerJobPosition,
+                // Default layout - You don't need to pass in any layout id, just your hint text and
+                // your list data
+
+                new HintAdapter<String>(this, "เลือกตำแหน่ง", Arrays.asList(job_position)),
+                new HintSpinner.Callback<String>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onItemSelected(int position, String itemAtPosition) {
+                        // Here you handle the on item selected event (this skips the hint selected event)
+                        textJob = job_position[position];
+
+
+                    }
+                });
+
+        hintSpinnerJob.init();
+    }
+
+
+    public void chooseDatePicker() {
+
+
+        edittext = (EditText) findViewById(R.id.editTextAge);
+        DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                // TODO Auto-generated method stub
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabel();
+            }
+
+        };
+
+        edittext.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                new DatePickerDialog(RegisterActivity.this, date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void updateLabel() {
+        String myFormat = "dd-MM-yyyy"; //In which you need put here
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+         edittext.setText(sdf.format(myCalendar.getTime()));
+            date = sdf.format(myCalendar.getTime());    0
+        }
+    }
 
     private int detectValid() {
         int min = 1;
@@ -173,17 +404,19 @@ RegisterActivity extends AppCompatActivity {
 
             return 1;
         }
-        if (ageText.getText().toString().isEmpty()) {
+        if (sdf == null) {
             return 2;
         }
-        int getAgeInt = Integer.parseInt(ageText.getText().toString());
-        if (getAgeInt < min || getAgeInt > max) {
-            return 4;
-        }
         if (imageUserRegister.getDrawable() == null) {
-
             return 3;
         }
+        if (textGroup == null) {
+            return 4;
+        }
+        if (textJob == null) {
+            return 5;
+        }
+
         return 0;
 
 
@@ -284,7 +517,6 @@ RegisterActivity extends AppCompatActivity {
                     Log.e("CHECKER", "OUTSIDE");
 
 
-
                     if (resultCode == RESULT_OK) {
                         Log.e("CHECKER", "ERRORRRRRRRRRRRRRRRRINSIDE");
                         galleryAddPic();
@@ -315,7 +547,7 @@ RegisterActivity extends AppCompatActivity {
                             byte[] byteArray = byteArrayOutputStream.toByteArray();
                             encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
-                            imageUserRegister.setImageBitmap(bitmap);
+                            imageUserRegister.setImageBitmap(rotatedBitmap);
 
                             imageUserRegister.setRotation(90);
 
@@ -369,11 +601,15 @@ RegisterActivity extends AppCompatActivity {
         Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight(), true);
         Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
 
+        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), rotatedBitmap);
+        roundedBitmapDrawable.setCornerRadius(50.0f);
+        roundedBitmapDrawable.setAntiAlias(true);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         rotatedBitmap.compress(Bitmap.CompressFormat.WEBP, 40, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
         encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
-        imageUserRegister.setImageBitmap(rotatedBitmap);
+//        imageUserRegister.setImageBitmap(rotatedBitmap);
+        imageUserRegister.setImageDrawable(roundedBitmapDrawable);
 
     }
 }

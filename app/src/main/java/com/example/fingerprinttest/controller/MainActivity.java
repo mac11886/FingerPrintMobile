@@ -33,7 +33,7 @@ import com.example.fingerprinttest.R;
 import com.example.fingerprinttest.model.Attendance;
 import com.example.fingerprinttest.model.User;
 import com.example.fingerprinttest.services.AnalyticsApplication;
-import com.example.fingerprinttest.services.JsonPlaceHolderApi;
+import com.example.fingerprinttest.services.Api;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
@@ -69,9 +69,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 public class MainActivity extends AppCompatActivity {
 
 
@@ -96,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
     TextView dateUser;
     TextView timeUser;
     String status = "เข้า";
-    private JsonPlaceHolderApi jsonPlaceHolderApi;
+    private Api api;
     private FingerprintSensor fingerprintSensor = null;
     private int i = -1;
 
@@ -121,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void createPostDate(int id, String date1, String time, String status) {
         Attendance attendance = new Attendance(id, " " + date1, " " + time, "" + status);
-        Call<Attendance> call = jsonPlaceHolderApi.createPostDate(attendance);
+        Call<Attendance> call = api.createPostDate(attendance);
         call.enqueue(new Callback<Attendance>() {
             @Override
             public void onResponse(Call<Attendance> call, Response<Attendance> response) {
@@ -136,56 +133,76 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+
+
     //get API
     public void getPosts() {
-        Call<List<User>> call = jsonPlaceHolderApi.getPost();
-        call.enqueue(new Callback<List<User>>() {
-            @Override
-            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                if (!response.isSuccessful()) {
-                    return;
-                }
+        try {
+            Call<List<User>> call = api.getPost();
+            call.enqueue(new Callback<List<User>>() {
+                @Override
+                public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                    if (!response.isSuccessful()) {
+                        return;
+                    }
 
-                users = response.body();
-                for (User user : users) {
-                    String content = "";
-                    content += "ID: " + user.getId() + "\n";
-                    content += "Name: " + user.getName() + "\n";
+                    users = response.body();
+                    for (User user : users) {
+                        String content = "";
+                        content += "ID: " + user.getId() + "\n";
+                        content += "Name: " + user.getName() + "\n";
 
-                    userImage = user.getImguser();
+                        userImage = user.getImguser();
 
 //                    textStatus.setText("users"+users);
-                }
+                    }
 //                textView.setText(""+response.toString());
-            }
+                }
 
-            @Override
-            public void onFailure(Call<List<User>> call, Throwable t) {
-                textView.setText("เกิดข้อผิดพลาดเกี่ยวกับ Internet");
-                textView.setTextSize(15);
-                SweetAlertDialog loading = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE);
-                loading.setTitleText("เกิดข้อผิดพลาดเกี่ยวกับ Internet");
-                loading.setContentText("กรุณาเปิดแอพใหม่อีกครั้ง");
-                loading.getProgressHelper().setBarColor(MainActivity.this.getResources().getColor(R.color.greentea));
-                loading.setOnShowListener((DialogInterface.OnShowListener) dialog -> {
-                    SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
-                    Typeface face = ResourcesCompat.getFont(MainActivity.this, R.font.kanit_light);
-                    TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
-                    TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
-                    textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                    textCon.setTextColor(getResources().getColor(R.color.black));
-                    textCon.setTypeface(face);
-                    textCon.setGravity(Gravity.CENTER);
-                    text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-                    text.setTextColor(getResources().getColor(R.color.red25));
-                    text.setTypeface(face);
-                    text.setGravity(Gravity.CENTER);
+                @Override
+                public void onFailure(Call<List<User>> call, Throwable t) {
+                    textView.setText("เกิดข้อผิดพลาดเกี่ยวกับ Internet");
+                    textView.setTextSize(15);
+                    SweetAlertDialog loading = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE);
+                    loading.setTitleText("เกิดข้อผิดพลาดเกี่ยวกับ Internet");
+                    loading.setContentText("กรุณาเปิดแอพใหม่อีกครั้ง");
+                    loading.getProgressHelper().setBarColor(MainActivity.this.getResources().getColor(R.color.greentea));
+                    loading.setOnShowListener((DialogInterface.OnShowListener) dialog -> {
+                        SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
+                        Typeface face = ResourcesCompat.getFont(MainActivity.this, R.font.kanit_light);
+                        TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
+                        TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
+                        textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                        textCon.setTextColor(getResources().getColor(R.color.black));
+                        textCon.setTypeface(face);
+                        textCon.setGravity(Gravity.CENTER);
+                        text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                        text.setTextColor(getResources().getColor(R.color.red25));
+                        text.setTypeface(face);
+                        text.setGravity(Gravity.CENTER);
 
-                });
+                    });
 
-                loading.show();
-            }
-        });
+                    loading.show();
+                }
+            });
+        }catch (Exception e){
+            com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("MainActivity","getPosts","can't get data on API");
+            Call<com.example.fingerprinttest.model.Log> call = api.createLog(log);
+            call.enqueue(new Callback<com.example.fingerprinttest.model.Log>() {
+                @Override
+                public void onResponse(Call<com.example.fingerprinttest.model.Log> call, Response<com.example.fingerprinttest.model.Log> response) {
+
+                }
+
+                @Override
+                public void onFailure(Call<com.example.fingerprinttest.model.Log> call, Throwable t) {
+
+                }
+            });
+        }
+
 
     }
 
@@ -218,6 +235,19 @@ public class MainActivity extends AppCompatActivity {
                try {
                    testError();
                }catch (Exception exception){
+                   com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("MainActivity","mainTEST","can't touch this");
+                   Call<com.example.fingerprinttest.model.Log> call = api.createLog(log);
+                   call.enqueue(new Callback<com.example.fingerprinttest.model.Log>() {
+                       @Override
+                       public void onResponse(Call<com.example.fingerprinttest.model.Log> call, Response<com.example.fingerprinttest.model.Log> response) {
+
+                       }
+
+                       @Override
+                       public void onFailure(Call<com.example.fingerprinttest.model.Log> call, Throwable t) {
+
+                       }
+                   });
                    Toast.makeText(MainActivity.this,"DONT DO THIS ",Toast.LENGTH_SHORT).show();
                }
 
@@ -240,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
                 .baseUrl("https://ta.kisrateam.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        api = retrofit.create(Api.class);
 //       SHOW DATE AND TIME
         dateUser.setText(new SimpleDateFormat("dd-MMM-yyyy", Locale.US).format(new Date()));
         final Handler someHandler = new Handler(getMainLooper());

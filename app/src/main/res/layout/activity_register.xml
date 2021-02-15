@@ -10,15 +10,14 @@
 
     <ImageView
         android:id="@+id/imageUserRegister"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="16dp"
+        android:layout_width="364dp"
+        android:layout_height="286dp"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
         android:tag="false"
         app:layout_constraintBottom_toTopOf="@+id/takeOrchooseBtn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.586"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.077"
@@ -31,7 +30,7 @@
         android:backgroundTint="@color/greeennewbtn"
         android:fontFamily="@font/kanit_light"
         android:tag="false"
-        android:text="เลือกรูปหรือถ่ายรุป"
+        android:text="เลือกรูปหรือถ่ายรูป"
         app:layout_constraintBottom_toTopOf="@+id/editTextName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -56,7 +55,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.621" />
+        app:layout_constraintVertical_bias="0.532" />
 
     <EditText
         android:id="@+id/editTextAge"
@@ -67,8 +66,9 @@
         android:drawablePadding="12dp"
         android:ems="10"
         android:fontFamily="@font/kanit_light"
-        android:hint="กรุณาใส่อายุ 1-100 ปี"
-        android:inputType="number"
+        android:hint="กรุณาเลือกวันเกิด"
+        android:editable="false"
+        android:clickable="true"
         android:paddingStart="12dp"
         android:paddingEnd="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -76,12 +76,41 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextName"
-        app:layout_constraintVertical_bias="0.178" />
+        app:layout_constraintVertical_bias="0.045" />
+
+    <Spinner
+        android:id="@+id/spinnerGroup"
+        android:layout_width="143dp"
+        android:layout_height="43dp"
+        android:background="@color/gray"
+        android:fontFamily="@font/kanit_light"
+        android:translationZ="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.064"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.739" />
+
+    <Spinner
+        android:id="@+id/spinnerJobPosition"
+        android:layout_width="209dp"
+        android:layout_height="43dp"
+        android:background="@color/gray"
+        android:fontFamily="@font/kanit_light"
+        android:translationZ="5dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.913"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.739" />
 
     <ImageView
         android:id="@+id/nextBtn"
-        android:layout_width="0dp"
-        android:layout_height="170dp"
+        android:layout_width="362dp"
+        android:layout_height="127dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.558"

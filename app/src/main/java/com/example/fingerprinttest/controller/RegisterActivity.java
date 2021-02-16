@@ -75,12 +75,12 @@ RegisterActivity extends AppCompatActivity {
     String[] deploy = {"Manager", "Barista"};
     String[] admin = {"Administrator", "IT Administrator"};
     String[] secretary = {"Secretary"};
-    String[] boss = {"CEO", "CTO"};
-    String[] acc = {"ACC"};
-    String[] ba = {"Business Analysyt"};
+    String[] boss = {"CEO"};
+    String[] acc = {"CTO"};
+    String[] ba = {"Business Analyst"};
     String[] graphic = {"Graphic Design"};
     String[] nj = {"NJ"};
-
+    int num_group ;
     final Calendar myCalendar = Calendar.getInstance();
     SimpleDateFormat sdf = null;
     String[] job_position = new String[]{};
@@ -99,8 +99,8 @@ RegisterActivity extends AppCompatActivity {
         String token;
         token = getIntent().getStringExtra("token");
         builder = new AlertDialog.Builder(this);
-        String[] group = {"Development", "Engineering", "Graphic Design", "Coordinat", "Deploy Space café", "Administrative", "Secretary"
-                , "Business Analysyt", "BOSS", "ACC","Accounting","DC ONE","NJ"};
+        String[] group = {"Development", "Engineering", "Graphic Design", "Coordinat", "Deploy Space café", "Administrative","Accounting", "Secretary"
+                , "Business Analyst", "CEO","CTO" ,"DC ONE","NJ"};
 
         HintSpinner<String> hintSpinner = new HintSpinner<>(
                 spinnerGroup,
@@ -112,48 +112,50 @@ RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onItemSelected(int position, String itemAtPosition) {
                         // Here you handle the on item selected event (this skips the hint selected event)
-                        textGroup = group[position];
-
-                        switch (textGroup) {
-                            case "Development":
+                        textGroup = itemAtPosition;
+                         num_group  = position;
+                        Log.e("---","----------------------------------------");
+                        System.out.println("position"+num_group);
+                        switch (num_group) {
+                            case 0:
                                 job_position = developer;
                                 break;
 
-                            case "Engineering":
+                            case 1:
                                 job_position = se;
                                 break;
-                            case "Graphic Design":
+                            case 2:
                                 job_position = graphic;
                                 break;
-                            case "Deploy Space café":
+                            case 3:
+                                job_position = coordinat;
+                                break;
+                            case 4:
                                 job_position = deploy;
                                 break;
-                            case "Administrative":
+                            case 5:
                                 job_position = admin;
                                 break;
-                            case "Secretary":
+                            case 6:
+                                job_position = accounting;
+                                break;
+                            case 7:
                                 job_position = secretary;
                                 break;
-                            case "Business Analysyt":
+                            case 8:
                                 job_position = ba;
                                 break;
-                            case "BOSS":
-                                job_position = boss;
-                                break;
-                            case "ACC":
-                                job_position = acc;
-                                break;
-                            case  "Coordinat":
-                                job_position =coordinat;
+                            case  9:
+                                job_position =boss;
                                 break;
 
-                            case  "Accounting":
-                                job_position =accounting;
+                            case  10:
+                                job_position =acc;
                                 break;
-                            case  "DC ONE":
+                            case  11:
                                 job_position =dc_one;
                                 break;
-                            case  "NJ":
+                            case  12:
                                 job_position =nj;
                                 break;
                         }
@@ -178,7 +180,6 @@ RegisterActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
-
 
                 if (detectValid() == 1) {
                     Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
@@ -307,17 +308,20 @@ RegisterActivity extends AppCompatActivity {
                     loading.show();
                 } else {
                     //sent data to post on API
+                    num_group +=1;
+                    String id_group = String.valueOf(num_group);
+
                     String imageBase64 = encoded;
                     String name = nameText.getText().toString();
                     Intent intent = new Intent(RegisterActivity.this, RegisterActivity2.class);
                     intent.putExtra("nameUser", name);
                     intent.putExtra("birthday", date);
-                    intent.putExtra("group", textGroup);
+                    intent.putExtra("group", id_group);
                     intent.putExtra("job", textJob);
                     intent.putExtra("imgUser", imageBase64);
                     intent.putExtra("token", token);
                     startActivity(intent);
-                    Toast.makeText(RegisterActivity.this,"date:"+date,Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(RegisterActivity.this,"date:"+date,Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -343,7 +347,6 @@ RegisterActivity extends AppCompatActivity {
                         // Here you handle the on item selected event (this skips the hint selected event)
                         textJob = job_position[position];
 
-
                     }
                 });
 
@@ -352,7 +355,6 @@ RegisterActivity extends AppCompatActivity {
 
 
     public void chooseDatePicker() {
-
 
         edittext = (EditText) findViewById(R.id.editTextAge);
         DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -393,7 +395,7 @@ RegisterActivity extends AppCompatActivity {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
          edittext.setText(sdf.format(myCalendar.getTime()));
-            date = sdf.format(myCalendar.getTime());    0
+            date = sdf.format(myCalendar.getTime());
         }
     }
 
@@ -543,12 +545,12 @@ RegisterActivity extends AppCompatActivity {
                             matrix.postRotate(0);
                             Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight(), true);
                             Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
-
+                            RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), rotatedBitmap);
+                            roundedBitmapDrawable.setCornerRadius(50.0f);
+                            roundedBitmapDrawable.setAntiAlias(true);
                             byte[] byteArray = byteArrayOutputStream.toByteArray();
                             encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
-
-                            imageUserRegister.setImageBitmap(rotatedBitmap);
-
+                            imageUserRegister.setImageDrawable(roundedBitmapDrawable);
                             imageUserRegister.setRotation(90);
 
                         } catch (FileNotFoundException e) {

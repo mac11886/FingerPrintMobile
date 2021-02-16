@@ -28,6 +28,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
 import com.example.fingerprinttest.R;
 import com.example.fingerprinttest.model.Attendance;
@@ -123,17 +125,100 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Attendance> call, Response<Attendance> response) {
                 Attendance attendance2 = response.body();
-                //textLog.setText(""+response.message());
+                if (!response.isSuccessful()) {
+//                    Toast.makeText(MainActivity.this, "สายสาย " + response.code(), Toast.LENGTH_LONG).show();
+                    SweetAlertDialog loading = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.NORMAL_TYPE);
+                    loading.setTitleText("ยินดีต้อนรับ");
+                    loading.setContentText("สายน้าวันนี้");
+
+                    loading.getProgressHelper().setBarColor(MainActivity.this.getResources().getColor(R.color.greentea));
+                    loading.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialog) {
+                            SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
+                            Typeface face = ResourcesCompat.getFont(MainActivity.this, R.font.kanit_light);
+                            TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
+                            TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
+                            textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                            textCon.setTextColor(getResources().getColor(R.color.red25));
+                            textCon.setTypeface(face);
+                            textCon.setGravity(Gravity.CENTER);
+                            text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
+                            text.setTextColor(getResources().getColor(R.color.blueButton));
+                            text.setTypeface(face);
+                            text.setGravity(Gravity.CENTER);
+
+                        }
+                    });
+
+                    loading.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+                            try {
+                                outbtn.setBackgroundColor(Color.parseColor("#00AF91"));
+                                inBtn.setBackgroundColor(Color.parseColor("#00AF91"));
+                                OnBnStop();
+                                loading.dismissWithAnimation();
+                            } catch (FingerprintException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+                    loading.show();
+                    loading.setCancelable(false);
+                }else {
+//                    Toast.makeText(MainActivity.this,"ไม่สาย ",Toast.LENGTH_LONG).show();
+                    SweetAlertDialog loading = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.NORMAL_TYPE);
+                    loading.setTitleText("ยินดีต้อนรับ");
+                    loading.setContentText("สวัสดีจ้า");
+
+                    loading.getProgressHelper().setBarColor(MainActivity.this.getResources().getColor(R.color.greentea));
+                    loading.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialog) {
+                            SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
+                            Typeface face = ResourcesCompat.getFont(MainActivity.this, R.font.kanit_light);
+                            TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
+                            TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
+                            textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                            textCon.setTextColor(getResources().getColor(R.color.blueButton));
+                            textCon.setTypeface(face);
+                            textCon.setGravity(Gravity.CENTER);
+                            text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
+                            text.setTextColor(getResources().getColor(R.color.blueButton));
+                            text.setTypeface(face);
+                            text.setGravity(Gravity.CENTER);
+
+                        }
+                    });
+
+                    loading.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+                            try {
+                                outbtn.setBackgroundColor(Color.parseColor("#00AF91"));
+                                inBtn.setBackgroundColor(Color.parseColor("#00AF91"));
+                                OnBnStop();
+                                loading.dismissWithAnimation();
+                            } catch (FingerprintException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+                    loading.show();
+                    loading.setCancelable(false);
+                }
             }
 
             @Override
             public void onFailure(Call<Attendance> call, Throwable t) {
+//                Toast.makeText(MainActivity.this,"สาย ",Toast.LENGTH_LONG).show();
+
             }
         });
     }
-
-
-
 
 
     //get API
@@ -162,6 +247,19 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<List<User>> call, Throwable t) {
+                    com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("mainActivity", "Getdata", "can't load data");
+                    Call<com.example.fingerprinttest.model.Log> call1 = api.createLog(log);
+                    call1.enqueue(new Callback<com.example.fingerprinttest.model.Log>() {
+                        @Override
+                        public void onResponse(Call<com.example.fingerprinttest.model.Log> call, Response<com.example.fingerprinttest.model.Log> response) {
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<com.example.fingerprinttest.model.Log> call, Throwable t) {
+
+                        }
+                    });
                     textView.setText("เกิดข้อผิดพลาดเกี่ยวกับ Internet");
                     textView.setTextSize(15);
                     SweetAlertDialog loading = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE);
@@ -187,8 +285,8 @@ public class MainActivity extends AppCompatActivity {
                     loading.show();
                 }
             });
-        }catch (Exception e){
-            com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("MainActivity","getPosts","can't get data on API");
+        } catch (Exception e) {
+            com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("MainActivity", "getPosts", "can't get data on API");
             Call<com.example.fingerprinttest.model.Log> call = api.createLog(log);
             call.enqueue(new Callback<com.example.fingerprinttest.model.Log>() {
                 @Override
@@ -232,37 +330,53 @@ public class MainActivity extends AppCompatActivity {
         main.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               try {
-                   testError();
-               }catch (Exception exception){
-                   com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("MainActivity","mainTEST","can't touch this");
-                   Call<com.example.fingerprinttest.model.Log> call = api.createLog(log);
-                   call.enqueue(new Callback<com.example.fingerprinttest.model.Log>() {
-                       @Override
-                       public void onResponse(Call<com.example.fingerprinttest.model.Log> call, Response<com.example.fingerprinttest.model.Log> response) {
+                try {
+                    testError();
+                } catch (Exception exception) {
+                    com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("MainActivity", "mainTEST", "can't touch this");
+                    Call<com.example.fingerprinttest.model.Log> call = api.createLog(log);
+                    call.enqueue(new Callback<com.example.fingerprinttest.model.Log>() {
+                        @Override
+                        public void onResponse(Call<com.example.fingerprinttest.model.Log> call, Response<com.example.fingerprinttest.model.Log> response) {
 
-                       }
+                        }
 
-                       @Override
-                       public void onFailure(Call<com.example.fingerprinttest.model.Log> call, Throwable t) {
+                        @Override
+                        public void onFailure(Call<com.example.fingerprinttest.model.Log> call, Throwable t) {
 
-                       }
-                   });
-                   Toast.makeText(MainActivity.this,"DONT DO THIS ",Toast.LENGTH_SHORT).show();
-               }
+                        }
+                    });
+                    Toast.makeText(MainActivity.this, "DONT DO THIS ", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
 
         adminBtn.setOnClickListener(v -> {
-            Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
-            t.send(new HitBuilders.EventBuilder()
-                    .setCategory("Intent")
-                    .setAction("click")
-                    .setLabel("LoginPage")
-                    .build());
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(intent);
+            try {
+                Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
+                t.send(new HitBuilders.EventBuilder()
+                        .setCategory("Intent")
+                        .setAction("click")
+                        .setLabel("LoginPage")
+                        .build());
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+            } catch (Exception e) {
+                com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("MainActivity", "go To admin", "stay in MainActivity");
+                Call<com.example.fingerprinttest.model.Log> call = api.createLog(log);
+                call.enqueue(new Callback<com.example.fingerprinttest.model.Log>() {
+                    @Override
+                    public void onResponse(Call<com.example.fingerprinttest.model.Log> call, Response<com.example.fingerprinttest.model.Log> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<com.example.fingerprinttest.model.Log> call, Throwable t) {
+
+                    }
+                });
+            }
         });
 
         //connectApi
@@ -308,7 +422,19 @@ public class MainActivity extends AppCompatActivity {
                 outbtn.setBackgroundColor(Color.parseColor("#207720"));
                 inBtn.setBackgroundColor(Color.parseColor("#00AF91"));
             } catch (FingerprintException e) {
-                e.printStackTrace();
+                com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("MainActivity", "CheckOutBtn", "not working");
+                Call<com.example.fingerprinttest.model.Log> call = api.createLog(log);
+                call.enqueue(new Callback<com.example.fingerprinttest.model.Log>() {
+                    @Override
+                    public void onResponse(Call<com.example.fingerprinttest.model.Log> call, Response<com.example.fingerprinttest.model.Log> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<com.example.fingerprinttest.model.Log> call, Throwable t) {
+
+                    }
+                });
             }
         });
         inBtn.setOnClickListener(v -> {
@@ -326,6 +452,19 @@ public class MainActivity extends AppCompatActivity {
                 outbtn.setBackgroundColor(Color.parseColor("#00AF91"));
             } catch (FingerprintException e) {
                 textView.setText("SERVER ERROR" + e.getMessage());
+                com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("MainActivity", "CheckInBtn", "not working");
+                Call<com.example.fingerprinttest.model.Log> call = api.createLog(log);
+                call.enqueue(new Callback<com.example.fingerprinttest.model.Log>() {
+                    @Override
+                    public void onResponse(Call<com.example.fingerprinttest.model.Log> call, Response<com.example.fingerprinttest.model.Log> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<com.example.fingerprinttest.model.Log> call, Throwable t) {
+
+                    }
+                });
             }
             status = "เข้า";
 
@@ -335,8 +474,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void testError()  {
-        throw  new EmptyStackException();
+    public void testError() {
+        throw new EmptyStackException();
     }
 
     private boolean checkConfiguration() {
@@ -388,23 +527,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void saveBitmap(Bitmap bm) {
-        File f = new File("/sdcard/fingerprint", "test.bmp");
-        if (f.exists()) {
-            f.delete();
-        }
-        FileOutputStream out = null;
-        try {
-            out = new FileOutputStream(f);
-            bm.compress(Bitmap.CompressFormat.PNG, 90, out);
-            out.flush();
-            out.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     private void InitDevice() {
         UsbManager musbManager = (UsbManager) this.getSystemService(Context.USB_SERVICE);
@@ -542,8 +664,11 @@ public class MainActivity extends AppCompatActivity {
                                     nameUser.setText("" + name);
                                     byte[] decodedString = Base64.decode(userImage, Base64.DEFAULT);
                                     Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-//                                    imageUser.setRotation(-90);
-                                    imageUser.setImageBitmap(decodedByte);
+                                    RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), decodedByte);
+                                    roundedBitmapDrawable.setCornerRadius(50.0f);
+                                    roundedBitmapDrawable.setAntiAlias(true);
+
+                                    imageUser.setImageDrawable(roundedBitmapDrawable);
 
 
                                     // DATE
@@ -556,46 +681,47 @@ public class MainActivity extends AppCompatActivity {
                                     timeUser.setText(formattime);
 
                                     if (status == "เข้า") {
-                                        SweetAlertDialog loading = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.NORMAL_TYPE);
-                                        loading.setTitleText("ยินดีต้อนรับ");
-                                        loading.setContentText("สวัสดีจ้า");
 
-                                        loading.getProgressHelper().setBarColor(MainActivity.this.getResources().getColor(R.color.greentea));
-                                        loading.setOnShowListener(new DialogInterface.OnShowListener() {
-                                            @Override
-                                            public void onShow(DialogInterface dialog) {
-                                                SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
-                                                Typeface face = ResourcesCompat.getFont(MainActivity.this, R.font.kanit_light);
-                                                TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
-                                                TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
-                                                textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                                                textCon.setTextColor(getResources().getColor(R.color.blueButton));
-                                                textCon.setTypeface(face);
-                                                textCon.setGravity(Gravity.CENTER);
-                                                text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
-                                                text.setTextColor(getResources().getColor(R.color.blueButton));
-                                                text.setTypeface(face);
-                                                text.setGravity(Gravity.CENTER);
-
-                                            }
-                                        });
-
-                                        loading.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                            @Override
-                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                                try {
-                                                    outbtn.setBackgroundColor(Color.parseColor("#00AF91"));
-                                                    inBtn.setBackgroundColor(Color.parseColor("#00AF91"));
-                                                    OnBnStop();
-                                                    loading.dismissWithAnimation();
-                                                } catch (FingerprintException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                        });
-
-                                        loading.show();
-                                        loading.setCancelable(false);
+//                                        SweetAlertDialog loading = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.NORMAL_TYPE);
+//                                        loading.setTitleText("ยินดีต้อนรับ");
+//                                        loading.setContentText("สวัสดีจ้า");
+//
+//                                        loading.getProgressHelper().setBarColor(MainActivity.this.getResources().getColor(R.color.greentea));
+//                                        loading.setOnShowListener(new DialogInterface.OnShowListener() {
+//                                            @Override
+//                                            public void onShow(DialogInterface dialog) {
+//                                                SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
+//                                                Typeface face = ResourcesCompat.getFont(MainActivity.this, R.font.kanit_light);
+//                                                TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
+//                                                TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
+//                                                textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+//                                                textCon.setTextColor(getResources().getColor(R.color.blueButton));
+//                                                textCon.setTypeface(face);
+//                                                textCon.setGravity(Gravity.CENTER);
+//                                                text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
+//                                                text.setTextColor(getResources().getColor(R.color.blueButton));
+//                                                text.setTypeface(face);
+//                                                text.setGravity(Gravity.CENTER);
+//
+//                                            }
+//                                        });
+//
+//                                        loading.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+//                                            @Override
+//                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+//                                                try {
+//                                                    outbtn.setBackgroundColor(Color.parseColor("#00AF91"));
+//                                                    inBtn.setBackgroundColor(Color.parseColor("#00AF91"));
+//                                                    OnBnStop();
+//                                                    loading.dismissWithAnimation();
+//                                                } catch (FingerprintException e) {
+//                                                    e.printStackTrace();
+//                                                }
+//                                            }
+//                                        });
+//
+//                                        loading.show();
+//                                        loading.setCancelable(false);
 
                                         Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
                                         t.send(new HitBuilders.EventBuilder()
@@ -689,6 +815,19 @@ public class MainActivity extends AppCompatActivity {
             textView.setText("สแกนนิ้วได้เลย");
         } catch (FingerprintException e) {
             //textView.setText("begin capture fail.errorcode:" + e.getErrorCode() + "err message:" + e.getMessage() + "inner code:" + e.getInternalErrorCode());
+            com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("MainActivity", "OnBegin", "not connect device");
+            Call<com.example.fingerprinttest.model.Log> call = api.createLog(log);
+            call.enqueue(new Callback<com.example.fingerprinttest.model.Log>() {
+                @Override
+                public void onResponse(Call<com.example.fingerprinttest.model.Log> call, Response<com.example.fingerprinttest.model.Log> response) {
+
+                }
+
+                @Override
+                public void onFailure(Call<com.example.fingerprinttest.model.Log> call, Throwable t) {
+
+                }
+            });
             textView.setText("กรุณาเชื่อมต่อกับเครื่องสแกน");
         }
     }
@@ -719,12 +858,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void OnBnVerify(View view) {
-        if (bstart) {
-            isRegister = false;
-            enrollidx = 0;
-        } else {
-            textView.setText("please begin capture first");
-        }
-    }
 }

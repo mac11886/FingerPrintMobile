@@ -48,7 +48,7 @@ public class RegisterActivity3 extends AppCompatActivity {
     ImageView submitBtn;
     Adapter adapter;
 
-    String birthday , group,job;
+    String birthday, group, job;
 
     String name;
     String age;
@@ -74,7 +74,6 @@ public class RegisterActivity3 extends AppCompatActivity {
         imgUser = getIntent().getStringExtra("imgUser");
         //regispage 2
         finger = getIntent().getStringExtra("fingerprint");
-
         token = getIntent().getStringExtra("token");
 //        Toast.makeText(this, "token:" + token, Toast.LENGTH_SHORT).show();
         interest = getIntent().getStringExtra("interest");
@@ -120,73 +119,77 @@ public class RegisterActivity3 extends AppCompatActivity {
 
                     loading.show();
                 } else {
+                    try {
+                        createPost();
+                        SweetAlertDialog dialog = new SweetAlertDialog(RegisterActivity3.this, SweetAlertDialog.SUCCESS_TYPE);
+                        dialog.setTitleText("แจ้งเตือน");
+                        dialog.setContentText("ข้อมูลได้ถูกบันทึกแล้ว");
+                        dialog.setConfirmText("OK!!");
 
+                        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                            @Override
+                            public void onShow(DialogInterface dialog) {
+                                SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
+                                Typeface face = ResourcesCompat.getFont(RegisterActivity3.this, R.font.kanit_light);
+                                TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
+                                TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
+                                textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                                textCon.setTextColor(getResources().getColor(R.color.black));
+                                textCon.setTypeface(face);
+                                textCon.setGravity(Gravity.CENTER);
+                                text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+                                text.setTextColor(getResources().getColor(R.color.red25));
+                                text.setTypeface(face);
+                                text.setGravity(Gravity.CENTER);
+                            }
+                        });
+                        dialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                Retrofit retrofit = new Retrofit.Builder()
+                                        .baseUrl("https://ta.kisrateam.com/")
+                                        .addConverterFactory(GsonConverterFactory.create())
+                                        .build();
+                                api = retrofit.create(Api.class);
+                                Token token1 = new Token(token);
+                                Call call = api.deleteToken(token1);
+                                call.enqueue(new Callback() {
+                                    @Override
+                                    public void onResponse(Call call, Response response) {
 
+                                    }
 
-                    SweetAlertDialog dialog = new SweetAlertDialog(RegisterActivity3.this, SweetAlertDialog.SUCCESS_TYPE);
-                    dialog.setTitleText("แจ้งเตือน");
-                    dialog.setContentText("ข้อมูลได้ถูกบันทึกแล้ว");
-                    dialog.setConfirmText("OK!!");
+                                    @Override
+                                    public void onFailure(Call call, Throwable t) {
 
-                    dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                        @Override
-                        public void onShow(DialogInterface dialog) {
-                            SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
-                            Typeface face = ResourcesCompat.getFont(RegisterActivity3.this, R.font.kanit_light);
-                            TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
-                            TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
-                            textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                            textCon.setTextColor(getResources().getColor(R.color.black));
-                            textCon.setTypeface(face);
-                            textCon.setGravity(Gravity.CENTER);
-                            text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
-                            text.setTextColor(getResources().getColor(R.color.red25));
-                            text.setTypeface(face);
-                            text.setGravity(Gravity.CENTER);
-                        }
-                    });
-                    dialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                        @Override
-                        public void onClick(SweetAlertDialog sDialog) {
-                            Retrofit retrofit = new Retrofit.Builder()
-                                    .baseUrl("https://ta.kisrateam.com/")
-                                    .addConverterFactory(GsonConverterFactory.create())
-                                    .build();
-                            api = retrofit.create(Api.class);
-                            Token token1 = new Token(token);
-                            Call call = api.deleteToken(token1);
-                            call.enqueue(new Callback() {
-                                @Override
-                                public void onResponse(Call call, Response response) {
+                                    }
+                                });
 
-                                }
+                                Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
+                                t.send(new HitBuilders.EventBuilder()
+                                        .setCategory("User")
+                                        .setAction("send")
+                                        .setLabel("newUser")
+                                        .build());
+                                Intent intent = new Intent(RegisterActivity3.this, MainActivity.class);
+                                startActivity(intent);
+                            }
+                        });
 
-                                @Override
-                                public void onFailure(Call call, Throwable t) {
+                        dialog.setCancelable(false);
+                        dialog.show();
 
-                                }
-                            });
-
-                            Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
-                            t.send(new HitBuilders.EventBuilder()
-                                    .setCategory("User")
-                                    .setAction("send")
-                                    .setLabel("newUser")
-                                    .build());
-                            Intent intent = new Intent(RegisterActivity3.this, MainActivity.class);
-                            startActivity(intent);
-                        }
-                    });
-
-                    dialog.setCancelable(false);
-                    dialog.show();
-                    createPost();
-                    getIntent().removeExtra("nameUser");
-                    getIntent().removeExtra("ageUser");
-                    getIntent().removeExtra("imgUser");
-                    getIntent().removeExtra("fingerprint");
-                    getIntent().removeExtra("interest");
-
+                        getIntent().removeExtra("nameUser");
+                        getIntent().removeExtra("group");
+                        getIntent().removeExtra("birthday");
+                        getIntent().removeExtra("group");
+                        getIntent().removeExtra("job");
+                        getIntent().removeExtra("imgUser");
+                        getIntent().removeExtra("fingerprint");
+                        getIntent().removeExtra("interest");
+                    }catch (Exception e) {
+//                        Toast.makeText(RegisterActivity3.this,"can't save data ",Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });
@@ -200,37 +203,66 @@ public class RegisterActivity3 extends AppCompatActivity {
 
     //save API
     public void createPost() {
-
-        user = new User(" " + name, birthday,group,job, "" + adapter.getSentdata(), "" + imgUser,
-                "" + finger);
-        Call<User> call = api.createPost(user);
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if (!response.isSuccessful()) {
+        try {
+//            int num_group = Integer.parseInt(group);
+//            Toast.makeText(RegisterActivity3.this,"name:"+name +"birthday:"+birthday+"group:"+group +"job"+job,Toast.LENGTH_SHORT).show();
+            user = new User( name, birthday, group, job,  adapter.getSentdata(),  imgUser,
+                     finger);
+            Call<User> call = api.createPost(user);
+            call.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    if (!response.isSuccessful()) {
 //                    textLog.setText("Code ERROR : " + response.code());
-                    return;
-                }
-                //
-                User userPost = response.body();
-                String content = "";
-                content += "ID: " + userPost.getId() + "\n";
-                content += "Name: " + userPost.getName() + "\n";
+                        return;
+                    }
+                    //
+                    User userPost = response.body();
+                    String content = "";
+                    content += "ID: " + userPost.getId() + "\n";
+                    content += "Name: " + userPost.getName() + "\n";
 //                content += "Age: " + userPost.getAge() + "\n";
-                content += "Interest: " + userPost.getInterest() + "\n";
-                content += "ImageUser: " + userPost.getImguser() + "\n";
-                content += "Fingeprint: " + userPost.getFingerprint() + "\n";
-                content += "update_at: " + userPost.getUpdated_at() + "\n";
-                content += "Create_at: " + userPost.getCreated_at() + "\n";
-            }
+                    content += "Interest: " + userPost.getInterest() + "\n";
+                    content += "ImageUser: " + userPost.getImguser() + "\n";
+                    content += "Fingeprint: " + userPost.getFingerprint() + "\n";
+                    content += "update_at: " + userPost.getUpdated_at() + "\n";
+                    content += "Create_at: " + userPost.getCreated_at() + "\n";
+                }
 
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("RegisterActivity3", "createPost", "can't save to API");
+                    Call<com.example.fingerprinttest.model.Log> call1 = api.createLog(log);
+                    call1.enqueue(new Callback<com.example.fingerprinttest.model.Log>() {
+                        @Override
+                        public void onResponse(Call<com.example.fingerprinttest.model.Log> call, Response<com.example.fingerprinttest.model.Log> response) {
 
-            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<com.example.fingerprinttest.model.Log> call, Throwable t) {
+
+                        }
+                    });
+                }
 
 
-        });
+            });
+        } catch (Exception e) {
+            com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("RegisterActivity3", "createPost", "can't save to API");
+            Call<com.example.fingerprinttest.model.Log> call = api.createLog(log);
+            call.enqueue(new Callback<com.example.fingerprinttest.model.Log>() {
+                @Override
+                public void onResponse(Call<com.example.fingerprinttest.model.Log> call, Response<com.example.fingerprinttest.model.Log> response) {
+
+                }
+
+                @Override
+                public void onFailure(Call<com.example.fingerprinttest.model.Log> call, Throwable t) {
+
+                }
+            });
+        }
     }
 
 

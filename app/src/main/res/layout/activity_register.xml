@@ -10,8 +10,8 @@
 
     <ImageView
         android:id="@+id/imageUserRegister"
-        android:layout_width="364dp"
-        android:layout_height="286dp"
+        android:layout_width="312dp"
+        android:layout_height="307dp"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
         android:tag="false"
@@ -55,7 +55,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.532" />
+        app:layout_constraintVertical_bias="0.589" />
 
     <EditText
         android:id="@+id/editTextAge"
@@ -90,7 +90,7 @@
         app:layout_constraintHorizontal_bias="0.064"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.739" />
+        app:layout_constraintVertical_bias="0.797" />
 
     <Spinner
         android:id="@+id/spinnerJobPosition"
@@ -105,7 +105,7 @@
         app:layout_constraintHorizontal_bias="0.913"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.739" />
+        app:layout_constraintVertical_bias="0.797" />
 
     <ImageView
         android:id="@+id/nextBtn"

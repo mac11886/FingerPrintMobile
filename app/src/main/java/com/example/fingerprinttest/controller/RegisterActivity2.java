@@ -64,8 +64,8 @@ public class RegisterActivity2 extends AppCompatActivity {
     String imgUser;
     String finger;
     String interest;
-    String birthday ;
-    String group,job;
+    String birthday;
+    String group, job;
 
     AlertDialog.Builder builder;
     private static final int VID = 6997;
@@ -107,11 +107,11 @@ public class RegisterActivity2 extends AppCompatActivity {
 
         //recieve from page 1
         name = getIntent().getStringExtra("nameUser");
-        birthday =getIntent().getStringExtra("birthday");
+        birthday = getIntent().getStringExtra("birthday");
         group = getIntent().getStringExtra("group");
         job = getIntent().getStringExtra("job");
+//        Toast.makeText(RegisterActivity2.this, "group" + group, Toast.LENGTH_SHORT).show();
 
-        age = getIntent().getStringExtra("ageUser");
         imgUser = getIntent().getStringExtra("imgUser");
         token = getIntent().getStringExtra("token");
 //        Toast.makeText(this, "token:" + birthday, Toast.LENGTH_SHORT).show();
@@ -123,57 +123,74 @@ public class RegisterActivity2 extends AppCompatActivity {
 
     //get API
     public void getPosts() {
-        Call<List<User>> call = api.getPost();
-        call.enqueue(new Callback<List<User>>() {
-            @Override
-            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                if (!response.isSuccessful()) {
-                    return;
-                }
-                users = response.body();
-                for (User user : users) {
-                    String content = "";
-                    content += "ID: " + user.getId() + "\n";
-                    content += "Name: " + user.getName() + "\n";
+        try {
+
+
+            Call<List<User>> call = api.getPost();
+            call.enqueue(new Callback<List<User>>() {
+                @Override
+                public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                    if (!response.isSuccessful()) {
+                        return;
+                    }
+                    users = response.body();
+                    for (User user : users) {
+                        String content = "";
+                        content += "ID: " + user.getId() + "\n";
+                        content += "Name: " + user.getName() + "\n";
 //                    content += "Age: " + user.getAge() + "\n";
-                    content += "Interest: " + user.getInterest() + "\n";
-                    content += "ImageUser: " + user.getImguser() + "\n";
-                    content += "Fingeprint: " + user.getFingerprint() + "\n";
-                    content += "update_at: " + user.getUpdated_at() + "\n";
-                    content += "Create_at: " + user.getCreated_at() + "\n";
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<User>> call, Throwable t) {
-                SweetAlertDialog loading = new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.WARNING_TYPE);
-                loading.setTitleText("แจ้งเตือน");
-                loading.setContentText("SERVER ERROR");
-                loading.getProgressHelper().setBarColor(RegisterActivity2.this.getResources().getColor(R.color.greentea));
-                loading.setOnShowListener(new DialogInterface.OnShowListener() {
-                    @Override
-                    public void onShow(DialogInterface dialog) {
-                        SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
-                        Typeface face = ResourcesCompat.getFont(RegisterActivity2.this, R.font.kanit_light);
-                        TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
-                        TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
-                        textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                        textCon.setTextColor(getResources().getColor(R.color.black));
-                        textCon.setTypeface(face);
-                        textCon.setGravity(Gravity.CENTER);
-                        text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
-                        text.setTextColor(getResources().getColor(R.color.red25));
-                        text.setTypeface(face);
-                        text.setGravity(Gravity.CENTER);
+                        content += "Interest: " + user.getInterest() + "\n";
+                        content += "ImageUser: " + user.getImguser() + "\n";
+                        content += "Fingeprint: " + user.getFingerprint() + "\n";
+                        content += "update_at: " + user.getUpdated_at() + "\n";
+                        content += "Create_at: " + user.getCreated_at() + "\n";
 
                     }
-                });
+                }
 
-                loading.show();
-            }
-        });
+                @Override
+                public void onFailure(Call<List<User>> call, Throwable t) {
+                    SweetAlertDialog loading = new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.WARNING_TYPE);
+                    loading.setTitleText("แจ้งเตือน");
+                    loading.setContentText("SERVER ERROR");
+                    loading.getProgressHelper().setBarColor(RegisterActivity2.this.getResources().getColor(R.color.greentea));
+                    loading.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialog) {
+                            SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
+                            Typeface face = ResourcesCompat.getFont(RegisterActivity2.this, R.font.kanit_light);
+                            TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
+                            TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
+                            textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                            textCon.setTextColor(getResources().getColor(R.color.black));
+                            textCon.setTypeface(face);
+                            textCon.setGravity(Gravity.CENTER);
+                            text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
+                            text.setTextColor(getResources().getColor(R.color.red25));
+                            text.setTypeface(face);
+                            text.setGravity(Gravity.CENTER);
 
+                        }
+                    });
+
+                    loading.show();
+                }
+            });
+        } catch (Exception e) {
+            com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("RegisterActivity2", "getPost", "can't get data from api");
+            Call<com.example.fingerprinttest.model.Log> call = api.createLog(log);
+            call.enqueue(new Callback<com.example.fingerprinttest.model.Log>() {
+                @Override
+                public void onResponse(Call<com.example.fingerprinttest.model.Log> call, Response<com.example.fingerprinttest.model.Log> response) {
+
+                }
+
+                @Override
+                public void onFailure(Call<com.example.fingerprinttest.model.Log> call, Throwable t) {
+
+                }
+            });
+        }
     }
 
 
@@ -451,9 +468,9 @@ public class RegisterActivity2 extends AppCompatActivity {
                                             public void onClick(SweetAlertDialog sweetAlertDialog) {
                                                 Intent intent = new Intent(RegisterActivity2.this, RegisterActivity3.class);
                                                 intent.putExtra("nameUser", name);
-                                                intent.putExtra("birthday",birthday);
-                                                intent.putExtra("group",group);
-                                                intent.putExtra("job",job);
+                                                intent.putExtra("birthday", birthday);
+                                                intent.putExtra("group", group);
+                                                intent.putExtra("job", job);
                                                 intent.putExtra("imgUser", imgUser);
                                                 intent.putExtra("fingerprint", strBase64);
                                                 intent.putExtra("token", token);
@@ -558,58 +575,90 @@ public class RegisterActivity2 extends AppCompatActivity {
                     .setAction("click")
                     .setLabel("notDetectDevice")
                     .build());
+            com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("RegisterActivity2", "OnBegin", "not connect device");
+            Call<com.example.fingerprinttest.model.Log> call = api.createLog(log);
+            call.enqueue(new Callback<com.example.fingerprinttest.model.Log>() {
+                @Override
+                public void onResponse(Call<com.example.fingerprinttest.model.Log> call, Response<com.example.fingerprinttest.model.Log> response) {
+
+                }
+
+                @Override
+                public void onFailure(Call<com.example.fingerprinttest.model.Log> call, Throwable t) {
+
+                }
+            });
             scanText.setText("กรุณาเชื่อมต่อกับที่สแกนนิ้ว");
         }
     }
 
     public void OnBnEnroll(View view) throws FingerprintException {
-        firstImage.setImageResource(R.drawable.shape_rectangle);
-        secondImage.setImageResource(R.drawable.shape_rectangle);
-        thridImage.setImageResource(R.drawable.shape_rectangle);
-        Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
-        t.send(new HitBuilders.EventBuilder()
-                .setCategory("Enroll")
-                .setAction("click")
-                .setLabel("EnrollScan")
-                .build());
-        OnBnBegin();
-        if (bstart) {
-            isRegister = true;
-            enrollidx = 0;
-            scanText.setText("กรุณาวางนิ้ว 3 ครั้งบนทีสแกน");
-        } else {
+        try {
 
-            SweetAlertDialog loading = new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.WARNING_TYPE);
-            loading.setTitleText("แจ้งเตือน");
-            loading.setContentText("" +
-                    "กรุณาเชื่อมต่อกับเครื่องสแกนนิ้ว");
+
+            firstImage.setImageResource(R.drawable.shape_rectangle);
+            secondImage.setImageResource(R.drawable.shape_rectangle);
+            thridImage.setImageResource(R.drawable.shape_rectangle);
+            Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
             t.send(new HitBuilders.EventBuilder()
-                    .setCategory("Device")
+                    .setCategory("Enroll")
                     .setAction("click")
-                    .setLabel("notDetectDevice")
+                    .setLabel("EnrollScan")
                     .build());
-            loading.getProgressHelper().setBarColor(RegisterActivity2.this.getResources().getColor(R.color.greentea));
-            loading.setOnShowListener(new DialogInterface.OnShowListener() {
+            OnBnBegin();
+            if (bstart) {
+                isRegister = true;
+                enrollidx = 0;
+                scanText.setText("กรุณาวางนิ้ว 3 ครั้งบนทีสแกน");
+            } else {
+
+                SweetAlertDialog loading = new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.WARNING_TYPE);
+                loading.setTitleText("แจ้งเตือน");
+                loading.setContentText("" +
+                        "กรุณาเชื่อมต่อกับเครื่องสแกนนิ้ว");
+                t.send(new HitBuilders.EventBuilder()
+                        .setCategory("Device")
+                        .setAction("click")
+                        .setLabel("notDetectDevice")
+                        .build());
+                loading.getProgressHelper().setBarColor(RegisterActivity2.this.getResources().getColor(R.color.greentea));
+                loading.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
+                        Typeface face = ResourcesCompat.getFont(RegisterActivity2.this, R.font.kanit_light);
+                        TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
+                        TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
+                        textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                        textCon.setTextColor(getResources().getColor(R.color.black));
+                        textCon.setTypeface(face);
+                        textCon.setGravity(Gravity.CENTER);
+                        text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+                        text.setTextColor(getResources().getColor(R.color.red25));
+                        text.setTypeface(face);
+                        text.setGravity(Gravity.CENTER);
+
+                    }
+                });
+
+                loading.show();
+                scanText.setText("กรุณาเชื่อมต่อกับเครื่องสแกนนิ้ว");
+            }
+
+        } catch (Exception e) {
+            com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("RegisterActivity2", "OnEnroll", "not connect device");
+            Call<com.example.fingerprinttest.model.Log> call = api.createLog(log);
+            call.enqueue(new Callback<com.example.fingerprinttest.model.Log>() {
                 @Override
-                public void onShow(DialogInterface dialog) {
-                    SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
-                    Typeface face = ResourcesCompat.getFont(RegisterActivity2.this, R.font.kanit_light);
-                    TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
-                    TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
-                    textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                    textCon.setTextColor(getResources().getColor(R.color.black));
-                    textCon.setTypeface(face);
-                    textCon.setGravity(Gravity.CENTER);
-                    text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
-                    text.setTextColor(getResources().getColor(R.color.red25));
-                    text.setTypeface(face);
-                    text.setGravity(Gravity.CENTER);
+                public void onResponse(Call<com.example.fingerprinttest.model.Log> call, Response<com.example.fingerprinttest.model.Log> response) {
+
+                }
+
+                @Override
+                public void onFailure(Call<com.example.fingerprinttest.model.Log> call, Throwable t) {
 
                 }
             });
-
-            loading.show();
-            scanText.setText("กรุณาเชื่อมต่อกับเครื่องสแกนนิ้ว");
         }
     }
 

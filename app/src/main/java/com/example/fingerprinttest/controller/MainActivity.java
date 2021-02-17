@@ -119,16 +119,19 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void createPostDate(int id, String date1, String time, String status) {
+
         Attendance attendance = new Attendance(id, " " + date1, " " + time, "" + status);
         Call<Attendance> call = api.createPostDate(attendance);
         call.enqueue(new Callback<Attendance>() {
             @Override
             public void onResponse(Call<Attendance> call, Response<Attendance> response) {
                 Attendance attendance2 = response.body();
+                int response_status = Integer.parseInt(response.body().getStatus());
                 if (response.isSuccessful()) {
-                    int response_status  = Integer.parseInt(response.body().getStatus());
+//                    Toast.makeText(MainActivity.this,"resStatus"+response_status,Toast.LENGTH_SHORT).show();
                     if (response_status == 0) {
-                        Toast.makeText(MainActivity.this, "ไม่สาย ", Toast.LENGTH_LONG).show();
+
+//                        Toast.makeText(MainActivity.this, "ไม่สาย", Toast.LENGTH_LONG).show();
                         SweetAlertDialog loading = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.NORMAL_TYPE);
                         loading.setTitleText("ยินดีต้อนรับ");
                         loading.setContentText("สวัสดีจ้า");
@@ -169,8 +172,8 @@ public class MainActivity extends AppCompatActivity {
 
                         loading.show();
                         loading.setCancelable(false);
-                    } else {
-                        Toast.makeText(MainActivity.this, "status " + response.body().getStatus(), Toast.LENGTH_LONG).show();
+                    } else if (response_status == 1) {
+//                        Toast.makeText(MainActivity.this, "status " + response.body().getStatus(), Toast.LENGTH_LONG).show();
                         SweetAlertDialog loading = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.NORMAL_TYPE);
                         loading.setTitleText("ยินดีต้อนรับ");
                         loading.setContentText("สายน้าวันนี้");
@@ -211,9 +214,53 @@ public class MainActivity extends AppCompatActivity {
 
                         loading.show();
                         loading.setCancelable(false);
+
+                    } else if (response_status == 3) {
+                        SweetAlertDialog loading = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.NORMAL_TYPE);
+                        loading.setTitleText("บ้ายบายยย");
+                        loading.setContentText("กลับบ้านดีๆ");
+                        loading.getProgressHelper().setBarColor(MainActivity.this.getResources().getColor(R.color.greentea));
+//                        Toast.makeText(MainActivity.this, "status" + status, Toast.LENGTH_SHORT).show();
+                        loading.setOnShowListener(new DialogInterface.OnShowListener() {
+                            @Override
+                            public void onShow(DialogInterface dialog) {
+                                SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
+                                Typeface face = ResourcesCompat.getFont(MainActivity.this, R.font.kanit_light);
+                                TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
+                                TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
+                                textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                                textCon.setTextColor(getResources().getColor(R.color.blueButton));
+                                textCon.setTypeface(face);
+
+                                textCon.setGravity(Gravity.CENTER);
+                                text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
+                                text.setTextColor(getResources().getColor(R.color.blueButton));
+                                text.setTypeface(face);
+
+                                text.setGravity(Gravity.CENTER);
+
+                            }
+                        });
+                        loading.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                try {
+
+                                    outbtn.setBackgroundColor(Color.parseColor("#00AF91"));
+                                    inBtn.setBackgroundColor(Color.parseColor("#00AF91"));
+                                    OnBnStop();
+                                    loading.dismissWithAnimation();
+                                } catch (FingerprintException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                        loading.show();
+
                     }
                 }
             }
+
             @Override
             public void onFailure(Call<Attendance> call, Throwable t) {
 //                Toast.makeText(MainActivity.this,"สาย ",Toast.LENGTH_LONG).show();
@@ -421,6 +468,7 @@ public class MainActivity extends AppCompatActivity {
                         .build());
                 OnBnBegin();
                 status = "ออก";
+//                Toast.makeText(MainActivity.this, "status" + status, Toast.LENGTH_SHORT).show();
                 outbtn.setBackgroundColor(Color.parseColor("#207720"));
                 inBtn.setBackgroundColor(Color.parseColor("#00AF91"));
             } catch (FingerprintException e) {
@@ -442,6 +490,7 @@ public class MainActivity extends AppCompatActivity {
         inBtn.setOnClickListener(v -> {
 
             try {
+                status = "เข้า";
                 Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
                 t.send(new HitBuilders.EventBuilder()
                         .setCategory("CheckIn-Out")
@@ -450,6 +499,7 @@ public class MainActivity extends AppCompatActivity {
                         .build());
 
                 OnBnBegin();
+//                Toast.makeText(MainActivity.this, "status" + status, Toast.LENGTH_SHORT).show();
                 inBtn.setBackgroundColor(Color.parseColor("#207720"));
                 outbtn.setBackgroundColor(Color.parseColor("#00AF91"));
             } catch (FingerprintException e) {
@@ -527,7 +577,6 @@ public class MainActivity extends AppCompatActivity {
         fingerprintParams.put(ParameterHelper.PARAM_KEY_PID, PID);
         fingerprintSensor = FingprintFactory.createFingerprintSensor(this, TransportType.USB, fingerprintParams);
     }
-
 
 
     private void InitDevice() {
@@ -731,6 +780,7 @@ public class MainActivity extends AppCompatActivity {
                                                 .setAction("Scan")
                                                 .setLabel("CheckIn")
                                                 .build());
+//                                        Toast.makeText(MainActivity.this, "status" + status, Toast.LENGTH_SHORT).show();
                                         createPostDate(users.get(Integer.parseInt(strRes[0])).getId(), formatdate, formattime, " " + status);
                                         try {
                                             outbtn.setBackgroundColor(Color.parseColor("#00AF91"));
@@ -741,46 +791,46 @@ public class MainActivity extends AppCompatActivity {
                                             e.printStackTrace();
                                         }
                                     } else if (status == "ออก") {
-                                        SweetAlertDialog loading = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.NORMAL_TYPE);
-                                        loading.setTitleText("บ้ายบายยย");
-                                        loading.setContentText("กลับบ้านดีๆ");
-                                        loading.getProgressHelper().setBarColor(MainActivity.this.getResources().getColor(R.color.greentea));
-
-                                        loading.setOnShowListener(new DialogInterface.OnShowListener() {
-                                            @Override
-                                            public void onShow(DialogInterface dialog) {
-                                                SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
-                                                Typeface face = ResourcesCompat.getFont(MainActivity.this, R.font.kanit_light);
-                                                TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
-                                                TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
-                                                textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                                                textCon.setTextColor(getResources().getColor(R.color.blueButton));
-                                                textCon.setTypeface(face);
-
-                                                textCon.setGravity(Gravity.CENTER);
-                                                text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
-                                                text.setTextColor(getResources().getColor(R.color.blueButton));
-                                                text.setTypeface(face);
-
-                                                text.setGravity(Gravity.CENTER);
-
-                                            }
-                                        });
-                                        loading.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                            @Override
-                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                                try {
-
-                                                    outbtn.setBackgroundColor(Color.parseColor("#00AF91"));
-                                                    inBtn.setBackgroundColor(Color.parseColor("#00AF91"));
-                                                    OnBnStop();
-                                                    loading.dismissWithAnimation();
-                                                } catch (FingerprintException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                        });
-                                        loading.show();
+//                                        SweetAlertDialog loading = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.NORMAL_TYPE);
+//                                        loading.setTitleText("บ้ายบายยย");
+//                                        loading.setContentText("กลับบ้านดีๆ");
+//                                        loading.getProgressHelper().setBarColor(MainActivity.this.getResources().getColor(R.color.greentea));
+//                                        Toast.makeText(MainActivity.this, "status" + status, Toast.LENGTH_SHORT).show();
+//                                        loading.setOnShowListener(new DialogInterface.OnShowListener() {
+//                                            @Override
+//                                            public void onShow(DialogInterface dialog) {
+//                                                SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
+//                                                Typeface face = ResourcesCompat.getFont(MainActivity.this, R.font.kanit_light);
+//                                                TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
+//                                                TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
+//                                                textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+//                                                textCon.setTextColor(getResources().getColor(R.color.blueButton));
+//                                                textCon.setTypeface(face);
+//
+//                                                textCon.setGravity(Gravity.CENTER);
+//                                                text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
+//                                                text.setTextColor(getResources().getColor(R.color.blueButton));
+//                                                text.setTypeface(face);
+//
+//                                                text.setGravity(Gravity.CENTER);
+//
+//                                            }
+//                                        });
+//                                        loading.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+//                                            @Override
+//                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+//                                                try {
+//
+//                                                    outbtn.setBackgroundColor(Color.parseColor("#00AF91"));
+//                                                    inBtn.setBackgroundColor(Color.parseColor("#00AF91"));
+//                                                    OnBnStop();
+//                                                    loading.dismissWithAnimation();
+//                                                } catch (FingerprintException e) {
+//                                                    e.printStackTrace();
+//                                                }
+//                                            }
+//                                        });
+//                                        loading.show();
 
                                         Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
                                         t.send(new HitBuilders.EventBuilder()

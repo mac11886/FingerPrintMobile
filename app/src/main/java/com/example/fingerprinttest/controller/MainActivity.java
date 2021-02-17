@@ -125,93 +125,95 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Attendance> call, Response<Attendance> response) {
                 Attendance attendance2 = response.body();
-                if (!response.isSuccessful()) {
-//                    Toast.makeText(MainActivity.this, "สายสาย " + response.code(), Toast.LENGTH_LONG).show();
-                    SweetAlertDialog loading = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.NORMAL_TYPE);
-                    loading.setTitleText("ยินดีต้อนรับ");
-                    loading.setContentText("สายน้าวันนี้");
+                if (response.isSuccessful()) {
+                    int response_status  = Integer.parseInt(response.body().getStatus());
+                    if (response_status == 0) {
+                        Toast.makeText(MainActivity.this, "ไม่สาย ", Toast.LENGTH_LONG).show();
+                        SweetAlertDialog loading = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.NORMAL_TYPE);
+                        loading.setTitleText("ยินดีต้อนรับ");
+                        loading.setContentText("สวัสดีจ้า");
 
-                    loading.getProgressHelper().setBarColor(MainActivity.this.getResources().getColor(R.color.greentea));
-                    loading.setOnShowListener(new DialogInterface.OnShowListener() {
-                        @Override
-                        public void onShow(DialogInterface dialog) {
-                            SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
-                            Typeface face = ResourcesCompat.getFont(MainActivity.this, R.font.kanit_light);
-                            TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
-                            TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
-                            textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                            textCon.setTextColor(getResources().getColor(R.color.red25));
-                            textCon.setTypeface(face);
-                            textCon.setGravity(Gravity.CENTER);
-                            text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
-                            text.setTextColor(getResources().getColor(R.color.blueButton));
-                            text.setTypeface(face);
-                            text.setGravity(Gravity.CENTER);
+                        loading.getProgressHelper().setBarColor(MainActivity.this.getResources().getColor(R.color.greentea));
+                        loading.setOnShowListener(new DialogInterface.OnShowListener() {
+                            @Override
+                            public void onShow(DialogInterface dialog) {
+                                SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
+                                Typeface face = ResourcesCompat.getFont(MainActivity.this, R.font.kanit_light);
+                                TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
+                                TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
+                                textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                                textCon.setTextColor(getResources().getColor(R.color.blueButton));
+                                textCon.setTypeface(face);
+                                textCon.setGravity(Gravity.CENTER);
+                                text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
+                                text.setTextColor(getResources().getColor(R.color.blueButton));
+                                text.setTypeface(face);
+                                text.setGravity(Gravity.CENTER);
 
-                        }
-                    });
-
-                    loading.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                        @Override
-                        public void onClick(SweetAlertDialog sweetAlertDialog) {
-                            try {
-                                outbtn.setBackgroundColor(Color.parseColor("#00AF91"));
-                                inBtn.setBackgroundColor(Color.parseColor("#00AF91"));
-                                OnBnStop();
-                                loading.dismissWithAnimation();
-                            } catch (FingerprintException e) {
-                                e.printStackTrace();
                             }
-                        }
-                    });
+                        });
 
-                    loading.show();
-                    loading.setCancelable(false);
-                }else {
-//                    Toast.makeText(MainActivity.this,"ไม่สาย ",Toast.LENGTH_LONG).show();
-                    SweetAlertDialog loading = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.NORMAL_TYPE);
-                    loading.setTitleText("ยินดีต้อนรับ");
-                    loading.setContentText("สวัสดีจ้า");
-
-                    loading.getProgressHelper().setBarColor(MainActivity.this.getResources().getColor(R.color.greentea));
-                    loading.setOnShowListener(new DialogInterface.OnShowListener() {
-                        @Override
-                        public void onShow(DialogInterface dialog) {
-                            SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
-                            Typeface face = ResourcesCompat.getFont(MainActivity.this, R.font.kanit_light);
-                            TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
-                            TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
-                            textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                            textCon.setTextColor(getResources().getColor(R.color.blueButton));
-                            textCon.setTypeface(face);
-                            textCon.setGravity(Gravity.CENTER);
-                            text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
-                            text.setTextColor(getResources().getColor(R.color.blueButton));
-                            text.setTypeface(face);
-                            text.setGravity(Gravity.CENTER);
-
-                        }
-                    });
-
-                    loading.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                        @Override
-                        public void onClick(SweetAlertDialog sweetAlertDialog) {
-                            try {
-                                outbtn.setBackgroundColor(Color.parseColor("#00AF91"));
-                                inBtn.setBackgroundColor(Color.parseColor("#00AF91"));
-                                OnBnStop();
-                                loading.dismissWithAnimation();
-                            } catch (FingerprintException e) {
-                                e.printStackTrace();
+                        loading.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                try {
+                                    outbtn.setBackgroundColor(Color.parseColor("#00AF91"));
+                                    inBtn.setBackgroundColor(Color.parseColor("#00AF91"));
+                                    OnBnStop();
+                                    loading.dismissWithAnimation();
+                                } catch (FingerprintException e) {
+                                    e.printStackTrace();
+                                }
                             }
-                        }
-                    });
+                        });
 
-                    loading.show();
-                    loading.setCancelable(false);
+                        loading.show();
+                        loading.setCancelable(false);
+                    } else {
+                        Toast.makeText(MainActivity.this, "status " + response.body().getStatus(), Toast.LENGTH_LONG).show();
+                        SweetAlertDialog loading = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.NORMAL_TYPE);
+                        loading.setTitleText("ยินดีต้อนรับ");
+                        loading.setContentText("สายน้าวันนี้");
+
+                        loading.getProgressHelper().setBarColor(MainActivity.this.getResources().getColor(R.color.greentea));
+                        loading.setOnShowListener(new DialogInterface.OnShowListener() {
+                            @Override
+                            public void onShow(DialogInterface dialog) {
+                                SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
+                                Typeface face = ResourcesCompat.getFont(MainActivity.this, R.font.kanit_light);
+                                TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
+                                TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
+                                textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                                textCon.setTextColor(getResources().getColor(R.color.red25));
+                                textCon.setTypeface(face);
+                                textCon.setGravity(Gravity.CENTER);
+                                text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
+                                text.setTextColor(getResources().getColor(R.color.blueButton));
+                                text.setTypeface(face);
+                                text.setGravity(Gravity.CENTER);
+
+                            }
+                        });
+
+                        loading.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                try {
+                                    outbtn.setBackgroundColor(Color.parseColor("#00AF91"));
+                                    inBtn.setBackgroundColor(Color.parseColor("#00AF91"));
+                                    OnBnStop();
+                                    loading.dismissWithAnimation();
+                                } catch (FingerprintException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+
+                        loading.show();
+                        loading.setCancelable(false);
+                    }
                 }
             }
-
             @Override
             public void onFailure(Call<Attendance> call, Throwable t) {
 //                Toast.makeText(MainActivity.this,"สาย ",Toast.LENGTH_LONG).show();

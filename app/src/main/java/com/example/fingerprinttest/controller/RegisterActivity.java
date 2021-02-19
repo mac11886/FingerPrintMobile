@@ -8,6 +8,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -23,11 +24,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -64,7 +67,7 @@ RegisterActivity extends AppCompatActivity {
     AlertDialog.Builder builder;
     String currentPhotoPath;
     Spinner spinnerGroup, spinnerJobPosition;
-    String textGroup, textJob,date;
+    String textGroup, textJob, date;
     EditText edittext;
 
     String[] dc_one = {"DC ONE"};
@@ -80,7 +83,7 @@ RegisterActivity extends AppCompatActivity {
     String[] ba = {"Business Analyst"};
     String[] graphic = {"Graphic Design"};
     String[] nj = {"NJ"};
-    int num_group ;
+    int num_group;
     final Calendar myCalendar = Calendar.getInstance();
     SimpleDateFormat sdf = null;
     String[] job_position = new String[]{};
@@ -99,13 +102,14 @@ RegisterActivity extends AppCompatActivity {
         String token;
         token = getIntent().getStringExtra("token");
         builder = new AlertDialog.Builder(this);
-        String[] group = {"Development", "Engineering", "Graphic Design", "Coordinat", "Deploy Space café", "Administrative","Accounting", "Secretary"
-                , "Business Analyst", "CEO","CTO" ,"DC ONE","NJ"};
+        String[] group = {"Development", "Engineering", "Graphic Design", "Coordinat", "Deploy Space café", "Administrative", "Accounting", "Secretary"
+                , "Business Analyst", "CEO", "CTO", "DC ONE", "NJ"};
 
         HintSpinner<String> hintSpinner = new HintSpinner<>(
                 spinnerGroup,
                 // Default layout - You don't need to pass in any layout id, just your hint text and
                 // your list data
+
                 new HintAdapter<String>(this, "เลือกตำแหน่ง", Arrays.asList(group)),
                 new HintSpinner.Callback<String>() {
                     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -113,9 +117,9 @@ RegisterActivity extends AppCompatActivity {
                     public void onItemSelected(int position, String itemAtPosition) {
                         // Here you handle the on item selected event (this skips the hint selected event)
                         textGroup = itemAtPosition;
-                         num_group  = position;
-                        Log.e("---","----------------------------------------");
-                        System.out.println("position"+num_group);
+                        num_group = position;
+                        Log.e("---", "----------------------------------------");
+                        System.out.println("position" + num_group);
                         switch (num_group) {
                             case 0:
                                 job_position = developer;
@@ -145,26 +149,27 @@ RegisterActivity extends AppCompatActivity {
                             case 8:
                                 job_position = ba;
                                 break;
-                            case  9:
-                                job_position =boss;
+                            case 9:
+                                job_position = boss;
                                 break;
 
-                            case  10:
-                                job_position =acc;
+                            case 10:
+                                job_position = acc;
                                 break;
-                            case  11:
-                                job_position =dc_one;
+                            case 11:
+                                job_position = dc_one;
                                 break;
-                            case  12:
-                                job_position =nj;
+                            case 12:
+                                job_position = nj;
                                 break;
                         }
                         createJobSpinner(job_position);
+                        hideSoftKeyboard(RegisterActivity.this);
                     }
                 });
         hintSpinner.init();
         createJobSpinner(job_position);
-
+//        edittext.hasFocus();
         chooseDatePicker();
         //take or choose image function
         takeOrChooseBtn.setOnClickListener(new View.OnClickListener() {
@@ -180,7 +185,7 @@ RegisterActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
-
+                hideSoftKeyboard(RegisterActivity.this);
                 if (detectValid() == 1) {
                     Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
                     t.send(new HitBuilders.EventBuilder()
@@ -308,7 +313,7 @@ RegisterActivity extends AppCompatActivity {
                     loading.show();
                 } else {
                     //sent data to post on API
-                    num_group +=1;
+                    num_group += 1;
                     String id_group = String.valueOf(num_group);
 
                     String imageBase64 = encoded;
@@ -357,31 +362,65 @@ RegisterActivity extends AppCompatActivity {
     public void chooseDatePicker() {
 
         edittext = (EditText) findViewById(R.id.editTextAge);
-        DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
-            @RequiresApi(api = Build.VERSION_CODES.N)
+        Toast.makeText(RegisterActivity.this,"First",Toast.LENGTH_LONG).show();
+        edittext.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-                // TODO Auto-generated method stub
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel();
-            }
-
-        };
-
-        edittext.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus){
+                    Toast.makeText(RegisterActivity.this,"onClick",Toast.LENGTH_LONG).show();
+                         DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                          int dayOfMonth) {
+                        // TODO Auto-generated method stub
+                        myCalendar.set(Calendar.YEAR, year);
+                        myCalendar.set(Calendar.MONTH, monthOfYear);
+                        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        updateLabel();
+                    }
+                };
                 new DatePickerDialog(RegisterActivity.this, date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+//                nameText.setInputType(InputType.TYPE_NULL);
+                hideSoftKeyboard(RegisterActivity.this);
+                }else {
+
+                }
             }
         });
+        edittext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                          int dayOfMonth) {
+                        // TODO Auto-generated method stub
+                        myCalendar.set(Calendar.YEAR, year);
+                        myCalendar.set(Calendar.MONTH, monthOfYear);
+                        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        updateLabel();
+                    }
+                };
+                new DatePickerDialog(RegisterActivity.this, date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+//                nameText.setInputType(InputType.TYPE_NULL);
+                hideSoftKeyboard(RegisterActivity.this);
+            }
+        });
+    }
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                activity.getCurrentFocus().getWindowToken(), 0);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -394,7 +433,7 @@ RegisterActivity extends AppCompatActivity {
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-         edittext.setText(sdf.format(myCalendar.getTime()));
+            edittext.setText(sdf.format(myCalendar.getTime()));
             date = sdf.format(myCalendar.getTime());
         }
     }

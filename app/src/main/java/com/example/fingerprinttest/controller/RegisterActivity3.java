@@ -24,6 +24,7 @@ import com.example.fingerprinttest.services.AnalyticsApplication;
 import com.example.fingerprinttest.services.Api;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +89,9 @@ public class RegisterActivity3 extends AppCompatActivity {
 
 
         addCard();
-
+        View view = null;
+//        Snackbar.make(view, "Sleeping For Less", Snackbar.LENGTH_SHORT).show();
+        Toast.makeText(RegisterActivity3.this,"เลือกได้ 1-4 ",Toast.LENGTH_LONG).show();
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

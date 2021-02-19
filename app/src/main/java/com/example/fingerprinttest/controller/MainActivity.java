@@ -379,8 +379,10 @@ public class MainActivity extends AppCompatActivity {
         main.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 try {
                     testError();
+
                 } catch (Exception exception) {
                     com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("MainActivity", "mainTEST", "can't touch this");
                     Call<com.example.fingerprinttest.model.Log> call = api.createLog(log);

@@ -164,7 +164,13 @@ RegisterActivity extends AppCompatActivity {
                                 break;
                         }
                         createJobSpinner(job_position);
-                        hideSoftKeyboard(RegisterActivity.this);
+                        try {
+                            hideSoftKeyboard(RegisterActivity.this);
+                        } catch (Exception e) {
+                            Log.e("asd", "catch");
+                        }
+
+
                     }
                 });
         hintSpinner.init();
@@ -362,31 +368,31 @@ RegisterActivity extends AppCompatActivity {
     public void chooseDatePicker() {
 
         edittext = (EditText) findViewById(R.id.editTextAge);
-
-        Toast.makeText(RegisterActivity.this,"First",Toast.LENGTH_LONG).show();
         edittext.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus){
-                    Toast.makeText(RegisterActivity.this,"onClick",Toast.LENGTH_LONG).show();
-                         DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                          int dayOfMonth) {
-                        // TODO Auto-generated method stub
-                        myCalendar.set(Calendar.YEAR, year);
-                        myCalendar.set(Calendar.MONTH, monthOfYear);
-                        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        updateLabel();
-                    }
-                };
-                new DatePickerDialog(RegisterActivity.this, date, myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-//                nameText.setInputType(InputType.TYPE_NULL);
-                hideSoftKeyboard(RegisterActivity.this);
-                }else {
+                if (hasFocus) {
+                    DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+                        @RequiresApi(api = Build.VERSION_CODES.N)
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                              int dayOfMonth) {
+                            // TODO Auto-generated method stub
+                            myCalendar.set(Calendar.YEAR, year);
+                            myCalendar.set(Calendar.MONTH, monthOfYear);
+                            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                            updateLabel();
+                        }
+                    };
+                    new DatePickerDialog(RegisterActivity.this, date, myCalendar
+                            .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                            myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+
+//                    new DatePickerDialog(RegisterActivity.this, android.R.style.Theme_Material_Light_Dialog,date, myCalendar
+//                            .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+//                            myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                    hideSoftKeyboard(RegisterActivity.this);
+                } else {
 
                 }
             }
@@ -410,11 +416,14 @@ RegisterActivity extends AppCompatActivity {
                 new DatePickerDialog(RegisterActivity.this, date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-//                nameText.setInputType(InputType.TYPE_NULL);
+//                new DatePickerDialog(RegisterActivity.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth,date,myCalendar.get(Calendar.DAY_OF_MONTH), myCalendar
+//                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH)
+//                        ).show();
                 hideSoftKeyboard(RegisterActivity.this);
             }
         });
     }
+
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager =
                 (InputMethodManager) activity.getSystemService(

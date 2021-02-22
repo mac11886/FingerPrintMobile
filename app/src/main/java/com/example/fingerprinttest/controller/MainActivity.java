@@ -264,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Attendance> call, Throwable t) {
 //                Toast.makeText(MainActivity.this,"สาย ",Toast.LENGTH_LONG).show();
-
+                Toast.makeText(MainActivity.this,"Can't send data ",Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -783,14 +783,16 @@ public class MainActivity extends AppCompatActivity {
                                                 .setLabel("CheckIn")
                                                 .build());
 //                                        Toast.makeText(MainActivity.this, "status" + status, Toast.LENGTH_SHORT).show();
-                                        createPostDate(users.get(Integer.parseInt(strRes[0])).getId(), formatdate, formattime, " " + status);
                                         try {
+                                            createPostDate(users.get(Integer.parseInt(strRes[0])).getId(), formatdate, formattime, " " + status);
+
                                             outbtn.setBackgroundColor(Color.parseColor("#00AF91"));
                                             inBtn.setBackgroundColor(Color.parseColor("#00AF91"));
 
                                             OnBnStop();
                                         } catch (FingerprintException e) {
                                             e.printStackTrace();
+                                            Toast.makeText(MainActivity.this,"ERROR",Toast.LENGTH_LONG).show();
                                         }
                                     } else if (status == "ออก") {
 //                                        SweetAlertDialog loading = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.NORMAL_TYPE);
@@ -840,6 +842,7 @@ public class MainActivity extends AppCompatActivity {
                                                 .setAction("Scan")
                                                 .setLabel("CheckOut")
                                                 .build());
+
                                         createPostDate(users.get(Integer.parseInt(strRes[0])).getId(), formatdate, formattime, " " + status);
                                         try {
                                             outbtn.setBackgroundColor(Color.parseColor("#00AF91"));

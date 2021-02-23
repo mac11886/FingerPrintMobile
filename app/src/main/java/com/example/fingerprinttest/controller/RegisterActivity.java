@@ -78,11 +78,12 @@ RegisterActivity extends AppCompatActivity {
     String[] deploy = {"Manager", "Barista"};
     String[] admin = {"Administrator", "IT Administrator"};
     String[] secretary = {"Secretary"};
-    String[] boss = {"CEO"};
+    String[] boss = {"CEO","Vice President"};
     String[] acc = {"CTO"};
     String[] ba = {"Business Analyst"};
     String[] graphic = {"Graphic Design"};
     String[] nj = {"NJ"};
+    String[] vice = {"Vice President"};
     int num_group;
     final Calendar myCalendar = Calendar.getInstance();
     SimpleDateFormat sdf = null;
@@ -162,6 +163,7 @@ RegisterActivity extends AppCompatActivity {
                             case 12:
                                 job_position = nj;
                                 break;
+
                         }
                         createJobSpinner(job_position);
                         try {

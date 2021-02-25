@@ -72,7 +72,7 @@ RegisterActivity extends AppCompatActivity {
 
     String[] dc_one = {"DC ONE"};
     String[] developer = {"Technical Leader", "Developer", "Supervisor Quality Assuarance", "Software Tester"};
-    String[] accounting = {"accounting", "Customer Relationship"};
+    String[] accounting = {"Accounting", "Customer Relationship"};
     String[] se = {"Software Engineering"};
     String[] coordinat = {"Project coordinat"};
     String[] deploy = {"Manager", "Barista"};

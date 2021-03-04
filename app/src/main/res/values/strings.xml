@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Fingerprint</string>
+    <string name="app_name">Attendance</string>
     <string name="show_text">show text !!!</string>
     <string name="register">ลงทะเบียน</string>
     <string name="fingerprint">สแกนลายนิ้วมือ</string>

@@ -24,7 +24,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
@@ -37,9 +36,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.fingerprinttest.R;
+import com.example.fingerprinttest.model.JobPositon;
 import com.example.fingerprinttest.services.AnalyticsApplication;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -48,9 +47,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -69,25 +70,41 @@ RegisterActivity extends AppCompatActivity {
     Spinner spinnerGroup, spinnerJobPosition;
     String textGroup, textJob, date;
     EditText edittext;
+    int job_position_num;
+    JobPositon job_num = new JobPositon("DC ONE",25);
+//    String[] dc_one = {"DC ONE"};
+    List<JobPositon> dc_one = Arrays.asList(new JobPositon("DC ONE", 25));
+//    String[] developer = {"Technical Leader", "Developer", "Supervisor Quality Assuarance", "Software Tester"};
+    List<JobPositon> developer = Arrays.asList(new JobPositon("Technical Leader", 7), new JobPositon("Developer", 8),new JobPositon("Supervisor Quality Assuarance", 9),new JobPositon("Software Tester", 10));
+    List<JobPositon> accounting = Arrays.asList(new JobPositon("Accounting", 22), new JobPositon("Customer Relationship", 21));
+    List<JobPositon> deploy = Arrays.asList(new JobPositon("Manager", 14), new JobPositon("Barista", 15));
+    List<JobPositon> admin = Arrays.asList(new JobPositon("Administrator", 16), new JobPositon("IT Administrator", 18));
+    List<JobPositon> se = Arrays.asList(new JobPositon("Software Engineering", 11));
+    List<JobPositon> coordinat = Arrays.asList(new JobPositon("Project coordinat", 13));
+    List<JobPositon> secretary = Arrays.asList(new JobPositon("Secretary", 23));
+    List<JobPositon> acc = Arrays.asList(new JobPositon("CTO", 30));
+    List<JobPositon> ba = Arrays.asList(new JobPositon("Business Analyst", 24));
+    List<JobPositon> graphic = Arrays.asList(new JobPositon("Graphic Design", 12));
+    List<JobPositon> nj = Arrays.asList(new JobPositon("NJ", 26));
+    List<JobPositon> boss = Arrays.asList(new JobPositon("CEO", 28), new JobPositon("Vice President", 29));
 
-    String[] dc_one = {"DC ONE"};
-    String[] developer = {"Technical Leader", "Developer", "Supervisor Quality Assuarance", "Software Tester"};
-    String[] accounting = {"Accounting", "Customer Relationship"};
-    String[] se = {"Software Engineering"};
-    String[] coordinat = {"Project coordinat"};
-    String[] deploy = {"Manager", "Barista"};
-    String[] admin = {"Administrator", "IT Administrator"};
-    String[] secretary = {"Secretary"};
-    String[] boss = {"CEO","Vice President"};
-    String[] acc = {"CTO"};
-    String[] ba = {"Business Analyst"};
-    String[] graphic = {"Graphic Design"};
-    String[] nj = {"NJ"};
-    String[] vice = {"Vice President"};
+
+//    String[] accounting = {"Accounting", "Customer Relationship"};
+//    String[] se = {"Software Engineering"};
+//    String[] coordinat = {"Project coordinat"};
+//    String[] deploy = {"Manager", "Barista"};
+//    String[] admin = {"Administrator", "IT Administrator"};
+//    String[] secretary = {"Secretary"};
+//    String[] boss = {"CEO","Vice President"};
+//    String[] acc = {"CTO"};
+//    String[] ba = {"Business Analyst"};
+//    String[] graphic = {"Graphic Design"};
+//    String[] nj = {"NJ"};
+//    String[] vice = {"Vice President"};
     int num_group;
     final Calendar myCalendar = Calendar.getInstance();
     SimpleDateFormat sdf = null;
-    String[] job_position = new String[]{};
+    List<JobPositon> job_position = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,16 +141,20 @@ RegisterActivity extends AppCompatActivity {
                         switch (num_group) {
                             case 0:
                                 job_position = developer;
+
                                 break;
 
                             case 1:
                                 job_position = se;
+
                                 break;
                             case 2:
                                 job_position = graphic;
+
                                 break;
                             case 3:
                                 job_position = coordinat;
+
                                 break;
                             case 4:
                                 job_position = deploy;
@@ -158,7 +179,7 @@ RegisterActivity extends AppCompatActivity {
                                 job_position = acc;
                                 break;
                             case 11:
-                                job_position = dc_one;
+                                job_position = dc_one ;
                                 break;
                             case 12:
                                 job_position = nj;
@@ -176,7 +197,7 @@ RegisterActivity extends AppCompatActivity {
                     }
                 });
         hintSpinner.init();
-        createJobSpinner(job_position);
+//        createJobSpinner(job_position);
 //        edittext.hasFocus();
         chooseDatePicker();
         //take or choose image function
@@ -330,7 +351,7 @@ RegisterActivity extends AppCompatActivity {
                     intent.putExtra("nameUser", name);
                     intent.putExtra("birthday", date);
                     intent.putExtra("group", id_group);
-                    intent.putExtra("job", textJob);
+                    intent.putExtra("job", String.valueOf(job_position_num));
                     intent.putExtra("imgUser", imageBase64);
                     intent.putExtra("token", token);
                     startActivity(intent);
@@ -346,19 +367,27 @@ RegisterActivity extends AppCompatActivity {
     }
 
 
-    public void createJobSpinner(String[] job_position) {
+    public void createJobSpinner(List<JobPositon> job_position) {
+        String[] positions = new String[job_position.size()];
+        int i = 0;
+        for (JobPositon job : job_position){
+            positions[i] = job.getName();
+            i++;
+        }
         HintSpinner<String> hintSpinnerJob = new HintSpinner<>(
                 spinnerJobPosition,
                 // Default layout - You don't need to pass in any layout id, just your hint text and
                 // your list data
 
-                new HintAdapter<String>(this, "เลือกตำแหน่ง", Arrays.asList(job_position)),
+                new HintAdapter<String>(this, "เลือกตำแหน่ง", Arrays.asList(positions)),
                 new HintSpinner.Callback<String>() {
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onItemSelected(int position, String itemAtPosition) {
                         // Here you handle the on item selected event (this skips the hint selected event)
-                        textJob = job_position[position];
+                        job_position_num = job_position.get(position).getId();
+
+                        Log.e("Job",""+job_position_num);
 
                     }
                 });
@@ -465,7 +494,7 @@ RegisterActivity extends AppCompatActivity {
         if (textGroup == null) {
             return 4;
         }
-        if (textJob == null) {
+        if (String.valueOf(job_position_num) == null) {
             return 5;
         }
 

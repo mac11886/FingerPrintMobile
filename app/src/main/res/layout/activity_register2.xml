@@ -61,16 +61,15 @@
 
     <ImageView
         android:id="@+id/scanbtn"
-        android:onClick="OnBnEnroll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="168dp"
+        android:layout_height="141dp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.556"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.891"
-        app:srcCompat="@drawable/ic_fingerprint_1" />
+        app:layout_constraintVertical_bias="0.897"
+        app:srcCompat="@drawable/ic_power__red" />
 
     <TextView
         android:id="@+id/textView4"
@@ -84,5 +83,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.684" />
+        app:layout_constraintVertical_bias="0.697" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

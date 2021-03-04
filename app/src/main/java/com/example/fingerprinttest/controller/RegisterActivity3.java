@@ -91,7 +91,7 @@ public class RegisterActivity3 extends AppCompatActivity {
         addCard();
         View view = null;
 //        Snackbar.make(view, "Sleeping For Less", Snackbar.LENGTH_SHORT).show();
-        Toast.makeText(RegisterActivity3.this,"เลือกได้ 1-4 ",Toast.LENGTH_LONG).show();
+//        Toast.makeText(RegisterActivity3.this,"เลือกได้ 1-4 ",Toast.LENGTH_LONG).show();
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

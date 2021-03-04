@@ -10,7 +10,13 @@ public class User {
     private int id;
     private String name;
     private String birthday ;
-
+    private String group ;
+    private String jobposition;
+    private String interest;
+    private String imguser;
+    private String fingerprint;
+    private Timestamp updated_at;
+    private Timestamp created_at;
     public int getId() {
         return id;
     }
@@ -91,13 +97,7 @@ public class User {
         this.created_at = created_at;
     }
 
-    private String group ;
-    private String jobposition;
-    private String interest;
-    private String imguser;
-    private String fingerprint;
-    private Timestamp updated_at;
-    private Timestamp created_at;
+
     public User(String name, String birthday, String group, String jobposition, String interest, String imguser, String fingerprint) {
         this.name = name;
         this.birthday = birthday;

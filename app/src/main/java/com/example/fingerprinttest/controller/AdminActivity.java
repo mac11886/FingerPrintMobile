@@ -42,7 +42,7 @@ public class AdminActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
 
-        goToAdmin = (ImageView) findViewById(R.id.goToAdmin);
+//        goToAdmin = (ImageView) findViewById(R.id.goToAdmin);
         goToRegister = (ImageView) findViewById(R.id.goToRegister);
         backBtn = (ImageView) findViewById(R.id.backBtnAdmin);
         token = getIntent().getStringExtra("token");
@@ -99,22 +99,22 @@ public class AdminActivity extends AppCompatActivity {
         });
 
 
-        goToAdmin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
-                t.send(new HitBuilders.EventBuilder()
-                        .setCategory("Intent")
-                        .setAction("click")
-                        .setLabel("WebPage")
-                        .build());
-
-                Intent intent = new Intent(AdminActivity.this, WebActivity.class);
-                intent.putExtra("token", token);
-                startActivity(intent);
-
-            }
-        });
+//        goToAdmin.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
+//                t.send(new HitBuilders.EventBuilder()
+//                        .setCategory("Intent")
+//                        .setAction("click")
+//                        .setLabel("WebPage")
+//                        .build());
+//
+//                Intent intent = new Intent(AdminActivity.this, WebActivity.class);
+//                intent.putExtra("token", token);
+//                startActivity(intent);
+//
+//            }
+//        });
 
 
     }

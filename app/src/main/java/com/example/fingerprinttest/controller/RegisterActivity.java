@@ -128,7 +128,7 @@ RegisterActivity extends AppCompatActivity {
                 // Default layout - You don't need to pass in any layout id, just your hint text and
                 // your list data
 
-                new HintAdapter<String>(this, "เลือกตำแหน่ง", Arrays.asList(group)),
+                new HintAdapter<String>(this, "เลือกแผนก", Arrays.asList(group)),
                 new HintSpinner.Callback<String>() {
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
@@ -494,7 +494,7 @@ RegisterActivity extends AppCompatActivity {
         if (textGroup == null) {
             return 4;
         }
-        if (String.valueOf(job_position_num) == null) {
+        if (job_position_num == 0) {
             return 5;
         }
 

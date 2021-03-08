@@ -452,7 +452,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 //       SHOW DATE AND TIME
-        dateUser.setText(new SimpleDateFormat("dd-MMM-yyyy", Locale.US).format(new Date()));
+        dateUser.setText(new SimpleDateFormat("dd MMM yyyy",Locale.US).format(new Date()));
+//        String formatdate = simpleDateFormat.format(c.getTime());
         final Handler someHandler = new Handler(getMainLooper());
         someHandler.postDelayed(new Runnable() {
             @Override
@@ -461,8 +462,6 @@ public class MainActivity extends AppCompatActivity {
                 someHandler.postDelayed(this, 1000);
             }
         }, 10);
-
-
         //Delay
         final Handler someHandler1 = new Handler(getMainLooper());
         someHandler1.postDelayed(new Runnable() {
@@ -769,7 +768,7 @@ public class MainActivity extends AppCompatActivity {
                                     SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("HH:mm:ss");
                                     String formatdate = simpleDateFormat.format(c.getTime());
                                     String formattime = simpleTimeFormat.format(c.getTime());
-                                    dateUser.setText(formatdate);
+//                                    dateUser.setText(formatdate);
                                     timeUser.setText(formattime);
 
                                     if (status == "เข้า") {

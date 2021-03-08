@@ -431,7 +431,7 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("click")
                         .setLabel("LoginPage")
                         .build());
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                Intent intent = new Intent(MainActivity.this, RegisterActivity2.class);
                 startActivity(intent);
             } catch (Exception e) {
                 com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("MainActivity", "go To admin", "stay in MainActivity");

@@ -66,6 +66,7 @@ public class RegisterActivity2 extends AppCompatActivity {
     String interest;
     String birthday;
     String group, job;
+    Boolean isFirstFinger = false;
 
     AlertDialog.Builder builder;
     private static final int VID = 6997;
@@ -96,7 +97,7 @@ public class RegisterActivity2 extends AppCompatActivity {
         pongFirst = (ImageView) findViewById(R.id.pongFirst);
         pongSecond = (ImageView) findViewById(R.id.pongSecond);
         pongThird = (ImageView) findViewById(R.id.pongThird);
-//        scanText = (TextView) findViewById(R.id.scanText);
+        scanText = (TextView) findViewById(R.id.textView4);
         scanbtn = (ImageView) findViewById(R.id.scanbtn);
 
    // comment check branch
@@ -129,6 +130,7 @@ public class RegisterActivity2 extends AppCompatActivity {
             public void onClick(View v) {
 
                 try {
+
                     OnBnEnroll();
                     scanbtn.setImageResource(R.drawable.ic_power_green);
                 } catch (FingerprintException e) {
@@ -311,12 +313,12 @@ public class RegisterActivity2 extends AppCompatActivity {
 
                 @Override
                 public void extractOK(final byte[] fpTemplate) {
+//                    Toast.makeText(RegisterActivity2.this, "1", Toast.LENGTH_SHORT);
                     final byte[] tmpBuffer = fpTemplate;
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-//                            for (int i = 0; i < 2; i++) {
-                            int i = 0;
+
 
                             if (isRegister) {
                                     byte[] bufids = new byte[256];
@@ -330,7 +332,7 @@ public class RegisterActivity2 extends AppCompatActivity {
                                                 .setAction("error")
                                                 .setLabel("alreadyFinger")
                                                 .build());
-                                        if (i == 1){
+                                        if (isFirstFinger){
                                             pongFirst.setImageResource(R.drawable.shape_rectangle);
                                             pongSecond.setImageResource(R.drawable.shape_rectangle);
                                             pongThird.setImageResource(R.drawable.shape_rectangle);
@@ -376,10 +378,9 @@ public class RegisterActivity2 extends AppCompatActivity {
                                     if (enrollidx > 0 && ZKFingerService.verify(regtemparray[enrollidx - 1], tmpBuffer) <= 0) {
                                         //เมื่อลงทะเบียน นิ้ว 1 ครั้งละเปลี่ยนนิ้ว จะเข้า if นี้
                                         if (enrollidx == 1) {
-                                            if (i == 1){
+                                            if (isFirstFinger){
                                                 pongSecond.setImageResource(R.drawable.shape_rectanglge_finger);
                                             } else {
-
                                                 secondImage.setImageResource(R.drawable.shape_rectangle_error_finger);
                                             }
                                             Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
@@ -415,7 +416,7 @@ public class RegisterActivity2 extends AppCompatActivity {
 
                                         }
                                         if (enrollidx == 2) {
-                                            if (i == 1){
+                                            if (isFirstFinger){
                                                 pongThird.setImageResource(R.drawable.shape_rectangle_error_finger);
                                             } else {
                                                 thridImage.setImageResource(R.drawable.shape_rectangle_error_finger);
@@ -459,7 +460,7 @@ public class RegisterActivity2 extends AppCompatActivity {
                                     enrollidx++;
                                     if (enrollidx == 3) {
 //
-                                        if (i == 1){
+                                        if (isFirstFinger){
                                             pongThird.setImageResource((R.drawable.shape_rectanglge_finger));
                                         } else {
                                             thridImage.setImageResource(R.drawable.shape_rectanglge_finger);
@@ -479,7 +480,7 @@ public class RegisterActivity2 extends AppCompatActivity {
                                                     .setAction("finish")
                                                     .setLabel("enrollFinish")
                                                     .build());
-                                            if (i == 1) {
+                                            if (isFirstFinger) {
 
                                                 SweetAlertDialog loading = new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.SUCCESS_TYPE);
                                                 loading.setTitleText("ลงทะเบียนลายนิ้วมือเสร็จสิ้น");
@@ -531,9 +532,19 @@ public class RegisterActivity2 extends AppCompatActivity {
 
                                                 scanText.setText(" ");
 
+                                            } else {
+                                                isFirstFinger = true;
+                                                scanText.setText("วางนิ้วโป้ง อีก 3 ครั้ง");
+                                                enrollidx = 0;
+                                                try {
+                                                    OnBnStop();
+//                                                    OnBnBegin();
+                                                } catch (FingerprintException e) {
+                                                    e.printStackTrace();
+                                                }
                                             }
                                         } else {
-                                            if (i == 1){
+                                            if (isFirstFinger){
                                                 pongFirst.setImageResource(R.drawable.shape_rectangle_error_finger);
                                                 pongSecond.setImageResource(R.drawable.shape_rectangle_error_finger);
                                                 pongThird.setImageResource(R.drawable.shape_rectangle_error_finger);
@@ -580,7 +591,7 @@ public class RegisterActivity2 extends AppCompatActivity {
                                         isRegister = false;
                                     } else {
                                         if (enrollidx == 1) {
-                                            if (i == 1){
+                                            if (isFirstFinger){
                                                 pongFirst.setImageResource(R.drawable.shape_rectanglge_finger);
                                             }else {
                                                 firstImage.setImageResource(R.drawable.shape_rectanglge_finger);
@@ -588,7 +599,7 @@ public class RegisterActivity2 extends AppCompatActivity {
                                         }
                                         if (enrollidx == 2) {
 //
-                                            if (i == 1){
+                                            if (isFirstFinger){
                                                 pongSecond.setImageResource(R.drawable.shape_rectanglge_finger);
 
                                             } else {
@@ -615,7 +626,6 @@ public class RegisterActivity2 extends AppCompatActivity {
                                     //String strBase64 = Base64.encodeToString(tmpBuffer, 0, fingerprintSensor.getLastTempLen(), Base64.NO_WRAP);+
                                 }
                             }
-//                        }
                     });
                 }
 
@@ -654,17 +664,18 @@ public class RegisterActivity2 extends AppCompatActivity {
             firstImage.setImageResource(R.drawable.shape_rectangle);
             secondImage.setImageResource(R.drawable.shape_rectangle);
             thridImage.setImageResource(R.drawable.shape_rectangle);
-            pongFirst.setImageResource(R.drawable.shape_rectangle);
-            pongSecond.setImageResource(R.drawable.shape_rectangle);
-            pongThird.setImageResource(R.drawable.shape_rectangle);
+
             scanText.setText("กรุณาวางนิ้ว 3 ครั้งบนทีสแกน");
+
             Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
             t.send(new HitBuilders.EventBuilder()
                     .setCategory("Enroll")
                     .setAction("click")
                     .setLabel("EnrollScan")
                     .build());
+
             OnBnBegin();
+
             if (bstart) {
                 isRegister = true;
                 enrollidx = 0;

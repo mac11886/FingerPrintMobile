@@ -162,6 +162,8 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(SweetAlertDialog sweetAlertDialog) {
                                 try {
+                                    imageUser.setImageResource(0);
+                                    nameUser.setText("");
                                     outbtn.setBackgroundColor(Color.parseColor("#00AF91"));
                                     inBtn.setBackgroundColor(Color.parseColor("#00AF91"));
                                     OnBnStop();
@@ -207,6 +209,8 @@ public class MainActivity extends AppCompatActivity {
                                     outbtn.setBackgroundColor(Color.parseColor("#00AF91"));
                                     inBtn.setBackgroundColor(Color.parseColor("#00AF91"));
                                     OnBnStop();
+                                    imageUser.setImageResource(0);
+                                    nameUser.setText("");
                                     loading.dismissWithAnimation();
                                 } catch (FingerprintException e) {
                                     e.printStackTrace();
@@ -251,6 +255,8 @@ public class MainActivity extends AppCompatActivity {
                                     outbtn.setBackgroundColor(Color.parseColor("#00AF91"));
                                     inBtn.setBackgroundColor(Color.parseColor("#00AF91"));
                                     OnBnStop();
+                                    imageUser.setImageResource(0);
+                                    nameUser.setText("");
                                     loading.dismissWithAnimation();
                                 } catch (FingerprintException e) {
                                     e.printStackTrace();
@@ -777,7 +783,14 @@ public class MainActivity extends AppCompatActivity {
 //                                        Toast.makeText(MainActivity.this, "status" + status, Toast.LENGTH_SHORT).show();
                                         try {
                                             createPostDate(users.get(Integer.parseInt(strRes[0])).getId(), formatdate, formattime, " " + status);
+                                            final Handler someHandler12 = new Handler(getMainLooper());
+                                            someHandler12.postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
 
+//                                                    someHandler12.postDelayed(this, 10000);
+                                                }
+                                            }, 10000);
                                             outbtn.setBackgroundColor(Color.parseColor("#00AF91"));
                                             inBtn.setBackgroundColor(Color.parseColor("#00AF91"));
 
@@ -799,6 +812,15 @@ public class MainActivity extends AppCompatActivity {
                                         try {
                                             outbtn.setBackgroundColor(Color.parseColor("#00AF91"));
                                             inBtn.setBackgroundColor(Color.parseColor("#00AF91"));
+                                            final Handler someHandler12 = new Handler(getMainLooper());
+                                            someHandler12.postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+
+//                                                    someHandler12.postDelayed(this, 10000);
+                                                }
+                                            },10000);
+
                                             OnBnStop();
                                         } catch (FingerprintException e) {
                                             e.printStackTrace();

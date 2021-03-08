@@ -95,7 +95,7 @@ public class RegisterActivity2 extends AppCompatActivity {
         scanText = (TextView) findViewById(R.id.scanText);
         scanbtn = (ImageView) findViewById(R.id.scanbtn);
 
-
+   // comment check branch
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://ta.kisrateam.com/")
                 .addConverterFactory(GsonConverterFactory.create())

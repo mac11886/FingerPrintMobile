@@ -43,7 +43,7 @@ public class WebActivity extends AppCompatActivity {
     private ValueCallback<Uri[]> afterLolipop;
     private ValueCallback<Uri[]> mUploadMessage;
     private String LOG_TAG = "DREG";
-
+    //check webeee
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override

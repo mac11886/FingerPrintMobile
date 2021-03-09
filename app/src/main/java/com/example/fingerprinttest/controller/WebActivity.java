@@ -42,8 +42,8 @@ public class WebActivity extends AppCompatActivity {
     private final static int FILECHOOSER_RESULTCODE = 1;
     private ValueCallback<Uri[]> afterLolipop;
     private ValueCallback<Uri[]> mUploadMessage;
-    private String LOG_TAG = "DREG";
-
+    private String LOG_TAG = "DREGฟฟฟฟฟฟฟฟฟฟฟฟฟ";
+    //check webeee
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override

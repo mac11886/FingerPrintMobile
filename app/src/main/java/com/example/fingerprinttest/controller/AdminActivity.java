@@ -93,7 +93,7 @@ public class AdminActivity extends AppCompatActivity {
                         .setLabel("RegisterPage")
                         .build());
                 Intent intent = new Intent(AdminActivity.this, RegisterActivity.class);
-                intent.putExtra("token", token);
+//                intent.putExtra("token", token);
                 startActivity(intent);
             }
         });

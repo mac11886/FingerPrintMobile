@@ -214,7 +214,11 @@ RegisterActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
-                hideSoftKeyboard(RegisterActivity.this);
+                try {
+                    hideSoftKeyboard(RegisterActivity.this);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
                 if (detectValid() == 1) {
                     Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
                     t.send(new HitBuilders.EventBuilder()

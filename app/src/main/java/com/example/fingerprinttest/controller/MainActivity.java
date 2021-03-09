@@ -290,7 +290,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     users = response.body();
 
-                    Log.e("SEC","SEC");
+                    Log.e("SEC", "SEC");
                     for (User user : users) {
                         String content = "";
                         userImage = user.getImguser();
@@ -401,8 +401,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 try {
-                    testError();
-
+//                    testError();
+                    Intent intent = new Intent(MainActivity.this, RegisterActivity3.class);
+                    startActivity(intent);
                 } catch (Exception exception) {
                     com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("MainActivity", "mainTEST", "can't touch this");
                     Call<com.example.fingerprinttest.model.Log> call = api.createLog(log);
@@ -452,7 +453,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 //       SHOW DATE AND TIME
-        dateUser.setText(new SimpleDateFormat("dd-MMM-yyyy", Locale.US).format(new Date()));
+        dateUser.setText(new SimpleDateFormat("dd MMM yyyy", Locale.US).format(new Date()));
+//        String formatdate = simpleDateFormat.format(c.getTime());
         final Handler someHandler = new Handler(getMainLooper());
         someHandler.postDelayed(new Runnable() {
             @Override
@@ -461,8 +463,6 @@ public class MainActivity extends AppCompatActivity {
                 someHandler.postDelayed(this, 1000);
             }
         }, 10);
-
-
         //Delay
         final Handler someHandler1 = new Handler(getMainLooper());
         someHandler1.postDelayed(new Runnable() {
@@ -517,7 +517,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         } catch (Exception e) {
-            Toast.makeText(MainActivity.this,"ลองใหม่อีกครั้ง",Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "ลองใหม่อีกครั้ง", Toast.LENGTH_SHORT).show();
         }
         try {
             inBtn.setOnClickListener(v -> {
@@ -635,7 +635,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void  OnBnBegin() throws FingerprintException {
+    public void OnBnBegin() throws FingerprintException {
 
         try {
             int i = 0;
@@ -643,12 +643,12 @@ public class MainActivity extends AppCompatActivity {
             if (bstart) return;
             fingerprintSensor.open(0);
 
-                for (User user : users) {
+            for (User user : users) {
 
-                    byte[] byte2 = Base64.decode(user.getFingerprint(), Base64.NO_WRAP);
-                    ZKFingerService.save(byte2, "" + i);
-                    i++;
-                }
+                byte[] byte2 = Base64.decode(user.getFingerprint(), Base64.NO_WRAP);
+                ZKFingerService.save(byte2, "" + i);
+                i++;
+            }
 
 //            Toast.makeText(MainActivity.this, "status", Toast.LENGTH_SHORT).show();
             final FingerprintCaptureListener listener = new FingerprintCaptureListener() {
@@ -769,7 +769,7 @@ public class MainActivity extends AppCompatActivity {
                                     SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("HH:mm:ss");
                                     String formatdate = simpleDateFormat.format(c.getTime());
                                     String formattime = simpleTimeFormat.format(c.getTime());
-                                    dateUser.setText(formatdate);
+//                                    dateUser.setText(formatdate);
                                     timeUser.setText(formattime);
 
                                     if (status == "เข้า") {
@@ -819,7 +819,7 @@ public class MainActivity extends AppCompatActivity {
 
 //                                                    someHandler12.postDelayed(this, 10000);
                                                 }
-                                            },10000);
+                                            }, 10000);
 
                                             OnBnStop();
                                         } catch (FingerprintException e) {

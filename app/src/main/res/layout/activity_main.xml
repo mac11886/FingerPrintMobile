@@ -11,169 +11,152 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".controller.MainActivity">
 
-
-    <TextView
-        android:id="@+id/statusText"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:fontFamily="@font/kanit_light"
+        android:orientation="vertical"
 
-        android:textColor="@color/black"
-        android:textSize="@dimen/textSizeDimen"
-        android:translationZ="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        android:weightSum="4">
+        <TextView
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:id="@+id/item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/kanit_light"
+            android:text="หน้าหลัก"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/textSizeDimen"
+
+            tools:layout_editor_absoluteX="154dp"
+            tools:layout_editor_absoluteY="16dp" />
+        <TextView
+            android:layout_weight="2"
+            android:layout_gravity="center"
+            android:id="@+id/DateUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/kanit_light"
+            android:text="date"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/textSizeDimen"
+            android:translationZ="5dp"
+            tools:layout_editor_absoluteX="178dp"
+            tools:layout_editor_absoluteY="62dp" />
+        <TextView
+            android:layout_gravity="center"
+            android:layout_weight="3"
+            android:id="@+id/timeUser"
+            android:padding="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/kanit_light"
+            android:text="time"
+            android:textColor="@color/black"
+            android:textSize="@dimen/textSizeDimen"
+            android:translationZ="5dp"
+            tools:layout_editor_absoluteX="181dp"
+            tools:layout_editor_absoluteY="126dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="2"
+            android:padding="10sp"
+            >
+
+            <Button
+
+                android:layout_weight="1"
+                android:id="@+id/inBtn"
+                android:layout_width="@dimen/buttonSizeW"
+                android:layout_height="@dimen/buttonSizeH"
+                android:fontFamily="@font/kanit_light"
+                android:text="เข้างาน"
+                android:textSize="25dp"
+                app:backgroundTint="@color/greeennewbtn"
+                app:cornerRadius="20dp"
+                />
+
+            <Button
+               android:layout_marginLeft="40dp"
+                android:layout_weight="2"
+                android:id="@+id/outBtn"
+                android:layout_width="@dimen/buttonSizeW"
+                android:layout_height="@dimen/buttonSizeH"
+                android:fontFamily="@font/kanit_light"
+                android:text="ออกงาน"
+                android:textSize="25dp"
+                app:backgroundTint="@color/greeennewbtn"
+                app:cornerRadius="20dp"
+             />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="4"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.89" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
+
+        <ImageView
+            android:id="@+id/imageUser"
+            android:layout_width="@dimen/imageUserSizeW"
+            android:layout_height="@dimen/imageUserSizeH"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:rotation="0"
+            tools:layout_editor_absoluteX="26dp"
+            tools:layout_editor_absoluteY="307dp"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/nameUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="2"
+            android:fontFamily="@font/kanit_light"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="@dimen/textSizeDimen"
+            android:translationZ="5dp"
+            android:layout_marginTop="8dp"
+            tools:layout_editor_absoluteX="168dp"
+            tools:layout_editor_absoluteY="579dp" />
+
+
+        <TextView
+            android:id="@+id/statusText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="4"
+            android:fontFamily="@font/kanit_light"
+            android:textColor="@color/black"
+            android:layout_marginTop="10dp"
+            android:textSize="@dimen/textSizeDimen"
+            android:translationZ="5dp" />
+
+
+    </LinearLayout>
 
     <ImageView
-        android:id="@+id/imageUser"
-        android:layout_width="359dp"
-        android:layout_height="242dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginBottom="20dp"
-        android:rotation="0"
-        app:layout_constraintBottom_toTopOf="@+id/nameUser"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inBtn"
-        tools:srcCompat="@tools:sample/avatars" />
 
-    <TextView
-        android:id="@+id/nameUser"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/kanit_light"
-        android:text=""
-        android:textColor="@color/black"
-        android:textSize="@dimen/textSizeDimen"
-        android:translationZ="5dp"
-        app:layout_constraintBottom_toTopOf="@+id/statusText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageUser" />
-
-    <TextView
-        android:id="@+id/DateUser"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/kanit_light"
-        android:text="date"
-        android:textColor="@color/black"
-        android:textSize="@dimen/textSizeDimen"
-        android:translationZ="5dp"
-        app:layout_constraintBottom_toTopOf="@+id/timeUser"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.666" />
-
-    <TextView
-        android:id="@+id/timeUser"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/kanit_light"
-        android:text="time"
-        android:textColor="@color/black"
-        android:textSize="@dimen/textSizeDimen"
-        android:translationZ="5dp"
-        app:layout_constraintBottom_toTopOf="@+id/inBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.519"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.705" />
-
-    <TextView
-        android:id="@+id/item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/kanit_light"
-        android:text="หน้าหลัก"
-        android:textColor="@color/black"
-        android:textSize="@dimen/textSizeDimen"
-
-        app:layout_constraintBottom_toTopOf="@+id/DateUser"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.022" />
-
-    <Button
-        android:id="@+id/inBtn"
-        android:layout_width="134dp"
-        android:layout_height="78dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:fontFamily="@font/kanit_light"
-        android:text="เข้างาน"
-        android:textSize="25dp"
-        app:backgroundTint="@color/greeennewbtn"
-        app:cornerRadius="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/outBtn"
-        app:layout_constraintHorizontal_bias="0.096"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.346" />
-
-    <Button
-        android:id="@+id/outBtn"
-        android:layout_width="134dp"
-        android:layout_height="78dp"
-        android:layout_marginEnd="28dp"
-        android:layout_marginRight="28dp"
-        android:fontFamily="@font/kanit_light"
-        android:text="ออกงาน"
-        android:textSize="25dp"
-        app:backgroundTint="@color/greeennewbtn"
-        app:cornerRadius="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/imageUser"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timeUser"
-        app:layout_constraintVertical_bias="0.695" />
-
-    <ImageView
         android:id="@+id/adminBtn"
         android:layout_width="81dp"
         android:layout_height="71dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginBottom="4dp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/ic_settings" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="20dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="20dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="20dp" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

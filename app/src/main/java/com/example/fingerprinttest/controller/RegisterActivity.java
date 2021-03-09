@@ -14,6 +14,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -71,11 +72,11 @@ RegisterActivity extends AppCompatActivity {
     String textGroup, textJob, date;
     EditText edittext;
     int job_position_num;
-    JobPositon job_num = new JobPositon("DC ONE",25);
-//    String[] dc_one = {"DC ONE"};
+    JobPositon job_num = new JobPositon("DC ONE", 25);
+    //    String[] dc_one = {"DC ONE"};
     List<JobPositon> dc_one = Arrays.asList(new JobPositon("DC ONE", 25));
-//    String[] developer = {"Technical Leader", "Developer", "Supervisor Quality Assuarance", "Software Tester"};
-    List<JobPositon> developer = Arrays.asList(new JobPositon("Technical Leader", 7), new JobPositon("Developer", 8),new JobPositon("Supervisor Quality Assuarance", 9),new JobPositon("Software Tester", 10));
+    //    String[] developer = {"Technical Leader", "Developer", "Supervisor Quality Assuarance", "Software Tester"};
+    List<JobPositon> developer = Arrays.asList(new JobPositon("Technical Leader", 7), new JobPositon("Developer", 8), new JobPositon("Supervisor Quality Assuarance", 9), new JobPositon("Software Tester", 10));
     List<JobPositon> accounting = Arrays.asList(new JobPositon("Accounting", 22), new JobPositon("Customer Relationship", 21));
     List<JobPositon> deploy = Arrays.asList(new JobPositon("Manager", 14), new JobPositon("Barista", 15));
     List<JobPositon> admin = Arrays.asList(new JobPositon("Administrator", 16), new JobPositon("IT Administrator", 18));
@@ -89,7 +90,7 @@ RegisterActivity extends AppCompatActivity {
     List<JobPositon> boss = Arrays.asList(new JobPositon("CEO", 28), new JobPositon("Vice President", 29));
 
 
-//    String[] accounting = {"Accounting", "Customer Relationship"};
+    //    String[] accounting = {"Accounting", "Customer Relationship"};
 //    String[] se = {"Software Engineering"};
 //    String[] coordinat = {"Project coordinat"};
 //    String[] deploy = {"Manager", "Barista"};
@@ -179,7 +180,7 @@ RegisterActivity extends AppCompatActivity {
                                 job_position = acc;
                                 break;
                             case 11:
-                                job_position = dc_one ;
+                                job_position = dc_one;
                                 break;
                             case 12:
                                 job_position = nj;
@@ -216,7 +217,7 @@ RegisterActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     hideSoftKeyboard(RegisterActivity.this);
-                }catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 if (detectValid() == 1) {
@@ -374,7 +375,7 @@ RegisterActivity extends AppCompatActivity {
     public void createJobSpinner(List<JobPositon> job_position) {
         String[] positions = new String[job_position.size()];
         int i = 0;
-        for (JobPositon job : job_position){
+        for (JobPositon job : job_position) {
             positions[i] = job.getName();
             i++;
         }
@@ -391,7 +392,7 @@ RegisterActivity extends AppCompatActivity {
                         // Here you handle the on item selected event (this skips the hint selected event)
                         job_position_num = job_position.get(position).getId();
 
-                        Log.e("Job",""+job_position_num);
+                        Log.e("Job", "" + job_position_num);
 
                     }
                 });
@@ -547,6 +548,7 @@ RegisterActivity extends AppCompatActivity {
 //                    Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //                    startActivityForResult(takePicture, 0);
                     Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_SCREEN_ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                     // Ensure that there's a camera activity to handle the intent
                     if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                         // Create the File where the photo should go
@@ -634,7 +636,7 @@ RegisterActivity extends AppCompatActivity {
                             byte[] byteArray = byteArrayOutputStream.toByteArray();
                             encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
                             imageUserRegister.setImageDrawable(roundedBitmapDrawable);
-                            imageUserRegister.setRotation(90);
+//                            imageUserRegister.setRotation(90);
 
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();

@@ -20,6 +20,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.icu.text.SimpleDateFormat;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -548,7 +549,6 @@ RegisterActivity extends AppCompatActivity {
 //                    Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //                    startActivityForResult(takePicture, 0);
                     Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    takePictureIntent.putExtra(MediaStore.EXTRA_SCREEN_ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                     // Ensure that there's a camera activity to handle the intent
                     if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                         // Create the File where the photo should go
@@ -564,7 +564,9 @@ RegisterActivity extends AppCompatActivity {
                             photoURI = FileProvider.getUriForFile(RegisterActivity.this,
                                     "com.example.android.fileprovider",
                                     photoFile);
+
                             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                            takePictureIntent.putExtra(MediaStore.EXTRA_SCREEN_ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                             startActivityForResult(takePictureIntent, 0);
                         }
                     }
@@ -601,13 +603,14 @@ RegisterActivity extends AppCompatActivity {
         if (resultCode != RESULT_CANCELED) {
             switch (requestCode) {
                 case 0:
-                    Log.e("CHECKER", "OUTSIDE");
-
 
                     if (resultCode == RESULT_OK) {
-                        Log.e("CHECKER", "ERRORRRRRRRRRRRRRRRRINSIDE");
                         galleryAddPic();
-                        setPic();
+                        try {
+                            setPic();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 //                        Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
 //                        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
 
@@ -660,43 +663,85 @@ RegisterActivity extends AppCompatActivity {
         this.sendBroadcast(mediaScanIntent);
     }
 
-    private void setPic() {
+    private void setPic() throws IOException {
         // Get the dimensions of the View
         int targetW = imageUserRegister.getWidth();
         int targetH = imageUserRegister.getHeight();
-
         // Get the dimensions of the bitmap
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
-
         BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
-
         int photoW = bmOptions.outWidth;
         int photoH = bmOptions.outHeight;
-
         // Determine how much to scale down the image
         int scaleFactor = Math.max(1, Math.min(photoW / targetW, photoH / targetH));
-
         // Decode the image file into a Bitmap sized to fill the View
         bmOptions.inJustDecodeBounds = false;
         bmOptions.inSampleSize = scaleFactor;
         bmOptions.inPurgeable = true;
-
         Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+//        imageUserRegister.setImageBitmap(bitmap);
         Matrix matrix = new Matrix();
         matrix.postRotate(90);
         Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight(), true);
         Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
 
-        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), rotatedBitmap);
+
+
+//        imageUserRegister.setImageDrawable(roundedBitmapDrawable);
+//        imageUserRegister.setRotation(90);
+
+
+        //---------------------------------------------------------------------------------------------------
+        ExifInterface ei = new ExifInterface(currentPhotoPath);
+        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_UNDEFINED);
+        Bitmap rotatedBitmapTest = null;
+
+        switch(orientation) {
+
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                rotatedBitmapTest = rotateImage(bitmap, 90);
+                roundBitmap(rotatedBitmapTest);
+
+
+                break;
+
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                rotatedBitmapTest = rotateImage(bitmap, 180);
+                roundBitmap(rotatedBitmapTest);
+
+                break;
+
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                rotatedBitmapTest = rotateImage(bitmap, 270);
+                roundBitmap(rotatedBitmapTest);
+
+                break;
+
+            case ExifInterface.ORIENTATION_NORMAL:
+            default:
+                rotatedBitmapTest = bitmap;
+                roundBitmap(rotatedBitmapTest);
+
+        }
+    }
+
+    public static Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
+    }
+
+    public void roundBitmap(Bitmap rotatedBitmapTest){
+        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(),  rotatedBitmapTest);
         roundedBitmapDrawable.setCornerRadius(50.0f);
         roundedBitmapDrawable.setAntiAlias(true);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        rotatedBitmap.compress(Bitmap.CompressFormat.WEBP, 40, byteArrayOutputStream);
+        rotatedBitmapTest.compress(Bitmap.CompressFormat.WEBP, 40, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
         encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
-//        imageUserRegister.setImageBitmap(rotatedBitmap);
         imageUserRegister.setImageDrawable(roundedBitmapDrawable);
-
     }
 }

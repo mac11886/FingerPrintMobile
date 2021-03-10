@@ -1,22 +1,32 @@
 package com.example.fingerprinttest.services;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fingerprinttest.R;
+import com.example.fingerprinttest.model.User;
+
+import java.util.List;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
-    String s[];
+    List<User> users;
+
     Context context;
-    public  UserAdapter(Context ctx, String s[]){
+    public  UserAdapter(Context ctx, List<User> users){
         this.context = ctx;
-        this.s = s;
+        this.users = users;
     }
     @NonNull
     @Override
@@ -28,19 +38,25 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.textView.setText(s[position]);
+        holder.nameText.setText(users.get(position).getName());
+        byte[] decodedString = Base64.decode(users.get(position).getImguser(), Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+        holder.userImageView.setImageBitmap(decodedByte);
     }
 
     @Override
     public int getItemCount() {
-        return s.length;
+        return users.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textView;
+        TextView nameText;
+        ImageView userImageView;
         public ViewHolder(@NonNull View view){
             super(view);
-            textView = view.findViewById(R.id.text1);
+            nameText = view.findViewById(R.id.nameUser);
+            userImageView = view.findViewById(R.id.userImage);
         }
     }
 }

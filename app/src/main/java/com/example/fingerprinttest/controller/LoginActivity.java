@@ -16,6 +16,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.example.fingerprinttest.R;
 import com.example.fingerprinttest.model.Admin;
+import com.example.fingerprinttest.model.User;
 import com.example.fingerprinttest.services.AnalyticsApplication;
 import com.example.fingerprinttest.services.Api;
 import com.google.android.gms.analytics.HitBuilders;

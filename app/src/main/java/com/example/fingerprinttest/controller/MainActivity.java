@@ -41,6 +41,8 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.zkteco.android.biometric.core.device.ParameterHelper;
 import com.zkteco.android.biometric.core.device.TransportType;
 import com.zkteco.android.biometric.core.utils.LogHelper;
@@ -51,12 +53,17 @@ import com.zkteco.android.biometric.module.fingerprintreader.FingprintFactory;
 import com.zkteco.android.biometric.module.fingerprintreader.ZKFingerService;
 import com.zkteco.android.biometric.module.fingerprintreader.exception.FingerprintException;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.EmptyStackException;
@@ -290,6 +297,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     users = response.body();
 
+//                    startActivityForResult(intent, 1);
                     Log.e("SEC", "SEC");
                     for (User user : users) {
                         String content = "";
@@ -432,7 +440,9 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("click")
                         .setLabel("LoginPage")
                         .build());
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+
+
+                Intent intent = new Intent(MainActivity.this, EditFingerprintActivity.class);
                 startActivity(intent);
             } catch (Exception e) {
                 com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("MainActivity", "go To admin", "stay in MainActivity");

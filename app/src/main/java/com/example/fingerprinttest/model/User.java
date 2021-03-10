@@ -1,5 +1,6 @@
 package com.example.fingerprinttest.model;
 
+
 import java.sql.Timestamp;
 
 public class User {
@@ -107,11 +108,4 @@ public class User {
         this.imguser = imguser;
         this.fingerprint = fingerprint;
     }
-
-
-
-
-
-
-
 }

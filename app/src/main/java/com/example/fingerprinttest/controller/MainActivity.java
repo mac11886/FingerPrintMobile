@@ -455,8 +455,6 @@ public class MainActivity extends AppCompatActivity {
                         .setLabel("LoginPage")
                         .build());
 
-                Intent intent = new Intent(MainActivity.this, EditFingerprintActivity.class);
-
                 Intent intent = new Intent(MainActivity.this, ListUserActivity.class);
                 startActivity(intent);
             } catch (Exception e) {

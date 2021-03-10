@@ -131,6 +131,8 @@ public class AdminActivity extends AppCompatActivity {
     }
 
 
+
+
     //get API   type synchronous
     public void getPosts() {
         Call<List<User>> call = api.getPost();
@@ -145,5 +147,10 @@ public class AdminActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    public  void  toEditActivity(View view){
+        Intent intent = new Intent(AdminActivity.this, EditFingerprintActivity.class);
+        startActivity(intent);
     }
 }

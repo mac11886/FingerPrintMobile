@@ -31,7 +31,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FingerprintTEST"
         android:usesCleartextTraffic="true">
-        <activity android:name=".controller.WebActivity"></activity>
+        <activity android:name=".controller.EditFingerprintActivity"></activity>
+        <activity android:name=".controller.WebActivity" />
         <activity android:name=".controller.LoginActivity" />
         <activity android:name=".controller.RegisterActivity" />
         <activity android:name=".controller.RegisterActivity3" />
@@ -41,6 +42,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.media.action.IMAGE_CAPTURE" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
@@ -55,6 +57,7 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.android.fileprovider"
@@ -62,7 +65,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
     </application>
 

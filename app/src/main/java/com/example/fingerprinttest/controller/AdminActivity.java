@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.fingerprinttest.R;
 import com.example.fingerprinttest.model.Token;
@@ -150,7 +149,7 @@ public class AdminActivity extends AppCompatActivity {
     }
 
     public  void  toEditActivity(View view){
-        Intent intent = new Intent(AdminActivity.this, EditFingerprintActivity.class);
+        Intent intent = new Intent(AdminActivity.this, ListUserActivity.class);
         startActivity(intent);
     }
 }

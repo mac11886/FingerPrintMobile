@@ -28,70 +28,64 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+
+
+
         <LinearLayout
-            android:id="@+id/linearLayout5"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            android:layout_gravity="center"
-            android:layout_marginTop="50dp">
+            android:layout_marginTop="30dp"
+            android:id="@+id/linearLayout7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:weightSum="2">
 
-            <LinearLayout
-                android:id="@+id/linearLayout6"
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/goToRegister"
+                android:layout_width="@dimen/imageSize"
+                android:layout_height="@dimen/imageSize"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_add" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:weightSum="2">
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="16dp"
+                android:layout_weight="2"
+                android:fontFamily="@font/kanit_light"
+                android:text="ลงทะเบียนลายนิ้วมือ"
+                android:textColor="@color/black"
+                android:textSize="24sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linearLayout6"
+            android:layout_marginTop="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:weightSum="2">
 
-                <ImageView
-                    android:id="@+id/goToEditFingerprint"
-                    android:layout_width="@dimen/imageSize"
-                    android:layout_height="@dimen/imageSize"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/ic_pencil" />
+            <ImageView
+                android:id="@+id/goToEditFingerprint"
+                android:layout_width="@dimen/imageSize"
+                android:layout_height="@dimen/imageSize"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/ic_pencil" />
 
-                <TextView
-                    android:id="@+id/textView8"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    android:layout_marginTop="16dp"
-                    android:layout_weight="2"
-                    android:fontFamily="@font/kanit_light"
-                    android:text="แก้ไขลายนิ้วมือ"
-                    android:textColor="@color/black"
-                    android:textSize="24sp"
-                    />
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/linearLayout7"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:weightSum="2">
-                <ImageView
-                    android:id="@+id/goToRegister"
-                    android:layout_width="@dimen/imageSize"
-                    android:layout_height="@dimen/imageSize"
-                    android:layout_gravity="center"
-                    app:srcCompat="@drawable/ic_add" />
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="2"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/kanit_light"
-                    android:text="ลงทะเบียนลายนิ้วมือ"
-                    android:textColor="@color/black"
-                    android:textSize="24sp"
-                    />
-            </LinearLayout>
-
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:layout_weight="2"
+                android:fontFamily="@font/kanit_light"
+                android:text="แก้ไขลายนิ้วมือ"
+                android:textColor="@color/black"
+                android:textSize="24sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -108,7 +102,7 @@
             android:layout_width="@dimen/imageSize"
             android:layout_height="@dimen/imageSize"
             android:layout_gravity="center"
-            android:layout_marginTop="136dp"
+            android:layout_marginTop="60dp"
             android:layout_weight="1"
             app:srcCompat="@drawable/ic_homepage" />
 

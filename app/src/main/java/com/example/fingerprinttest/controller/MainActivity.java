@@ -636,234 +636,259 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void OnBnBegin() throws FingerprintException {
-
         try {
-            int i = 0;
             getPosts();
-            if (bstart) return;
-            fingerprintSensor.open(0);
+            try {
+                int i = 0;
 
-            for (User user : users) {
+                if (bstart) return;
+                fingerprintSensor.open(0);
 
-                byte[] byte2 = Base64.decode(user.getFingerprint(), Base64.NO_WRAP);
-                ZKFingerService.save(byte2, "" + i);
-                i++;
-            }
+                for (User user : users) {
+
+                    byte[] byte2 = Base64.decode(user.getFingerprint(), Base64.NO_WRAP);
+                    ZKFingerService.save(byte2, "" + i);
+                    i++;
+                }
 
 //            Toast.makeText(MainActivity.this, "status", Toast.LENGTH_SHORT).show();
-            final FingerprintCaptureListener listener = new FingerprintCaptureListener() {
-                @Override
-                public void captureOK(final byte[] fpImage) {
-                    final int width = fingerprintSensor.getImageWidth();
-                    final int height = fingerprintSensor.getImageHeight();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (null != fpImage) {
-                                ToolUtils.outputHexString(fpImage);
-                                LogHelper.i("width=" + width + "\nHeight=" + height);
-                                Bitmap bitmapFp = ToolUtils.renderCroppedGreyScaleBitmap(fpImage, width, height);
-                                //saveBitmap(bitmapFp);
-                                //imageView.setImageBitmap(bitmapFp);
+                final FingerprintCaptureListener listener = new FingerprintCaptureListener() {
+                    @Override
+                    public void captureOK(final byte[] fpImage) {
+                        final int width = fingerprintSensor.getImageWidth();
+                        final int height = fingerprintSensor.getImageHeight();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (null != fpImage) {
+                                    ToolUtils.outputHexString(fpImage);
+                                    LogHelper.i("width=" + width + "\nHeight=" + height);
+                                    Bitmap bitmapFp = ToolUtils.renderCroppedGreyScaleBitmap(fpImage, width, height);
+                                    //saveBitmap(bitmapFp);
+                                    //imageView.setImageBitmap(bitmapFp);
+                                }
+                                //textView.setText("FakeStatus:" + fingerprintSensor.getFakeStatus());
                             }
-                            //textView.setText("FakeStatus:" + fingerprintSensor.getFakeStatus());
-                        }
-                    });
-                }
+                        });
+                    }
 
-                @Override
-                public void captureError(FingerprintException e) {
-                    final FingerprintException exp = e;
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            LogHelper.d("captureError  errno=" + exp.getErrorCode() +
-                                    ",Internal error code: " + exp.getInternalErrorCode() + ",message=" + exp.getMessage());
-                        }
-                    });
-                }
+                    @Override
+                    public void captureError(FingerprintException e) {
+                        final FingerprintException exp = e;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                LogHelper.d("captureError  errno=" + exp.getErrorCode() +
+                                        ",Internal error code: " + exp.getInternalErrorCode() + ",message=" + exp.getMessage());
+                            }
+                        });
+                    }
 
-                @Override
-                public void extractError(final int err) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            textView.setText("extract fail, errorcode:" + err);
-                        }
-                    });
-                }
+                    @Override
+                    public void extractError(final int err) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                textView.setText("extract fail, errorcode:" + err);
+                            }
+                        });
+                    }
 
-                @Override
-                public void extractOK(final byte[] fpTemplate) {
+                    @Override
+                    public void extractOK(final byte[] fpTemplate) {
 
-                    final byte[] tmpBuffer = fpTemplate;
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (isRegister) {
-                                byte[] bufids = new byte[256];
-                                int ret = ZKFingerService.identify(tmpBuffer, bufids, 55, 1);
-                                if (ret > 0) {
-                                    String strRes[] = new String(bufids).split("\t");
-                                    // finger has registry
-                                    textView.setText("the finger already enroll by " + strRes[0] + ",cancel enroll");
-                                    isRegister = false;
-                                    enrollidx = 0;
-                                    return;
-                                }
+                        final byte[] tmpBuffer = fpTemplate;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (isRegister) {
+                                    byte[] bufids = new byte[256];
+                                    int ret = ZKFingerService.identify(tmpBuffer, bufids, 55, 1);
+                                    if (ret > 0) {
+                                        String strRes[] = new String(bufids).split("\t");
+                                        // finger has registry
+                                        textView.setText("the finger already enroll by " + strRes[0] + ",cancel enroll");
+                                        isRegister = false;
+                                        enrollidx = 0;
+                                        return;
+                                    }
 
-                                if (enrollidx > 0 && ZKFingerService.verify(regtemparray[enrollidx - 1], tmpBuffer) <= 0) {
-                                    //เมื่อลงทะเบียน นิ้ว 1 ครั้งละเปลี่ยนนิ้ว จะเข้า if นี้
-                                    textView.setText("please press the same finger 3 times for the enrollment");
-                                    return;
-                                }
-                                System.arraycopy(tmpBuffer, 0, regtemparray[enrollidx], 0, 2048);
-                                enrollidx++;
-                                if (enrollidx == 3) {
-                                    byte[] regTemp = new byte[2048];
-                                    if (0 < (ret = ZKFingerService.merge(regtemparray[0], regtemparray[1], regtemparray[2], regTemp))) {
-                                        // save id
-                                        ZKFingerService.save(regTemp, "test  " + uid++);
-                                        System.arraycopy(regTemp, 0, lastRegTemp, 0, ret);
-                                        //Base64 Template
-                                        // register success
-                                        String strBase64 = Base64.encodeToString(regTemp, 0, ret, Base64.NO_WRAP);
-                                        textView.setText("enroll succ, uid:" + uid + "count:" + ZKFingerService.count());
+                                    if (enrollidx > 0 && ZKFingerService.verify(regtemparray[enrollidx - 1], tmpBuffer) <= 0) {
+                                        //เมื่อลงทะเบียน นิ้ว 1 ครั้งละเปลี่ยนนิ้ว จะเข้า if นี้
+                                        textView.setText("please press the same finger 3 times for the enrollment");
+                                        return;
+                                    }
+                                    System.arraycopy(tmpBuffer, 0, regtemparray[enrollidx], 0, 2048);
+                                    enrollidx++;
+                                    if (enrollidx == 3) {
+                                        byte[] regTemp = new byte[2048];
+                                        if (0 < (ret = ZKFingerService.merge(regtemparray[0], regtemparray[1], regtemparray[2], regTemp))) {
+                                            // save id
+                                            ZKFingerService.save(regTemp, "test  " + uid++);
+                                            System.arraycopy(regTemp, 0, lastRegTemp, 0, ret);
+                                            //Base64 Template
+                                            // register success
+                                            String strBase64 = Base64.encodeToString(regTemp, 0, ret, Base64.NO_WRAP);
+                                            textView.setText("enroll succ, uid:" + uid + "count:" + ZKFingerService.count());
+                                        } else {
+                                            textView.setText("enroll fail");
+                                        }
+                                        isRegister = false;
                                     } else {
-                                        textView.setText("enroll fail");
+                                        //เมื่อสแกนครั้งแรกเส้ดจะขึ้นให้แสกนอีกกี่ครั้ง
+                                        textView.setText("You need to press the " + (3 - enrollidx) + "time fingerprint");
                                     }
-                                    isRegister = false;
                                 } else {
-                                    //เมื่อสแกนครั้งแรกเส้ดจะขึ้นให้แสกนอีกกี่ครั้ง
-                                    textView.setText("You need to press the " + (3 - enrollidx) + "time fingerprint");
-                                }
-                            } else {
-                                byte[] bufids = new byte[256];
-                                int ret = ZKFingerService.identify(tmpBuffer, bufids, 55, 1);
-                                // register success เมื่อสแกนอีกรอบจะขึ้นอันนี้
-                                if (ret > 0) {
-                                    String strRes[] = new String(bufids).split("\t");
+                                    byte[] bufids = new byte[256];
+                                    int ret = ZKFingerService.identify(tmpBuffer, bufids, 55, 1);
+                                    // register success เมื่อสแกนอีกรอบจะขึ้นอันนี้
+                                    if (ret > 0) {
+                                        String strRes[] = new String(bufids).split("\t");
 //                                    textView.setText("identify succ, userid:" + strRes[0] + ", score:" + strRes[1]);
-                                    textView.setText("สแกนเสร็จสิ้น,ความชัด " + strRes[1] + " %");
-                                    try {
-                                        getPosts();
-                                    } catch (Exception e) {
-                                        textView.setText("server Error" + e.getMessage());
-                                    }
+                                        textView.setText("สแกนเสร็จสิ้น,ความชัด " + strRes[1] + " %");
+                                        try {
+                                            getPosts();
+                                        } catch (Exception e) {
+                                            textView.setText("server Error" + e.getMessage());
+                                        }
 
-                                    userImage = getUser(Integer.parseInt(strRes[0])).getImguser();
-                                    name = getUser(Integer.parseInt(strRes[0])).getName();
-                                    nameUser.setText("" + name);
-                                    byte[] decodedString = Base64.decode(userImage, Base64.DEFAULT);
-                                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                                    RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), decodedByte);
-                                    roundedBitmapDrawable.setCornerRadius(50.0f);
-                                    roundedBitmapDrawable.setAntiAlias(true);
+                                        userImage = getUser(Integer.parseInt(strRes[0])).getImguser();
+                                        name = getUser(Integer.parseInt(strRes[0])).getName();
+                                        nameUser.setText("" + name);
+                                        byte[] decodedString = Base64.decode(userImage, Base64.DEFAULT);
+                                        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                                        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), decodedByte);
+                                        roundedBitmapDrawable.setCornerRadius(50.0f);
+                                        roundedBitmapDrawable.setAntiAlias(true);
 
-                                    imageUser.setImageDrawable(roundedBitmapDrawable);
+                                        imageUser.setImageDrawable(roundedBitmapDrawable);
 
 
-                                    // DATE
-                                    Calendar c = Calendar.getInstance();
-                                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
-                                    SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("HH:mm:ss");
-                                    String formatdate = simpleDateFormat.format(c.getTime());
-                                    String formattime = simpleTimeFormat.format(c.getTime());
+                                        // DATE
+                                        Calendar c = Calendar.getInstance();
+                                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+                                        SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("HH:mm:ss");
+                                        String formatdate = simpleDateFormat.format(c.getTime());
+                                        String formattime = simpleTimeFormat.format(c.getTime());
 //                                    dateUser.setText(formatdate);
-                                    timeUser.setText(formattime);
+                                        timeUser.setText(formattime);
 
-                                    if (status == "เข้า") {
+                                        if (status == "เข้า") {
 
-                                        Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
-                                        t.send(new HitBuilders.EventBuilder()
-                                                .setCategory("Scanner")
-                                                .setAction("Scan")
-                                                .setLabel("CheckIn")
-                                                .build());
+                                            Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
+                                            t.send(new HitBuilders.EventBuilder()
+                                                    .setCategory("Scanner")
+                                                    .setAction("Scan")
+                                                    .setLabel("CheckIn")
+                                                    .build());
 //                                        Toast.makeText(MainActivity.this, "status" + status, Toast.LENGTH_SHORT).show();
-                                        try {
-                                            createPostDate(users.get(Integer.parseInt(strRes[0])).getId(), formatdate, formattime, " " + status);
-                                            final Handler someHandler12 = new Handler(getMainLooper());
-                                            someHandler12.postDelayed(new Runnable() {
-                                                @Override
-                                                public void run() {
+                                            try {
+                                                createPostDate(users.get(Integer.parseInt(strRes[0])).getId(), formatdate, formattime, " " + status);
+                                                final Handler someHandler12 = new Handler(getMainLooper());
+                                                someHandler12.postDelayed(new Runnable() {
+                                                    @Override
+                                                    public void run() {
 
 //                                                    someHandler12.postDelayed(this, 10000);
-                                                }
-                                            }, 10000);
-                                            outbtn.setBackgroundColor(Color.parseColor("#00AF91"));
-                                            inBtn.setBackgroundColor(Color.parseColor("#00AF91"));
+                                                    }
+                                                }, 10000);
+                                                outbtn.setBackgroundColor(Color.parseColor("#00AF91"));
+                                                inBtn.setBackgroundColor(Color.parseColor("#00AF91"));
 
-                                            OnBnStop();
-                                        } catch (FingerprintException e) {
-                                            e.printStackTrace();
-                                            Toast.makeText(MainActivity.this, "ERROR", Toast.LENGTH_LONG).show();
-                                        }
-                                    } else if (status == "ออก") {
+                                                OnBnStop();
+                                            } catch (FingerprintException e) {
+                                                e.printStackTrace();
+                                                Toast.makeText(MainActivity.this, "ERROR", Toast.LENGTH_LONG).show();
+                                            }
+                                        } else if (status == "ออก") {
 //
-                                        Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
-                                        t.send(new HitBuilders.EventBuilder()
-                                                .setCategory("Scanner")
-                                                .setAction("Scan")
-                                                .setLabel("CheckOut")
-                                                .build());
+                                            Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
+                                            t.send(new HitBuilders.EventBuilder()
+                                                    .setCategory("Scanner")
+                                                    .setAction("Scan")
+                                                    .setLabel("CheckOut")
+                                                    .build());
 
-                                        createPostDate(users.get(Integer.parseInt(strRes[0])).getId(), formatdate, formattime, " " + status);
-                                        try {
-                                            outbtn.setBackgroundColor(Color.parseColor("#00AF91"));
-                                            inBtn.setBackgroundColor(Color.parseColor("#00AF91"));
-                                            final Handler someHandler12 = new Handler(getMainLooper());
-                                            someHandler12.postDelayed(new Runnable() {
-                                                @Override
-                                                public void run() {
+                                            createPostDate(users.get(Integer.parseInt(strRes[0])).getId(), formatdate, formattime, " " + status);
+                                            try {
+                                                outbtn.setBackgroundColor(Color.parseColor("#00AF91"));
+                                                inBtn.setBackgroundColor(Color.parseColor("#00AF91"));
+                                                final Handler someHandler12 = new Handler(getMainLooper());
+                                                someHandler12.postDelayed(new Runnable() {
+                                                    @Override
+                                                    public void run() {
 
 //                                                    someHandler12.postDelayed(this, 10000);
-                                                }
-                                            }, 10000);
+                                                    }
+                                                }, 10000);
 
-                                            OnBnStop();
-                                        } catch (FingerprintException e) {
-                                            e.printStackTrace();
+                                                OnBnStop();
+                                            } catch (FingerprintException e) {
+                                                e.printStackTrace();
+                                            }
                                         }
+
+                                    } else {
+                                        //ยังไม่เคยสแกนลายนิ้วมือ
+                                        textView.setText("กรุณาสแกนใหม่อีกครั้ง");
                                     }
-
-                                } else {
-                                    //ยังไม่เคยสแกนลายนิ้วมือ
-                                    textView.setText("กรุณาสแกนใหม่อีกครั้ง");
+                                    //Base64 Template
+                                    //String strBase64 = Base64.encodeToString(tmpBuffer, 0, fingerprintSensor.getLastTempLen(), Base64.NO_WRAP);
                                 }
-                                //Base64 Template
-                                //String strBase64 = Base64.encodeToString(tmpBuffer, 0, fingerprintSensor.getLastTempLen(), Base64.NO_WRAP);
                             }
-                        }
-                    });
-                }
+                        });
+                    }
 
 
-            };
-            fingerprintSensor.setFingerprintCaptureListener(0, listener);
-            fingerprintSensor.startCapture(0);
-            bstart = true;
-            textView.setText("สแกนนิ้วได้เลย");
-        } catch (Exception e) {
-            //textView.setText("begin capture fail.errorcode:" + e.getErrorCode() + "err message:" + e.getMessage() + "inner code:" + e.getInternalErrorCode());
+                };
+                fingerprintSensor.setFingerprintCaptureListener(0, listener);
+                fingerprintSensor.startCapture(0);
+                bstart = true;
+                textView.setText("สแกนนิ้วได้เลย");
+            } catch (Exception e) {
+                //textView.setText("begin capture fail.errorcode:" + e.getErrorCode() + "err message:" + e.getMessage() + "inner code:" + e.getInternalErrorCode());
 //            Toast.makeText(MainActivity.this,""+ e.getMessage(),Toast.LENGTH_SHORT).show();
-            com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("MainActivity", "OnBegin", e.getMessage());
-            Call<com.example.fingerprinttest.model.Log> call = api.createLog(log);
-            call.enqueue(new Callback<com.example.fingerprinttest.model.Log>() {
-                @Override
-                public void onResponse(Call<com.example.fingerprinttest.model.Log> call, Response<com.example.fingerprinttest.model.Log> response) {
+                com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("MainActivity", "OnBegin", e.getMessage());
+                Call<com.example.fingerprinttest.model.Log> call = api.createLog(log);
+                call.enqueue(new Callback<com.example.fingerprinttest.model.Log>() {
+                    @Override
+                    public void onResponse(Call<com.example.fingerprinttest.model.Log> call, Response<com.example.fingerprinttest.model.Log> response) {
 
-                }
+                    }
 
-                @Override
-                public void onFailure(Call<com.example.fingerprinttest.model.Log> call, Throwable t) {
+                    @Override
+                    public void onFailure(Call<com.example.fingerprinttest.model.Log> call, Throwable t) {
 
-                }
+                    }
+                });
+                textView.setText("กรุณาเชื่อมต่อกับเครื่องสแกน");
+            }
+
+        } catch (Exception exception) {
+            textView.setText("เกิดข้อผิดพลาดเกี่ยวกับ Internet");
+            textView.setTextSize(15);
+            SweetAlertDialog loading = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE);
+            loading.setTitleText("เกิดข้อผิดพลาดเกี่ยวกับ Internet");
+            loading.setContentText("กรุณาเปิดแอพใหม่อีกครั้ง");
+            loading.getProgressHelper().setBarColor(MainActivity.this.getResources().getColor(R.color.greentea));
+            loading.setOnShowListener((DialogInterface.OnShowListener) dialog -> {
+                SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
+                Typeface face = ResourcesCompat.getFont(MainActivity.this, R.font.kanit_light);
+                TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
+                TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
+                textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                textCon.setTextColor(getResources().getColor(R.color.black));
+                textCon.setTypeface(face);
+                textCon.setGravity(Gravity.CENTER);
+                text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                text.setTextColor(getResources().getColor(R.color.red25));
+                text.setTypeface(face);
+                text.setGravity(Gravity.CENTER);
+
             });
-            textView.setText("กรุณาเชื่อมต่อกับเครื่องสแกน");
+            loading.show();
         }
     }
-
     public void OnBnStop() throws FingerprintException {
         try {
             if (bstart) {

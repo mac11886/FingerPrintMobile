@@ -128,19 +128,21 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"
         android:layout_weight="2"
         android:orientation="vertical"
-        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout9">
+
         <TextView
-            android:layout_weight="1"
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_weight="1"
             android:fontFamily="@font/kanit_light"
             android:text="กรุณากดเพื่อลงทะเบียน"
             android:textColor="@color/black"
@@ -150,13 +152,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.697" />
+
         <ImageView
-            android:layout_weight="2"
-            android:layout_marginTop="10dp"
             android:id="@+id/scanbtn"
             android:layout_width="168dp"
-            android:layout_gravity="center"
             android:layout_height="141dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_weight="2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

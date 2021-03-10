@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fingerprinttest.R;
@@ -44,8 +46,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         holder.nameText.setText(users.get(position).getName());
         byte[] decodedString = Base64.decode(users.get(position).getImguser(), Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-
-        holder.userImageView.setImageBitmap(decodedByte);
+        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(context.getResources(), decodedByte);
+        roundedBitmapDrawable.setCornerRadius(50.0f);
+        roundedBitmapDrawable.setAntiAlias(true);
+        holder.userImageView.setImageDrawable(roundedBitmapDrawable);
         holder.finger1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

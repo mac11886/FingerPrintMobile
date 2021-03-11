@@ -47,8 +47,8 @@ public class LoginActivity extends AppCompatActivity {
         passwordText = findViewById(R.id.password_admin);
         signIn = findViewById(R.id.sign_in);
 
-        emailText.setText("admin@email.com");
-        passwordText.setText("123456");
+//        emailText.setText("admin@email.com");
+//        passwordText.setText("123456");
 
         String emailPattern = "^[A-Za-z0-9+_.-]+@(.+)$";
         signIn.setOnClickListener(new View.OnClickListener() {

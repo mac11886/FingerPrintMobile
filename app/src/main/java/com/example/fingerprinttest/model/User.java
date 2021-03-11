@@ -16,6 +16,16 @@ public class User {
     private String interest;
     private String imguser;
     private String fingerprint;
+
+    public String getSecondFinger() {
+        return secondFinger;
+    }
+
+    public void setSecondFinger(String secondFinger) {
+        this.secondFinger = secondFinger;
+    }
+
+    private String secondFinger;
     private Timestamp updated_at;
     private Timestamp created_at;
     public int getId() {
@@ -99,7 +109,7 @@ public class User {
     }
 
 
-    public User(String name, String birthday, String group, String jobposition, String interest, String imguser, String fingerprint) {
+    public User(String name, String birthday, String group, String jobposition, String interest, String imguser, String fingerprint,String secondFinger ) {
         this.name = name;
         this.birthday = birthday;
         this.group = group;
@@ -107,5 +117,6 @@ public class User {
         this.interest = interest;
         this.imguser = imguser;
         this.fingerprint = fingerprint;
+        this.secondFinger = secondFinger;
     }
 }

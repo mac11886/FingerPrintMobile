@@ -2,6 +2,7 @@ package com.example.fingerprinttest.services;
 
 import com.example.fingerprinttest.model.Admin;
 import com.example.fingerprinttest.model.Attendance;
+import com.example.fingerprinttest.model.EditFingerprint;
 import com.example.fingerprinttest.model.Log;
 import com.example.fingerprinttest.model.Token;
 import com.example.fingerprinttest.model.User;
@@ -36,5 +37,8 @@ public interface Api {
     @POST("api/save_logmobile")
     Call<Log> createLog(@Body Log log);
 
+
+    @POST("api/editFingerprint")
+    Call<EditFingerprint> editFingerprintApi(@Body EditFingerprint editFingerprint);
 
 }

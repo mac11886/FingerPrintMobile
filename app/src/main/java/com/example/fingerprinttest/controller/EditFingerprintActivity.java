@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.fingerprinttest.R;
+import com.example.fingerprinttest.model.EditFingerprint;
 import com.example.fingerprinttest.model.User;
 import com.example.fingerprinttest.services.AnalyticsApplication;
 import com.example.fingerprinttest.services.Api;
@@ -66,7 +67,7 @@ public class EditFingerprintActivity extends AppCompatActivity {
     String imgUser;
     String birthday;
     String group, job;
-
+    String user[] ;
     AlertDialog.Builder builder;
     private static final int VID = 6997;
     private static final int PID = 288;
@@ -108,9 +109,8 @@ public class EditFingerprintActivity extends AppCompatActivity {
 //        byte[] decodedString = Base64.decode(img, Base64.DEFAULT);
 
 
-
         Bundle bundle = this.getIntent().getExtras();
-        String user[] = bundle.getStringArray("user");
+         user = bundle.getStringArray("user");
 //        Log.e("P'best","P:" + user[0]);
         byte[] decodedString = Base64.decode(user[1], Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
@@ -121,8 +121,6 @@ public class EditFingerprintActivity extends AppCompatActivity {
         userimg.setImageDrawable(roundedBitmapDrawable);
         nametext.setText(user[0]);
         fingerText.setText(user[2]);
-
-
 
 
         // comment check branch
@@ -154,7 +152,8 @@ public class EditFingerprintActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        });}
+        });
+    }
 
     //get API
     public void getPosts() {
@@ -228,6 +227,59 @@ public class EditFingerprintActivity extends AppCompatActivity {
         }
     }
 
+    //save API
+    public void editFingerprintApi(int id, String finger) {
+        try {
+
+            EditFingerprint editFingerprint = new EditFingerprint(id, finger);
+            Call<EditFingerprint> call = api.editFingerprintApi(editFingerprint);
+            call.enqueue(new Callback<EditFingerprint>() {
+                @Override
+                public void onResponse(Call<EditFingerprint> call, Response<EditFingerprint> response) {
+                    if (!response.isSuccessful()) {
+//                    textLog.setText("Code ERROR : " + response.code());
+                        return;
+                    }
+                    //
+                    EditFingerprint editFingerprint1 = response.body();
+
+                }
+
+                @Override
+                public void onFailure(Call<EditFingerprint> call, Throwable t) {
+                    com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("RegisterActivity3", "createPost", "can't save to API");
+                    Call<com.example.fingerprinttest.model.Log> call1 = api.createLog(log);
+                    call1.enqueue(new Callback<com.example.fingerprinttest.model.Log>() {
+                        @Override
+                        public void onResponse(Call<com.example.fingerprinttest.model.Log> call, Response<com.example.fingerprinttest.model.Log> response) {
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<com.example.fingerprinttest.model.Log> call, Throwable t) {
+
+                        }
+                    });
+                }
+
+
+            });
+        } catch (Exception e) {
+            com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("RegisterActivity3", "createPost", "can't save to API");
+            Call<com.example.fingerprinttest.model.Log> call = api.createLog(log);
+            call.enqueue(new Callback<com.example.fingerprinttest.model.Log>() {
+                @Override
+                public void onResponse(Call<com.example.fingerprinttest.model.Log> call, Response<com.example.fingerprinttest.model.Log> response) {
+
+                }
+
+                @Override
+                public void onFailure(Call<com.example.fingerprinttest.model.Log> call, Throwable t) {
+
+                }
+            });
+        }
+    }
 
     private BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
         @Override
@@ -477,66 +529,57 @@ public class EditFingerprintActivity extends AppCompatActivity {
                                                 .setAction("finish")
                                                 .setLabel("enrollFinish")
                                                 .build());
-
-
-                                            SweetAlertDialog loading = new SweetAlertDialog(EditFingerprintActivity.this, SweetAlertDialog.WARNING_TYPE);
-                                            loading.setTitleText("ลงทะเบียนลายนิ้วมือเสร็จสิ้น");
-                                            loading.setContentText("ข้อมูลได้ถูกบันทึกแล้ว");
-                                            loading.setConfirmText("OK");
-                                            loading.setCancelText("ยกเลิก");
-                                            loading.showCancelButton(true);
-                                            loading.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                                @Override
-                                                public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                                    sweetAlertDialog.cancel();
-                                                }
-                                            });
-                                            loading.getProgressHelper().setBarColor(EditFingerprintActivity.this.getResources().getColor(R.color.greentea));
-                                            loading.setOnShowListener(new DialogInterface.OnShowListener() {
-                                                @Override
-                                                public void onShow(DialogInterface dialog) {
-                                                    SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
-                                                    Typeface face = ResourcesCompat.getFont(EditFingerprintActivity.this, R.font.kanit_light);
-                                                    TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
-                                                    TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
-                                                    textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                                                    textCon.setTextColor(getResources().getColor(R.color.black));
-                                                    textCon.setTypeface(face);
+                                        SweetAlertDialog loading = new SweetAlertDialog(EditFingerprintActivity.this, SweetAlertDialog.WARNING_TYPE);
+                                        loading.setTitleText("ตืนยันการแก้ไข");
+//                                            loading.setContentText("ข้อมูลได้ถูกบันทึกแล้ว");
+                                        loading.setConfirmText("ตกลง");
+                                        loading.setCancelText("ยกเลิก");
+                                        loading.showCancelButton(true);
+                                        loading.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                sweetAlertDialog.cancel();
+                                            }
+                                        });
+                                        loading.getProgressHelper().setBarColor(EditFingerprintActivity.this.getResources().getColor(R.color.greentea));
+                                        loading.setOnShowListener(new DialogInterface.OnShowListener() {
+                                            @Override
+                                            public void onShow(DialogInterface dialog) {
+                                                SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
+                                                Typeface face = ResourcesCompat.getFont(EditFingerprintActivity.this, R.font.kanit_light);
+                                                TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
+                                                TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
+                                                textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                                                textCon.setTextColor(getResources().getColor(R.color.black));
+                                                textCon.setTypeface(face);
 //
-                                                    textCon.setGravity(Gravity.CENTER);
-                                                    text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-                                                    text.setTextColor(getResources().getColor(R.color.greentea));
-                                                    text.setTypeface(face);
+                                                textCon.setGravity(Gravity.CENTER);
+                                                text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                                                text.setTextColor(getResources().getColor(R.color.greentea));
+                                                text.setTypeface(face);
 //
-                                                    text.setGravity(Gravity.CENTER);
+                                                text.setGravity(Gravity.CENTER);
 
+                                            }
+                                        });
+                                        loading.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                editFingerprintApi(Integer.parseInt(user[1]),strBase64);
+                                                Intent intent = new Intent(EditFingerprintActivity.this, ListUserActivity.class);
+                                                startActivity(intent);
+                                                try {
+                                                    OnBnStop();
+                                                } catch (FingerprintException e) {
+                                                    e.printStackTrace();
                                                 }
-                                            });
-                                            loading.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                                @Override
-                                                public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                                    Intent intent = new Intent(EditFingerprintActivity.this, RegisterActivity3.class);
-                                                    intent.putExtra("nameUser", name);
-                                                    intent.putExtra("birthday", birthday);
-                                                    intent.putExtra("group", group);
-                                                    intent.putExtra("job", job);
-                                                    intent.putExtra("imgUser", imgUser);
-                                                    intent.putExtra("fingerprint", strBase64);
-                                                    intent.putExtra("token", token);
-                                                    intent.putExtra("secondFinger", Secondfinger);
-                                                    startActivity(intent);
-                                                    try {
-                                                        OnBnStop();
-                                                    } catch (FingerprintException e) {
-                                                        e.printStackTrace();
-                                                    }
 
-                                                }
-                                            });
+                                            }
+                                        });
 //                                        loading.setCancelable(false);
-                                            loading.show();
+                                        loading.show();
 
-                                            scanText.setText(" ");
+                                        scanText.setText(" ");
 
                                     } else {
                                         firstImage.setImageResource(R.drawable.shape_rectangle_error_finger);

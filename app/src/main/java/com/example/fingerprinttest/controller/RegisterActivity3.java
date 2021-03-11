@@ -54,7 +54,7 @@ public class RegisterActivity3 extends AppCompatActivity {
     String name;
     String age;
     String imgUser;
-    String finger;
+    String finger,secondFinger;
     String interest = "";
     AlertDialog.Builder builder;
     private Api api;
@@ -78,7 +78,7 @@ public class RegisterActivity3 extends AppCompatActivity {
         token = getIntent().getStringExtra("token");
 //        Toast.makeText(this, "token:" + token, Toast.LENGTH_SHORT).show();
         interest = getIntent().getStringExtra("interest");
-
+        secondFinger = getIntent().getStringExtra("secondFinger");
 
         //connectApi
         Retrofit retrofit = new Retrofit.Builder()
@@ -210,7 +210,7 @@ public class RegisterActivity3 extends AppCompatActivity {
 //            int num_group = Integer.parseInt(group);
 //            Toast.makeText(RegisterActivity3.this,"name:"+name +"birthday:"+birthday+"group:"+group +"job"+job,Toast.LENGTH_SHORT).show();
             user = new User( name, birthday, group, job,  adapter.getSentdata(),  imgUser,
-                     finger);
+                     finger,secondFinger);
             Call<User> call = api.createPost(user);
             call.enqueue(new Callback<User>() {
                 @Override

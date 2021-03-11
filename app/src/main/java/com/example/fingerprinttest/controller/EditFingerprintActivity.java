@@ -2,6 +2,8 @@ package com.example.fingerprinttest.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -87,6 +89,7 @@ public class EditFingerprintActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_fingerprint);
+        Log.e("OOOOOOO","PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
         builder = new AlertDialog.Builder(this);
         firstImage = (ImageView) findViewById(R.id.firstImage);
         secondImage = (ImageView) findViewById(R.id.secondImage);
@@ -101,11 +104,14 @@ public class EditFingerprintActivity extends AppCompatActivity {
         Bundle bundle = this.getIntent().getExtras();
 
         String user[] = bundle.getStringArray("user");
-
+        Log.e("P'best","P:" + user[0]);
         byte[] decodedString = Base64.decode(user[1], Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
-        userimg.setImageBitmap(decodedByte);
+        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), decodedByte);
+        roundedBitmapDrawable.setCornerRadius(50.0f);
+        roundedBitmapDrawable.setAntiAlias(true);
+        userimg.setImageDrawable(roundedBitmapDrawable);
         nametext.setText(user[0]);
         fingerText.setText(user[2]);
 

@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.fingerprinttest.R;
@@ -27,11 +28,12 @@ public class ListUserActivity extends AppCompatActivity {
     List<User> users;
     RecyclerView recyclerView;
     Api api;
+    TextView editFingerText ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_user);
-
+        editFingerText = findViewById(R.id.editFingerText);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://ta.kisrateam.com/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -53,6 +55,7 @@ public class ListUserActivity extends AppCompatActivity {
             @Override
             public void run() {
                 createUserList();
+                editFingerText.setText("แก้ไขลายนิ้วมือ");
             }
         }, 3000);
 

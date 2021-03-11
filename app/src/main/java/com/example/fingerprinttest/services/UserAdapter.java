@@ -59,6 +59,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                     bundle.putStringArray("user", new String[]{user.getName(), user.getImguser() , "นิ้วชี้ขวา"});
                     intent.putExtras(bundle);
                     context.startActivity(intent);
+                    Log.e("TEST","TEST:"+user.getName());
                 }
             });
         holder.finger2.setOnClickListener(new View.OnClickListener() {

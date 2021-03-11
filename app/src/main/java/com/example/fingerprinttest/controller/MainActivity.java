@@ -390,6 +390,7 @@ public class MainActivity extends AppCompatActivity {
         startFingerprintSensor();
         LoadingDialog loadingDialog = new LoadingDialog(MainActivity.this);
         loadingDialog.startLoadingDialog();
+        loadingDialog.cancelDialog();
         try {
             getPosts();
         } catch (Exception e) {

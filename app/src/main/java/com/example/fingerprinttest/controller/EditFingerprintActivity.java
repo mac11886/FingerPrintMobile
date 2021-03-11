@@ -67,7 +67,7 @@ public class EditFingerprintActivity extends AppCompatActivity {
     String imgUser;
     String birthday;
     String group, job;
-    String user[] ;
+    String user[];
     AlertDialog.Builder builder;
     private static final int VID = 6997;
     private static final int PID = 288;
@@ -110,7 +110,7 @@ public class EditFingerprintActivity extends AppCompatActivity {
 
 
         Bundle bundle = this.getIntent().getExtras();
-         user = bundle.getStringArray("user");
+        user = bundle.getStringArray("user");
 //        Log.e("P'best","P:" + user[0]);
         byte[] decodedString = Base64.decode(user[1], Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
@@ -228,10 +228,10 @@ public class EditFingerprintActivity extends AppCompatActivity {
     }
 
     //save API
-    public void editFingerprintApi(int id, String finger) {
+    public void editFingerprintApi(int id, String finger, String typeOfFingerprint) {
         try {
 
-            EditFingerprint editFingerprint = new EditFingerprint(id, finger);
+            EditFingerprint editFingerprint = new EditFingerprint(id, finger, typeOfFingerprint);
             Call<EditFingerprint> call = api.editFingerprintApi(editFingerprint);
             call.enqueue(new Callback<EditFingerprint>() {
                 @Override
@@ -565,14 +565,26 @@ public class EditFingerprintActivity extends AppCompatActivity {
                                         loading.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                             @Override
                                             public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                                editFingerprintApi(Integer.parseInt(user[1]),strBase64);
-                                                Intent intent = new Intent(EditFingerprintActivity.this, ListUserActivity.class);
-                                                startActivity(intent);
-                                                try {
-                                                    OnBnStop();
-                                                } catch (FingerprintException e) {
-                                                    e.printStackTrace();
+                                                if (user[2] == "นิ้วชี้ขวา") {
+                                                    editFingerprintApi(Integer.parseInt(user[1]), strBase64, "thumbFingerprint");
+                                                    Intent intent = new Intent(EditFingerprintActivity.this, ListUserActivity.class);
+                                                    startActivity(intent);
+                                                    try {
+                                                        OnBnStop();
+                                                    } catch (FingerprintException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }else {
+                                                    editFingerprintApi(Integer.parseInt(user[1]), strBase64, "foreFingerprint");
+                                                    Intent intent = new Intent(EditFingerprintActivity.this, ListUserActivity.class);
+                                                    startActivity(intent);
+                                                    try {
+                                                        OnBnStop();
+                                                    } catch (FingerprintException e) {
+                                                        e.printStackTrace();
+                                                    }
                                                 }
+
 
                                             }
                                         });

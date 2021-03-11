@@ -43,6 +43,7 @@ public class ListUserActivity extends AppCompatActivity {
         getPosts();
         LoadingDialog loadingDialog = new LoadingDialog(ListUserActivity.this);
         loadingDialog.startLoadingDialog();
+        loadingDialog.cancelDialog();
         final Handler someHandler1 = new Handler(getMainLooper());
         someHandler1.postDelayed(new Runnable() {
             @Override

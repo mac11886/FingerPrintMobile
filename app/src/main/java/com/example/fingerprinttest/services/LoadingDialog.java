@@ -9,23 +9,28 @@ import com.example.fingerprinttest.R;
 public class LoadingDialog {
 
 
-    Activity activity ;
+    Activity activity;
     AlertDialog dialog;
 
-    public LoadingDialog(Activity myActivity){
+    public LoadingDialog(Activity myActivity) {
         activity = myActivity;
     }
-    public  void  startLoadingDialog(){
+
+    public void startLoadingDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        LayoutInflater inflater =activity.getLayoutInflater();
-        builder.setView(inflater.inflate(R.layout.progress_dialog_view,null));
+        LayoutInflater inflater = activity.getLayoutInflater();
+        builder.setView(inflater.inflate(R.layout.progress_dialog_view, null));
         builder.setCancelable(true);
 
         dialog = builder.create();
         dialog.show();
     }
 
-    public void  dismissDialog(){
+    public void  cancelDialog(){
+        dialog.setCancelable(false);
+    }
+
+    public void dismissDialog() {
         dialog.dismiss();
     }
 

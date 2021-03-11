@@ -89,7 +89,7 @@ public class EditFingerprintActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_fingerprint);
-        Log.e("OOOOOOO","PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
+
         builder = new AlertDialog.Builder(this);
         firstImage = (ImageView) findViewById(R.id.firstImage);
         secondImage = (ImageView) findViewById(R.id.secondImage);
@@ -101,10 +101,17 @@ public class EditFingerprintActivity extends AppCompatActivity {
         nametext = findViewById(R.id.name);
         fingerText = findViewById(R.id.finger);
 
-        Bundle bundle = this.getIntent().getExtras();
+//        String img = getIntent().getStringExtra("users");
+//        String name = getIntent().getStringExtra("name");
+//        String finger = getIntent().getStringExtra("finger");
 
+//        byte[] decodedString = Base64.decode(img, Base64.DEFAULT);
+
+
+
+        Bundle bundle = this.getIntent().getExtras();
         String user[] = bundle.getStringArray("user");
-        Log.e("P'best","P:" + user[0]);
+//        Log.e("P'best","P:" + user[0]);
         byte[] decodedString = Base64.decode(user[1], Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 

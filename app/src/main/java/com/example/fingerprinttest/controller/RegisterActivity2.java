@@ -495,7 +495,7 @@ public class RegisterActivity2 extends AppCompatActivity {
 
                                                 SweetAlertDialog loading = new SweetAlertDialog(RegisterActivity2.this, SweetAlertDialog.SUCCESS_TYPE);
                                                 loading.setTitleText("ลงทะเบียนลายนิ้วมือเสร็จสิ้น");
-                                                loading.setContentText("ข้อมูลได้ถูกบันทึกแล้ว");
+//                                                loading.setContentText("ข้อมูลได้ถูกบันทึกแล้ว");
                                                 loading.setConfirmText("NEXT");
                                                 loading.getProgressHelper().setBarColor(RegisterActivity2.this.getResources().getColor(R.color.greentea));
                                                 loading.setOnShowListener(new DialogInterface.OnShowListener() {

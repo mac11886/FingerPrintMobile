@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,16 +24,19 @@ import com.example.fingerprinttest.R;
 import com.example.fingerprinttest.controller.EditFingerprintActivity;
 import com.example.fingerprinttest.model.User;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     List<User> users;
 
     Context context;
-    public  UserAdapter(Context ctx, List<User> users){
+
+    public UserAdapter(Context ctx, List<User> users) {
         this.context = ctx;
         this.users = users;
     }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -51,24 +55,52 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         roundedBitmapDrawable.setAntiAlias(true);
         holder.userImageView.setImageDrawable(roundedBitmapDrawable);
         holder.finger1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, EditFingerprintActivity.class);
-                    User user = users.get(position);
-                    Bundle bundle = new Bundle();
-                    bundle.putStringArray("user", new String[]{user.getName(), user.getImguser() , "นิ้วชี้ขวา"});
-                    intent.putExtras(bundle);
-                    context.startActivity(intent);
-                    Log.e("TEST","TEST:"+user.getName());
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, EditFingerprintActivity.class);
+                User user = users.get(position);
+//                    String finger = "นิ้วชี้ขวา";
+//                    intent.putExtra("users",user.getImguser());
+//                    intent.putExtra("name",user.getName());
+//                    intent.putExtra("finger",finger);
+                if (user.getImguser().length() > 200000) {
+                    byte[] decodedString = Base64.decode(user.getImguser(), Base64.DEFAULT);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    decodedByte.compress(Bitmap.CompressFormat.WEBP, 50, byteArrayOutputStream);
+                    byte[] byteArray = byteArrayOutputStream.toByteArray();
+                    String encode = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    user.setImguser(encode);
                 }
-            });
+                Bundle bundle = new Bundle();
+                bundle.putStringArray("user", new String[]{user.getName(), user.getImguser(), "นิ้วชี้ขวา"});
+//                    intent.putExtra("image", user.getImguser());
+                intent.putExtras(bundle);
+                context.startActivity(intent);
+                Log.e("TEST", "Image:" + user.getName() + "\n" + user.getImguser().length());
+            }
+        });
         holder.finger2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, EditFingerprintActivity.class);
                 User user = users.get(position);
+//                String finger = "นิ้วโป้งขวา";
+//                intent.putExtra("users",user.getImguser());
+//                intent.putExtra("name",user.getName());
+//                intent.putExtra("finger",finger);
+
+                if (user.getImguser().length() > 200000) {
+                    byte[] decodedString = Base64.decode(user.getImguser(), Base64.DEFAULT);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    decodedByte.compress(Bitmap.CompressFormat.WEBP, 50, byteArrayOutputStream);
+                    byte[] byteArray = byteArrayOutputStream.toByteArray();
+                    String encode = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    user.setImguser(encode);
+                }
                 Bundle bundle = new Bundle();
-                bundle.putStringArray("user", new String[]{user.getName(), user.getImguser() , "นิ้วโป้งขวา"});
+                bundle.putStringArray("user", new String[]{user.getName(), user.getImguser(), "นิ้วโป้งขวา"});
                 intent.putExtras(bundle);
                 context.startActivity(intent);
             }
@@ -82,9 +114,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameText;
-        ImageView userImageView ;
+        ImageView userImageView;
         Button finger1, finger2;
-        public ViewHolder(@NonNull View view){
+
+        public ViewHolder(@NonNull View view) {
             super(view);
             nameText = view.findViewById(R.id.nameUser);
             userImageView = view.findViewById(R.id.userImage);

@@ -22,6 +22,7 @@ import android.graphics.Typeface;
 import android.icu.text.SimpleDateFormat;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -40,7 +41,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.fingerprinttest.R;
-import com.example.fingerprinttest.model.JobPositon;
+import com.example.fingerprinttest.model.GroupData;
 import com.example.fingerprinttest.services.AnalyticsApplication;
 import com.example.fingerprinttest.services.Api;
 import com.google.android.gms.analytics.HitBuilders;
@@ -60,6 +61,10 @@ import java.util.Locale;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.srodrigo.androidhintspinner.HintAdapter;
 import me.srodrigo.androidhintspinner.HintSpinner;
+import okhttp3.Request;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -77,22 +82,26 @@ RegisterActivity extends AppCompatActivity {
     EditText edittext;
     int job_position_num;
     private Api api;
-    JobPositon job_num = new JobPositon("DC ONE", 25);
+    List<GroupData> groupData;
+    int id;
+    String name;
+    List<GroupData> groupData2;
+    JobData job_num = new JobData("DC ONE", 25);
     //    String[] dc_one = {"DC ONE"};
-    List<JobPositon> dc_one = Arrays.asList(new JobPositon("DC ONE", 25));
+    List<JobData> dc_one = Arrays.asList(new JobData("DC ONE", 25));
     //    String[] developer = {"Technical Leader", "Developer", "Supervisor Quality Assuarance", "Software Tester"};
-    List<JobPositon> developer = Arrays.asList(new JobPositon("Technical Leader", 7), new JobPositon("Developer", 8), new JobPositon("Supervisor Quality Assuarance", 9), new JobPositon("Software Tester", 10));
-    List<JobPositon> accounting = Arrays.asList(new JobPositon("Accounting", 22), new JobPositon("Customer Relationship", 21));
-    List<JobPositon> deploy = Arrays.asList(new JobPositon("Manager", 14), new JobPositon("Barista", 15));
-    List<JobPositon> admin = Arrays.asList(new JobPositon("Administrator", 16), new JobPositon("IT Administrator", 18));
-    List<JobPositon> se = Arrays.asList(new JobPositon("Software Engineering", 11));
-    List<JobPositon> coordinat = Arrays.asList(new JobPositon("Project coordinat", 13));
-    List<JobPositon> secretary = Arrays.asList(new JobPositon("Secretary", 23));
-    List<JobPositon> acc = Arrays.asList(new JobPositon("CTO", 30));
-    List<JobPositon> ba = Arrays.asList(new JobPositon("Business Analyst", 24));
-    List<JobPositon> graphic = Arrays.asList(new JobPositon("Graphic Design", 12));
-    List<JobPositon> nj = Arrays.asList(new JobPositon("NJ", 26));
-    List<JobPositon> boss = Arrays.asList(new JobPositon("CEO", 28), new JobPositon("Vice President", 29));
+    List<JobData> developer = Arrays.asList(new JobData("Technical Leader", 7), new JobData("Developer", 8), new JobData("Supervisor Quality Assuarance", 9), new JobData("Software Tester", 10));
+    List<JobData> accounting = Arrays.asList(new JobData("Accounting", 22), new JobData("Customer Relationship", 21));
+    List<JobData> deploy = Arrays.asList(new JobData("Manager", 14), new JobData("Barista", 15));
+    List<JobData> admin = Arrays.asList(new JobData("Administrator", 16), new JobData("IT Administrator", 18));
+    List<JobData> se = Arrays.asList(new JobData("Software Engineering", 11));
+    List<JobData> coordinat = Arrays.asList(new JobData("Project coordinat", 13));
+    List<JobData> secretary = Arrays.asList(new JobData("Secretary", 23));
+    List<JobData> acc = Arrays.asList(new JobData("CTO", 30));
+    List<JobData> ba = Arrays.asList(new JobData("Business Analyst", 24));
+    List<JobData> graphic = Arrays.asList(new JobData("Graphic Design", 12));
+    List<JobData> nj = Arrays.asList(new JobData("NJ", 26));
+    List<JobData> boss = Arrays.asList(new JobData("CEO", 28), new JobData("Vice President", 29));
 
 
     //    String[] accounting = {"Accounting", "Customer Relationship"};
@@ -110,7 +119,7 @@ RegisterActivity extends AppCompatActivity {
     int num_group;
     final Calendar myCalendar = Calendar.getInstance();
     SimpleDateFormat sdf = null;
-    List<JobPositon> job_position = new ArrayList<>();
+    List<JobData> job_position = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +141,7 @@ RegisterActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         api = retrofit.create(Api.class);
+
 
         String[] group = {"Development", "Engineering", "Graphic Design", "Coordinat", "Deploy Space café", "Administrative", "Accounting", "Secretary"
                 , "Business Analyst", "CEO", "CTO", "DC ONE", "NJ"};
@@ -384,12 +394,10 @@ RegisterActivity extends AppCompatActivity {
     }
 
 
-    
-
-    public void createJobSpinner(List<JobPositon> job_position) {
+    public void createJobSpinner(List<JobData> job_position) {
         String[] positions = new String[job_position.size()];
         int i = 0;
-        for (JobPositon job : job_position) {
+        for (JobData job : job_position) {
             positions[i] = job.getName();
             i++;
         }
@@ -412,6 +420,13 @@ RegisterActivity extends AppCompatActivity {
                 });
 
         hintSpinnerJob.init();
+    }
+
+
+    public void createGroupSpinner(List<GroupData> groupDataList){
+        String[] position = new String[groupDataList.size()];
+        int i = 0 ;
+        
     }
 
 
@@ -700,7 +715,6 @@ RegisterActivity extends AppCompatActivity {
         Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
 
 
-
 //        imageUserRegister.setImageDrawable(roundedBitmapDrawable);
 //        imageUserRegister.setRotation(90);
 
@@ -711,7 +725,7 @@ RegisterActivity extends AppCompatActivity {
                 ExifInterface.ORIENTATION_UNDEFINED);
         Bitmap rotatedBitmapTest = null;
 
-        switch(orientation) {
+        switch (orientation) {
 
             case ExifInterface.ORIENTATION_ROTATE_90:
                 rotatedBitmapTest = rotateImage(bitmap, 90);
@@ -747,8 +761,8 @@ RegisterActivity extends AppCompatActivity {
                 matrix, true);
     }
 
-    public void roundBitmap(Bitmap rotatedBitmapTest){
-        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(),  rotatedBitmapTest);
+    public void roundBitmap(Bitmap rotatedBitmapTest) {
+        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), rotatedBitmapTest);
         roundedBitmapDrawable.setCornerRadius(50.0f);
         roundedBitmapDrawable.setAntiAlias(true);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -757,4 +771,26 @@ RegisterActivity extends AppCompatActivity {
         encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
         imageUserRegister.setImageDrawable(roundedBitmapDrawable);
     }
+
+
+    public void getGroup() {
+        Call<GroupData> call = api.getGroupApi();
+        call.enqueue(new Callback<GroupData>() {
+            @Override
+            public void onResponse(Call<GroupData> call, Response<GroupData> response) {
+
+                GroupData groupData = response.body();
+
+
+
+
+            }
+
+            @Override
+            public void onFailure(Call<GroupData> call, Throwable t) {
+
+            }
+        });
+    }
+
 }

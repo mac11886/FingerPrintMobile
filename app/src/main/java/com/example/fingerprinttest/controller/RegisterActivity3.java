@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.fingerprinttest.R;
+import com.example.fingerprinttest.model.Log;
 import com.example.fingerprinttest.model.Token;
 import com.example.fingerprinttest.model.User;
 import com.example.fingerprinttest.services.Adapter;
@@ -80,6 +81,8 @@ public class RegisterActivity3 extends AppCompatActivity {
         interest = getIntent().getStringExtra("interest");
         secondFinger = getIntent().getStringExtra("secondFinger");
 
+        android.util.Log.e("firstFinger",""+finger);
+        android.util.Log.e("2Finger",""+secondFinger);
         //connectApi
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://ta.kisrateam.com/")
@@ -221,15 +224,7 @@ public class RegisterActivity3 extends AppCompatActivity {
                     }
                     //
                     User userPost = response.body();
-                    String content = "";
-                    content += "ID: " + userPost.getId() + "\n";
-                    content += "Name: " + userPost.getName() + "\n";
-//                content += "Age: " + userPost.getAge() + "\n";
-                    content += "Interest: " + userPost.getInterest() + "\n";
-                    content += "ImageUser: " + userPost.getImguser() + "\n";
-                    content += "Fingeprint: " + userPost.getFingerprint() + "\n";
-                    content += "update_at: " + userPost.getUpdated_at() + "\n";
-                    content += "Create_at: " + userPost.getCreated_at() + "\n";
+
                 }
 
                 @Override

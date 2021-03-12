@@ -38,7 +38,7 @@ public interface Api {
     Call<Log> createLog(@Body Log log);
 
 
-    @POST("api/editFingerprint")
+    @POST("api/edit_fingerprint")
     Call<EditFingerprint> editFingerprintApi(@Body EditFingerprint editFingerprint);
 
 }

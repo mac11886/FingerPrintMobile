@@ -73,7 +73,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                     user.setImguser(encode);
                 }
                 Bundle bundle = new Bundle();
-                bundle.putStringArray("user", new String[]{user.getName(), user.getImguser(), "นิ้วชี้ขวา"});
+                bundle.putStringArray("user", new String[]{user.getName(), user.getImguser(), "นิ้วชี้ขวา",String.valueOf(user.getId())});
 //                    intent.putExtra("image", user.getImguser());
                 intent.putExtras(bundle);
                 context.startActivity(intent);
@@ -100,7 +100,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                     user.setImguser(encode);
                 }
                 Bundle bundle = new Bundle();
-                bundle.putStringArray("user", new String[]{user.getName(), user.getImguser(), "นิ้วโป้งขวา"});
+                bundle.putStringArray("user", new String[]{user.getName(), user.getImguser(), "นิ้วโป้งขวา",String.valueOf(user.getId())});
                 intent.putExtras(bundle);
                 context.startActivity(intent);
             }

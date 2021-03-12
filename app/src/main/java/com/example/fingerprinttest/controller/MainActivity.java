@@ -456,7 +456,7 @@ public class MainActivity extends AppCompatActivity {
                         .setLabel("LoginPage")
                         .build());
 
-                Intent intent = new Intent(MainActivity.this, ListUserActivity.class);
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
             } catch (Exception e) {
                 com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("MainActivity", "go To admin", "stay in MainActivity");
@@ -717,14 +717,20 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             int i = 0;
-
+            int y = 0;
             if (bstart) return;
             fingerprintSensor.open(0);
 
             for (User user : users) {
-
+                Log.e("1", "" + user.getFingerprint());
+                Log.e("2", "" + user.getFore_fingerprint());
                 byte[] byte2 = Base64.decode(user.getFingerprint(), Base64.NO_WRAP);
-                ZKFingerService.save(byte2, "" + i);
+                ZKFingerService.save(byte2, "0" + i);
+                if (user.getFore_fingerprint() != null) {
+                    byte[] byte3 = Base64.decode(user.getFore_fingerprint(), Base64.NO_WRAP);
+                    ZKFingerService.save(byte3, "00" + i);
+                    y++;
+                }
                 i++;
             }
 

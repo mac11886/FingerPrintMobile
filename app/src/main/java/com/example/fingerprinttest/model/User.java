@@ -17,15 +17,15 @@ public class User {
     private String imguser;
     private String fingerprint;
 
-    public String getSecondFinger() {
-        return secondFinger;
+    public String getFore_fingerprint() {
+        return fore_fingerprint;
     }
 
-    public void setSecondFinger(String secondFinger) {
-        this.secondFinger = secondFinger;
+    public void setFore_fingerprint(String fore_fingerprint) {
+        this.fore_fingerprint = fore_fingerprint;
     }
 
-    private String secondFinger;
+    private String fore_fingerprint;
     private Timestamp updated_at;
     private Timestamp created_at;
     public int getId() {
@@ -109,7 +109,7 @@ public class User {
     }
 
 
-    public User(String name, String birthday, String group, String jobposition, String interest, String imguser, String fingerprint,String secondFinger ) {
+    public User(String name, String birthday, String group, String jobposition, String interest, String imguser, String fingerprint,String fore_fingerprint) {
         this.name = name;
         this.birthday = birthday;
         this.group = group;
@@ -117,6 +117,6 @@ public class User {
         this.interest = interest;
         this.imguser = imguser;
         this.fingerprint = fingerprint;
-        this.secondFinger = secondFinger;
+        this.fore_fingerprint = fore_fingerprint;
     }
 }

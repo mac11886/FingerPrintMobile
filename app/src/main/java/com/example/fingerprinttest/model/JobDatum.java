@@ -9,7 +9,7 @@ public class JobDatum {
     @SerializedName("created_at")
     private String mCreatedAt;
     @SerializedName("id")
-    private Long mId;
+    private int mId;
     @SerializedName("id_group")
     private Long mIdGroup;
     @SerializedName("name")
@@ -25,11 +25,11 @@ public class JobDatum {
         mCreatedAt = createdAt;
     }
 
-    public Long getId() {
+    public int getId() {
         return mId;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         mId = id;
     }
 

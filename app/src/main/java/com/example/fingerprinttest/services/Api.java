@@ -39,7 +39,7 @@ public interface Api {
     @POST("api/edit_fingerprint")
     Call<EditFingerprint> editFingerprintApi(@Body EditFingerprint editFingerprint);
 
-    @GET("api/getGroup-job")
+    @GET("api/getgroup-job")
     Call<GroupData> getGroupApi();
 
 

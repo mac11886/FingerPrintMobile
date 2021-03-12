@@ -42,6 +42,8 @@ import android.widget.TextView;
 
 import com.example.fingerprinttest.R;
 import com.example.fingerprinttest.model.GroupData;
+import com.example.fingerprinttest.model.GroupDatum;
+import com.example.fingerprinttest.model.JobDatum;
 import com.example.fingerprinttest.services.AnalyticsApplication;
 import com.example.fingerprinttest.services.Api;
 import com.google.android.gms.analytics.HitBuilders;
@@ -86,40 +88,9 @@ RegisterActivity extends AppCompatActivity {
     int id;
     String name;
     List<GroupData> groupData2;
-    JobData job_num = new JobData("DC ONE", 25);
-    //    String[] dc_one = {"DC ONE"};
-    List<JobData> dc_one = Arrays.asList(new JobData("DC ONE", 25));
-    //    String[] developer = {"Technical Leader", "Developer", "Supervisor Quality Assuarance", "Software Tester"};
-    List<JobData> developer = Arrays.asList(new JobData("Technical Leader", 7), new JobData("Developer", 8), new JobData("Supervisor Quality Assuarance", 9), new JobData("Software Tester", 10));
-    List<JobData> accounting = Arrays.asList(new JobData("Accounting", 22), new JobData("Customer Relationship", 21));
-    List<JobData> deploy = Arrays.asList(new JobData("Manager", 14), new JobData("Barista", 15));
-    List<JobData> admin = Arrays.asList(new JobData("Administrator", 16), new JobData("IT Administrator", 18));
-    List<JobData> se = Arrays.asList(new JobData("Software Engineering", 11));
-    List<JobData> coordinat = Arrays.asList(new JobData("Project coordinat", 13));
-    List<JobData> secretary = Arrays.asList(new JobData("Secretary", 23));
-    List<JobData> acc = Arrays.asList(new JobData("CTO", 30));
-    List<JobData> ba = Arrays.asList(new JobData("Business Analyst", 24));
-    List<JobData> graphic = Arrays.asList(new JobData("Graphic Design", 12));
-    List<JobData> nj = Arrays.asList(new JobData("NJ", 26));
-    List<JobData> boss = Arrays.asList(new JobData("CEO", 28), new JobData("Vice President", 29));
-
-
-    //    String[] accounting = {"Accounting", "Customer Relationship"};
-//    String[] se = {"Software Engineering"};
-//    String[] coordinat = {"Project coordinat"};
-//    String[] deploy = {"Manager", "Barista"};
-//    String[] admin = {"Administrator", "IT Administrator"};
-//    String[] secretary = {"Secretary"};
-//    String[] boss = {"CEO","Vice President"};
-//    String[] acc = {"CTO"};
-//    String[] ba = {"Business Analyst"};
-//    String[] graphic = {"Graphic Design"};
-//    String[] nj = {"NJ"};
-//    String[] vice = {"Vice President"};
     int num_group;
     final Calendar myCalendar = Calendar.getInstance();
     SimpleDateFormat sdf = null;
-    List<JobData> job_position = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,83 +114,7 @@ RegisterActivity extends AppCompatActivity {
         api = retrofit.create(Api.class);
 
 
-        String[] group = {"Development", "Engineering", "Graphic Design", "Coordinat", "Deploy Space café", "Administrative", "Accounting", "Secretary"
-                , "Business Analyst", "CEO", "CTO", "DC ONE", "NJ"};
-
-        HintSpinner<String> hintSpinner = new HintSpinner<>(
-                spinnerGroup,
-                // Default layout - You don't need to pass in any layout id, just your hint text and
-                // your list data
-
-                new HintAdapter<String>(this, "เลือกแผนก", Arrays.asList(group)),
-                new HintSpinner.Callback<String>() {
-                    @RequiresApi(api = Build.VERSION_CODES.O)
-                    @Override
-                    public void onItemSelected(int position, String itemAtPosition) {
-                        // Here you handle the on item selected event (this skips the hint selected event)
-                        textGroup = itemAtPosition;
-                        num_group = position;
-                        Log.e("---", "----------------------------------------");
-                        System.out.println("position" + num_group);
-                        switch (num_group) {
-                            case 0:
-                                job_position = developer;
-
-                                break;
-
-                            case 1:
-                                job_position = se;
-
-                                break;
-                            case 2:
-                                job_position = graphic;
-
-                                break;
-                            case 3:
-                                job_position = coordinat;
-
-                                break;
-                            case 4:
-                                job_position = deploy;
-                                break;
-                            case 5:
-                                job_position = admin;
-                                break;
-                            case 6:
-                                job_position = accounting;
-                                break;
-                            case 7:
-                                job_position = secretary;
-                                break;
-                            case 8:
-                                job_position = ba;
-                                break;
-                            case 9:
-                                job_position = boss;
-                                break;
-
-                            case 10:
-                                job_position = acc;
-                                break;
-                            case 11:
-                                job_position = dc_one;
-                                break;
-                            case 12:
-                                job_position = nj;
-                                break;
-
-                        }
-                        createJobSpinner(job_position);
-                        try {
-                            hideSoftKeyboard(RegisterActivity.this);
-                        } catch (Exception e) {
-                            Log.e("asd", "catch");
-                        }
-
-
-                    }
-                });
-        hintSpinner.init();
+        getGroup();
 //        createJobSpinner(job_position);
 //        edittext.hasFocus();
         chooseDatePicker();
@@ -393,26 +288,71 @@ RegisterActivity extends AppCompatActivity {
 
     }
 
+    public void createSpinnerRoot(List<GroupDatum> groupDatumList, List<JobDatum> jobDatumList){
 
-    public void createJobSpinner(List<JobData> job_position) {
-        String[] positions = new String[job_position.size()];
-        int i = 0;
-        for (JobData job : job_position) {
-            positions[i] = job.getName();
-            i++;
+        List<String> groups = new ArrayList<>();
+
+        for (GroupDatum group : groupDatumList){
+            groups.add(group.getName());
         }
-        HintSpinner<String> hintSpinnerJob = new HintSpinner<>(
-                spinnerJobPosition,
+
+
+        HintSpinner<String> hintSpinner = new HintSpinner<>(
+                spinnerGroup,
                 // Default layout - You don't need to pass in any layout id, just your hint text and
                 // your list data
 
-                new HintAdapter<String>(this, "เลือกตำแหน่ง", Arrays.asList(positions)),
+                new HintAdapter<String>(this, "เลือกแผนก", groups),
                 new HintSpinner.Callback<String>() {
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onItemSelected(int position, String itemAtPosition) {
                         // Here you handle the on item selected event (this skips the hint selected event)
-                        job_position_num = job_position.get(position).getId();
+                        textGroup = itemAtPosition;
+                        num_group = groupDatumList.get(position).getId();
+                        Log.e("---", "----------------------------------------");
+                        System.out.println("position" + num_group);
+                        List<JobDatum> jobDatas = new ArrayList<>();
+
+                        for (JobDatum jobDatum : jobDatumList){
+                            if (jobDatum.getIdGroup() == groupDatumList.get(position).getId()){
+                                jobDatas.add(jobDatum);
+                            }
+                        }
+
+                        createJobSpinner(jobDatas);
+                        try {
+                            hideSoftKeyboard(RegisterActivity.this);
+                        } catch (Exception e) {
+                            Log.e("asd", "catch");
+                        }
+
+
+                    }
+                });
+        hintSpinner.init();
+    }
+
+    public void createJobSpinner(List<JobDatum> jobDatumList) {
+
+        List<String> jobs = new ArrayList<>();
+
+        for (JobDatum jobDatum : jobDatumList){
+            jobs.add(jobDatum.getName());
+        }
+
+        HintSpinner<String> hintSpinnerJob = new HintSpinner<>(
+                spinnerJobPosition,
+                // Default layout - You don't need to pass in any layout id, just your hint text and
+                // your list data
+
+                new HintAdapter<String>(this, "เลือกตำแหน่ง", jobs),
+                new HintSpinner.Callback<String>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onItemSelected(int position, String itemAtPosition) {
+                        // Here you handle the on item selected event (this skips the hint selected event)
+                        job_position_num = jobDatumList.get(position).getId();
 
                         Log.e("Job", "" + job_position_num);
 
@@ -421,14 +361,6 @@ RegisterActivity extends AppCompatActivity {
 
         hintSpinnerJob.init();
     }
-
-
-    public void createGroupSpinner(List<GroupData> groupDataList){
-        String[] position = new String[groupDataList.size()];
-        int i = 0 ;
-        
-    }
-
 
     public void chooseDatePicker() {
 
@@ -780,10 +712,8 @@ RegisterActivity extends AppCompatActivity {
             public void onResponse(Call<GroupData> call, Response<GroupData> response) {
 
                 GroupData groupData = response.body();
-
-
-
-
+//                Log.e("test" ,groupData.getGroupData().get(0).getName());
+                createSpinnerRoot(groupData.getGroupData(), groupData.getJobData());
             }
 
             @Override

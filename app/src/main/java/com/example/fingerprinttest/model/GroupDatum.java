@@ -9,7 +9,7 @@ public class GroupDatum {
     @SerializedName("created_at")
     private String mCreatedAt;
     @SerializedName("id")
-    private Long mId;
+    private int mId;
     @SerializedName("name")
     private String mName;
     @SerializedName("updated_at")
@@ -23,11 +23,11 @@ public class GroupDatum {
         mCreatedAt = createdAt;
     }
 
-    public Long getId() {
+    public int getId() {
         return mId;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         mId = id;
     }
 

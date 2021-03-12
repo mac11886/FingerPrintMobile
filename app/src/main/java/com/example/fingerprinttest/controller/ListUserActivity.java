@@ -4,8 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +32,7 @@ public class ListUserActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     Api api;
     TextView editFingerText ;
+    ImageView backBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +44,14 @@ public class ListUserActivity extends AppCompatActivity {
                 .build();
         api = retrofit.create(Api.class);
 
+        backBtn = findViewById(R.id.backBtnList);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ListUserActivity.this, AdminActivity.class);
+                startActivity(intent);
+            }
+        });
         getPosts();
         LoadingDialog loadingDialog = new LoadingDialog(ListUserActivity.this);
         loadingDialog.startLoadingDialog();
@@ -57,6 +69,7 @@ public class ListUserActivity extends AppCompatActivity {
             public void run() {
                 createUserList();
                 editFingerText.setText("แก้ไขลายนิ้วมือ");
+                backBtn.setImageResource(R.drawable.ic_left_arrow);
             }
         }, 3000);
 

@@ -42,6 +42,7 @@ import android.widget.TextView;
 import com.example.fingerprinttest.R;
 import com.example.fingerprinttest.model.JobPositon;
 import com.example.fingerprinttest.services.AnalyticsApplication;
+import com.example.fingerprinttest.services.Api;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
@@ -59,6 +60,8 @@ import java.util.Locale;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.srodrigo.androidhintspinner.HintAdapter;
 import me.srodrigo.androidhintspinner.HintSpinner;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class
 RegisterActivity extends AppCompatActivity {
@@ -73,6 +76,7 @@ RegisterActivity extends AppCompatActivity {
     String textGroup, textJob, date;
     EditText edittext;
     int job_position_num;
+    private Api api;
     JobPositon job_num = new JobPositon("DC ONE", 25);
     //    String[] dc_one = {"DC ONE"};
     List<JobPositon> dc_one = Arrays.asList(new JobPositon("DC ONE", 25));
@@ -122,6 +126,13 @@ RegisterActivity extends AppCompatActivity {
         String token;
         token = getIntent().getStringExtra("token");
         builder = new AlertDialog.Builder(this);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://ta.kisrateam.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        api = retrofit.create(Api.class);
+
         String[] group = {"Development", "Engineering", "Graphic Design", "Coordinat", "Deploy Space café", "Administrative", "Accounting", "Secretary"
                 , "Business Analyst", "CEO", "CTO", "DC ONE", "NJ"};
 
@@ -372,6 +383,8 @@ RegisterActivity extends AppCompatActivity {
 
     }
 
+
+    
 
     public void createJobSpinner(List<JobPositon> job_position) {
         String[] positions = new String[job_position.size()];

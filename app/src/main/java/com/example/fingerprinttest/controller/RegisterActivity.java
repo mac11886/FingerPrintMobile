@@ -426,7 +426,7 @@ RegisterActivity extends AppCompatActivity {
     public void createGroupSpinner(List<GroupData> groupDataList){
         String[] position = new String[groupDataList.size()];
         int i = 0 ;
-        
+
     }
 
 

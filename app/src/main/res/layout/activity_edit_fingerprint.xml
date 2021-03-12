@@ -125,7 +125,7 @@
             android:fontFamily="@font/kanit_light"
             android:text="กรุณากดเพื่อลงทะเบียน"
             android:textColor="@color/black"
-            android:textSize="25dp" />
+            android:textSize="22dp" />
 
         <ImageView
             android:layout_marginTop="10dp"

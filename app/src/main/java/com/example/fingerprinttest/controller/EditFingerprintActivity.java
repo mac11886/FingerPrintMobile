@@ -531,18 +531,19 @@ public class EditFingerprintActivity extends AppCompatActivity {
                                                 .setLabel("enrollFinish")
                                                 .build());
                                         SweetAlertDialog loading = new SweetAlertDialog(EditFingerprintActivity.this, SweetAlertDialog.WARNING_TYPE);
-                                        loading.setTitleText("ตืนยันการแก้ไข");
+                                        loading.setTitleText("ยืนยันการแก้ไข");
 //                                            loading.setContentText("ข้อมูลได้ถูกบันทึกแล้ว");
                                         loading.setConfirmText("ตกลง");
-                                        loading.setCancelText("ยกเลิก");
+
                                         loading.showCancelButton(true);
-                                        loading.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                        loading.setCancelButton("ยกเลิก", new SweetAlertDialog.OnSweetClickListener() {
                                             @Override
                                             public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                                sweetAlertDialog.cancel();
+                                                
                                             }
                                         });
-                                        loading.getProgressHelper().setBarColor(EditFingerprintActivity.this.getResources().getColor(R.color.greentea));
+
+//                                        loading.getProgressHelper().setBarColor(EditFingerprintActivity.this.getResources().getColor(R.color.greentea));
                                         loading.setOnShowListener(new DialogInterface.OnShowListener() {
                                             @Override
                                             public void onShow(DialogInterface dialog) {
@@ -569,14 +570,14 @@ public class EditFingerprintActivity extends AppCompatActivity {
                                                 if (user[2].equals("นิ้วชี้ขวา")) {
 
                                                     editFingerprintApi(Integer.parseInt(user[3]), strBase64, "foreFingerprint");
-                                                    Log.e("TEST", "+++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
                                                     Intent intent = new Intent(EditFingerprintActivity.this, ListUserActivity.class);
                                                     startActivity(intent);
                                                     try {
                                                         OnBnStop();
                                                     } catch (FingerprintException e) {
                                                         e.printStackTrace();
-                                                        Log.e("TEST", "---------------------------------------------------------------------------------------------");
+
                                                     }
                                                 } else {
                                                     editFingerprintApi(Integer.parseInt(user[3]), strBase64, "thumbFingerprint");

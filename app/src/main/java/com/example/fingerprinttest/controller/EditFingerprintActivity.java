@@ -530,18 +530,18 @@ public class EditFingerprintActivity extends AppCompatActivity {
                                                 .setAction("finish")
                                                 .setLabel("enrollFinish")
                                                 .build());
-                                        SweetAlertDialog loading = new SweetAlertDialog(EditFingerprintActivity.this, SweetAlertDialog.WARNING_TYPE);
-                                        loading.setTitleText("ยืนยันการแก้ไข");
+                                        SweetAlertDialog loading = new SweetAlertDialog(EditFingerprintActivity.this, SweetAlertDialog.SUCCESS_TYPE);
+                                        loading.setTitleText("แก้ไขเสร็จสิ้น");
 //                                            loading.setContentText("ข้อมูลได้ถูกบันทึกแล้ว");
                                         loading.setConfirmText("ตกลง");
 
-                                        loading.showCancelButton(true);
-                                        loading.setCancelButton("ยกเลิก", new SweetAlertDialog.OnSweetClickListener() {
-                                            @Override
-                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                                
-                                            }
-                                        });
+//                                        loading.showCancelButton(true);
+//                                        loading.setCancelButton("ยกเลิก", new SweetAlertDialog.OnSweetClickListener() {
+//                                            @Override
+//                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+//
+//                                            }
+//                                        });
 
 //                                        loading.getProgressHelper().setBarColor(EditFingerprintActivity.this.getResources().getColor(R.color.greentea));
                                         loading.setOnShowListener(new DialogInterface.OnShowListener() {

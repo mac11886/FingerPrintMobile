@@ -113,10 +113,12 @@ RegisterActivity extends AppCompatActivity {
                 .build();
         api = retrofit.create(Api.class);
 
+        try {
+            getGroup();
+        } catch (Exception e){
+            Log.e("ERROR","getGroup is null");
+        }
 
-        getGroup();
-//        createJobSpinner(job_position);
-//        edittext.hasFocus();
         chooseDatePicker();
         //take or choose image function
         takeOrChooseBtn.setOnClickListener(new View.OnClickListener() {
@@ -288,11 +290,11 @@ RegisterActivity extends AppCompatActivity {
 
     }
 
-    public void createSpinnerRoot(List<GroupDatum> groupDatumList, List<JobDatum> jobDatumList){
+    public void createSpinnerRoot(List<GroupDatum> groupDatumList, List<JobDatum> jobDatumList) {
 
         List<String> groups = new ArrayList<>();
 
-        for (GroupDatum group : groupDatumList){
+        for (GroupDatum group : groupDatumList) {
             groups.add(group.getName());
         }
 
@@ -314,8 +316,8 @@ RegisterActivity extends AppCompatActivity {
                         System.out.println("position" + num_group);
                         List<JobDatum> jobDatas = new ArrayList<>();
 
-                        for (JobDatum jobDatum : jobDatumList){
-                            if (jobDatum.getIdGroup() == groupDatumList.get(position).getId()){
+                        for (JobDatum jobDatum : jobDatumList) {
+                            if (jobDatum.getIdGroup() == groupDatumList.get(position).getId()) {
                                 jobDatas.add(jobDatum);
                             }
                         }
@@ -337,7 +339,7 @@ RegisterActivity extends AppCompatActivity {
 
         List<String> jobs = new ArrayList<>();
 
-        for (JobDatum jobDatum : jobDatumList){
+        for (JobDatum jobDatum : jobDatumList) {
             jobs.add(jobDatum.getName());
         }
 
@@ -713,7 +715,11 @@ RegisterActivity extends AppCompatActivity {
 
                 GroupData groupData = response.body();
 //                Log.e("test" ,groupData.getGroupData().get(0).getName());
+                try {
                 createSpinnerRoot(groupData.getGroupData(), groupData.getJobData());
+                }catch (Exception e){
+                    Log.e("GETGROUP","getGroup is null");
+                }
             }
 
             @Override

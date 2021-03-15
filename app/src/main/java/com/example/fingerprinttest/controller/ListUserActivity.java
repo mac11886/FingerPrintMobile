@@ -1,12 +1,17 @@
 package com.example.fingerprinttest.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,6 +25,7 @@ import com.example.fingerprinttest.services.UserAdapter;
 
 import java.util.List;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -52,7 +58,10 @@ public class ListUserActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        getPosts();
+
+            getPosts();
+
+
         LoadingDialog loadingDialog = new LoadingDialog(ListUserActivity.this);
         loadingDialog.startLoadingDialog();
         loadingDialog.cancelDialog();
@@ -63,11 +72,11 @@ public class ListUserActivity extends AppCompatActivity {
                 loadingDialog.dismissDialog();
             }
         }, 3500);
-        final Handler someHandler2 = new Handler(getMainLooper());
         someHandler1.postDelayed(new Runnable() {
             @Override
             public void run() {
                 createUserList();
+
                 editFingerText.setText("แก้ไขลายนิ้วมือ");
                 backBtn.setImageResource(R.drawable.ic_left_arrow);
             }
@@ -80,8 +89,35 @@ public class ListUserActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.userList);
 
-        UserAdapter userAdapter = new UserAdapter(this, users);
-        recyclerView.setAdapter(userAdapter);
+
+
+        try {
+            UserAdapter userAdapter = new UserAdapter(this, users);
+            recyclerView.setAdapter(userAdapter);
+        }catch (Exception e){
+            SweetAlertDialog loading = new SweetAlertDialog(ListUserActivity.this, SweetAlertDialog.WARNING_TYPE);
+            loading.setTitleText("เกิดข้อผิดพลาดเกี่ยวกับ Internet");
+            loading.setContentText("กรุณาเปิดแอพใหม่อีกครั้ง");
+            loading.getProgressHelper().setBarColor(ListUserActivity.this.getResources().getColor(R.color.greentea));
+            loading.setOnShowListener((DialogInterface.OnShowListener) dialog -> {
+                SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
+                Typeface face = ResourcesCompat.getFont(ListUserActivity.this, R.font.kanit_light);
+                TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
+                TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
+                textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                textCon.setTextColor(getResources().getColor(R.color.black));
+                textCon.setTypeface(face);
+                textCon.setGravity(Gravity.CENTER);
+                text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                text.setTextColor(getResources().getColor(R.color.red25));
+                text.setTypeface(face);
+                text.setGravity(Gravity.CENTER);
+
+            });
+
+            loading.show();
+        }
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
@@ -111,4 +147,10 @@ public class ListUserActivity extends AppCompatActivity {
 
 
     }
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+
+    }
+
 }

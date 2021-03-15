@@ -470,8 +470,8 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
 //                    testError();
-                    Intent intent = new Intent(MainActivity.this, RegisterActivity2.class);
-                    startActivity(intent);
+//                    Intent intent = new Intent(MainActivity.this, RegisterActivity2.class);
+//                    startActivity(intent);
                 } catch (Exception exception) {
                     com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("MainActivity", "mainTEST", "can't touch this");
                     Call<com.example.fingerprinttest.model.Log> call = api.createLog(log);
@@ -552,7 +552,7 @@ public class MainActivity extends AppCompatActivity {
         mTracker = application.getDefaultTracker();
         mTracker.setScreenName("MainActivity");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-        try {
+
             outbtn.setOnClickListener(v -> {
                 try {
                     User user = users.get(0);
@@ -610,10 +610,8 @@ public class MainActivity extends AppCompatActivity {
                     loading.show();
                 }
             });
-        } catch (Exception e) {
-            Toast.makeText(MainActivity.this, "ลองใหม่อีกครั้ง", Toast.LENGTH_SHORT).show();
-        }
-        try {
+
+
             inBtn.setOnClickListener(v -> {
                 try {
                     User user = users.get(0);
@@ -678,9 +676,6 @@ public class MainActivity extends AppCompatActivity {
             });
 
 
-        } catch (Exception e) {
-            Toast.makeText(MainActivity.this, "ลองใหม่อีกครั้ง", Toast.LENGTH_SHORT).show();
-        }
 
     }
 

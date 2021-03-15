@@ -51,11 +51,6 @@ import com.zkteco.android.biometric.module.fingerprintreader.FingprintFactory;
 import com.zkteco.android.biometric.module.fingerprintreader.ZKFingerService;
 import com.zkteco.android.biometric.module.fingerprintreader.exception.FingerprintException;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -64,7 +59,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
@@ -335,6 +329,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     users = response.body();
 
+//                    startActivityForResult(intent, 1);
                     Log.e("SEC", "SEC");
                     for (User user : users) {
                         String content = "";
@@ -440,6 +435,7 @@ public class MainActivity extends AppCompatActivity {
         startFingerprintSensor();
         LoadingDialog loadingDialog = new LoadingDialog(MainActivity.this);
         loadingDialog.startLoadingDialog();
+        loadingDialog.cancelDialog();
         try {
             getPosts();
         } catch (Exception e) {
@@ -467,13 +463,14 @@ public class MainActivity extends AppCompatActivity {
 
             loading.show();
         }
+
         main.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 try {
 //                    testError();
-                    Intent intent = new Intent(MainActivity.this, RegisterActivity3.class);
+                    Intent intent = new Intent(MainActivity.this, RegisterActivity2.class);
                     startActivity(intent);
                 } catch (Exception exception) {
                     com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("MainActivity", "mainTEST", "can't touch this");
@@ -503,6 +500,7 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("click")
                         .setLabel("LoginPage")
                         .build());
+
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
             } catch (Exception e) {
@@ -761,17 +759,24 @@ public class MainActivity extends AppCompatActivity {
 
     public void OnBnBegin() throws FingerprintException {
 
-            try {
-                int i = 0;
-                if (bstart) return;
-                fingerprintSensor.open(0);
+        try {
+            int i = 0;
+            int y = 0;
+            if (bstart) return;
+            fingerprintSensor.open(0);
 
-                for (User user : users) {
-
-                    byte[] byte2 = Base64.decode(user.getFingerprint(), Base64.NO_WRAP);
-                    ZKFingerService.save(byte2, "" + i);
-                    i++;
+            for (User user : users) {
+                Log.e("1", "" + user.getFingerprint());
+                Log.e("2", "" + user.getFore_fingerprint());
+                byte[] byte2 = Base64.decode(user.getFingerprint(), Base64.NO_WRAP);
+                ZKFingerService.save(byte2, "0" + i);
+                if (user.getFore_fingerprint() != null) {
+                    byte[] byte3 = Base64.decode(user.getFore_fingerprint(), Base64.NO_WRAP);
+                    ZKFingerService.save(byte3, "00" + i);
+                    y++;
                 }
+                i++;
+            }
 
 //            Toast.makeText(MainActivity.this, "status", Toast.LENGTH_SHORT).show();
                 final FingerprintCaptureListener listener = new FingerprintCaptureListener() {
@@ -995,10 +1000,11 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<com.example.fingerprinttest.model.Log> call, Throwable t) {
 
-                    }
-                });
-                textView.setText("กรุณาเชื่อมต่อกับเครื่องสแกน");
-            }
+                }
+            });
+            textView.setText("กรุณาเชื่อมต่อกับเครื่องสแกน");
+        }
+
     }
 
     public void OnBnStop() throws FingerprintException {

@@ -1,5 +1,6 @@
 package com.example.fingerprinttest.model;
 
+
 import java.sql.Timestamp;
 
 public class User {
@@ -15,6 +16,16 @@ public class User {
     private String interest;
     private String imguser;
     private String fingerprint;
+
+    public String getFore_fingerprint() {
+        return fore_fingerprint;
+    }
+
+    public void setFore_fingerprint(String fore_fingerprint) {
+        this.fore_fingerprint = fore_fingerprint;
+    }
+
+    private String fore_fingerprint;
     private Timestamp updated_at;
     private Timestamp created_at;
     public int getId() {
@@ -98,7 +109,7 @@ public class User {
     }
 
 
-    public User(String name, String birthday, String group, String jobposition, String interest, String imguser, String fingerprint) {
+    public User(String name, String birthday, String group, String jobposition, String interest, String imguser, String fingerprint,String fore_fingerprint) {
         this.name = name;
         this.birthday = birthday;
         this.group = group;
@@ -106,12 +117,6 @@ public class User {
         this.interest = interest;
         this.imguser = imguser;
         this.fingerprint = fingerprint;
+        this.fore_fingerprint = fore_fingerprint;
     }
-
-
-
-
-
-
-
 }

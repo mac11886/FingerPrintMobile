@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.example.fingerprinttest.R;
 import com.example.fingerprinttest.model.Token;
@@ -34,19 +34,44 @@ public class AdminActivity extends AppCompatActivity {
 
     String token;
     List<User> users;
-
-    ImageView goToAdmin, goToRegister, backBtn;
+    TextView editFingerText,editRegisterText,backAdminText;
+    ImageView goToAdmin, goToRegister, backBtn,goToEditFingerprint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
-
+        editFingerText = findViewById(R.id.editFingerText);
+        editRegisterText = findViewById(R.id.editRegisterText);
+        backAdminText = findViewById(R.id.backAdminText);
+        goToEditFingerprint = findViewById(R.id.goToEditFingerprint);
 //        goToAdmin = (ImageView) findViewById(R.id.goToAdmin);
         goToRegister = (ImageView) findViewById(R.id.goToRegister);
         backBtn = (ImageView) findViewById(R.id.backBtnAdmin);
         token = getIntent().getStringExtra("token");
-//        Toast.makeText(this,"token:"+token,Toast.LENGTH_SHORT).show();
+
+
+        editFingerText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AdminActivity.this,ListUserActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        goToEditFingerprint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AdminActivity.this,ListUserActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+
+
+
+
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,11 +118,23 @@ public class AdminActivity extends AppCompatActivity {
                         .setLabel("RegisterPage")
                         .build());
                 Intent intent = new Intent(AdminActivity.this, RegisterActivity.class);
-                intent.putExtra("token", token);
                 startActivity(intent);
             }
         });
+        editRegisterText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
+                t.send(new HitBuilders.EventBuilder()
+                        .setCategory("Intent")
+                        .setAction("click")
+                        .setLabel("RegisterPage")
+                        .build());
+                Intent intent = new Intent(AdminActivity.this, RegisterActivity.class);
 
+                startActivity(intent);
+            }
+        });
 
 //        goToAdmin.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -131,6 +168,8 @@ public class AdminActivity extends AppCompatActivity {
     }
 
 
+
+
     //get API   type synchronous
     public void getPosts() {
         Call<List<User>> call = api.getPost();
@@ -145,5 +184,10 @@ public class AdminActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    public  void  toEditActivity(View view){
+        Intent intent = new Intent(AdminActivity.this, ListUserActivity.class);
+        startActivity(intent);
     }
 }

@@ -318,7 +318,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     //get API
-    public void getPosts() {
+    public void getUsers() {
         try {
             Call<List<User>> call = api.getPost();
             call.enqueue(new Callback<List<User>>() {
@@ -330,13 +330,13 @@ public class MainActivity extends AppCompatActivity {
                     users = response.body();
 
 //                    startActivityForResult(intent, 1);
-                    Log.e("SEC", "SEC");
-                    for (User user : users) {
-                        String content = "";
-                        userImage = user.getImguser();
+//                    Log.e("SEC", "SEC");
+//                    for (User user : users) {
+//                        String content = "";
+//                        userImage = user.getImguser();
 
 //                    textStatus.setText("users"+users);
-                    }
+//                    }
 //                textView.setText(""+response.toString());
                 }
 
@@ -357,27 +357,7 @@ public class MainActivity extends AppCompatActivity {
                     });
                     textView.setText("เกิดข้อผิดพลาดเกี่ยวกับ Internet");
                     textView.setTextSize(15);
-                     loading = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE);
-                    loading.setTitleText("เกิดข้อผิดพลาดเกี่ยวกับ Internet");
-                    loading.setContentText("กรุณาเปิดแอพใหม่อีกครั้ง");
-                    loading.getProgressHelper().setBarColor(MainActivity.this.getResources().getColor(R.color.greentea));
-                    loading.setOnShowListener((DialogInterface.OnShowListener) dialog -> {
-                        SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
-                        Typeface face = ResourcesCompat.getFont(MainActivity.this, R.font.kanit_light);
-                        TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
-                        TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
-                        textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                        textCon.setTextColor(getResources().getColor(R.color.black));
-                        textCon.setTypeface(face);
-                        textCon.setGravity(Gravity.CENTER);
-                        text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-                        text.setTextColor(getResources().getColor(R.color.red25));
-                        text.setTypeface(face);
-                        text.setGravity(Gravity.CENTER);
-
-                    });
-
-                    loading.show();
+                    loadErrorAlert();
                 }
             });
         } catch (Exception e) {
@@ -437,60 +417,13 @@ public class MainActivity extends AppCompatActivity {
         loadingDialog.startLoadingDialog();
         loadingDialog.cancelDialog();
         try {
-            getPosts();
+            getUsers();
         } catch (Exception e) {
             textView.setText("เกิดข้อผิดพลาดเกี่ยวกับ Internet");
 //            textView.setTextSize(15);
-            SweetAlertDialog loading = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE);
-            loading.setTitleText("เกิดข้อผิดพลาดเกี่ยวกับ Internet");
-            loading.setContentText("กรุณาเปิดแอพใหม่อีกครั้ง");
-            loading.getProgressHelper().setBarColor(MainActivity.this.getResources().getColor(R.color.greentea));
-            loading.setOnShowListener((DialogInterface.OnShowListener) dialog -> {
-                SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
-                Typeface face = ResourcesCompat.getFont(MainActivity.this, R.font.kanit_light);
-                TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
-                TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
-                textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                textCon.setTextColor(getResources().getColor(R.color.black));
-                textCon.setTypeface(face);
-                textCon.setGravity(Gravity.CENTER);
-                text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-                text.setTextColor(getResources().getColor(R.color.red25));
-                text.setTypeface(face);
-                text.setGravity(Gravity.CENTER);
-
-            });
-
-            loading.show();
+            loadErrorAlert();
         }
 
-        main.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                try {
-//                    testError();
-//                    Intent intent = new Intent(MainActivity.this, RegisterActivity2.class);
-//                    startActivity(intent);
-                } catch (Exception exception) {
-                    com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("MainActivity", "mainTEST", "can't touch this");
-                    Call<com.example.fingerprinttest.model.Log> call = api.createLog(log);
-                    call.enqueue(new Callback<com.example.fingerprinttest.model.Log>() {
-                        @Override
-                        public void onResponse(Call<com.example.fingerprinttest.model.Log> call, Response<com.example.fingerprinttest.model.Log> response) {
-
-                        }
-
-                        @Override
-                        public void onFailure(Call<com.example.fingerprinttest.model.Log> call, Throwable t) {
-
-                        }
-                    });
-                    Toast.makeText(MainActivity.this, "DONT DO THIS ", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
 
         adminBtn.setOnClickListener(v -> {
             try {
@@ -555,7 +488,6 @@ public class MainActivity extends AppCompatActivity {
 
             outbtn.setOnClickListener(v -> {
                 try {
-                    User user = users.get(0);
                     try {
                         Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
                         t.send(new HitBuilders.EventBuilder()
@@ -587,27 +519,7 @@ public class MainActivity extends AppCompatActivity {
                 } catch (Exception we) {
                     textView.setText("เกิดข้อผิดพลาดเกี่ยวกับ Internet");
 //            textView.setTextSize(15);
-                    SweetAlertDialog loading = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE);
-                    loading.setTitleText("เกิดข้อผิดพลาดเกี่ยวกับ Internet");
-                    loading.setContentText("กรุณาเปิดแอพใหม่อีกครั้ง");
-                    loading.getProgressHelper().setBarColor(MainActivity.this.getResources().getColor(R.color.greentea));
-                    loading.setOnShowListener((DialogInterface.OnShowListener) dialog -> {
-                        SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
-                        Typeface face = ResourcesCompat.getFont(MainActivity.this, R.font.kanit_light);
-                        TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
-                        TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
-                        textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                        textCon.setTextColor(getResources().getColor(R.color.black));
-                        textCon.setTypeface(face);
-                        textCon.setGravity(Gravity.CENTER);
-                        text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-                        text.setTextColor(getResources().getColor(R.color.red25));
-                        text.setTypeface(face);
-                        text.setGravity(Gravity.CENTER);
-
-                    });
-
-                    loading.show();
+                    loadErrorAlert();
                 }
             });
 
@@ -636,51 +548,26 @@ public class MainActivity extends AppCompatActivity {
                         call.enqueue(new Callback<com.example.fingerprinttest.model.Log>() {
                             @Override
                             public void onResponse(Call<com.example.fingerprinttest.model.Log> call, Response<com.example.fingerprinttest.model.Log> response) {
-
                             }
 
                             @Override
                             public void onFailure(Call<com.example.fingerprinttest.model.Log> call, Throwable t) {
-
                             }
                         });
                     }
                 } catch (Exception we) {
                     textView.setText("เกิดข้อผิดพลาดเกี่ยวกับ Internet");
 //            textView.setTextSize(15);
-                    SweetAlertDialog loading = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE);
-                    loading.setTitleText("เกิดข้อผิดพลาดเกี่ยวกับ Internet");
-                    loading.setContentText("กรุณาเปิดแอพใหม่อีกครั้ง");
-                    loading.getProgressHelper().setBarColor(MainActivity.this.getResources().getColor(R.color.greentea));
-                    loading.setOnShowListener((DialogInterface.OnShowListener) dialog -> {
-                        SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
-                        Typeface face = ResourcesCompat.getFont(MainActivity.this, R.font.kanit_light);
-                        TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
-                        TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
-                        textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                        textCon.setTextColor(getResources().getColor(R.color.black));
-                        textCon.setTypeface(face);
-                        textCon.setGravity(Gravity.CENTER);
-                        text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-                        text.setTextColor(getResources().getColor(R.color.red25));
-                        text.setTypeface(face);
-                        text.setGravity(Gravity.CENTER);
-
-                    });
-
-                    loading.show();
+                    loadErrorAlert();
                 }
                 status = "เข้า";
 
 
             });
-
-
-
     }
 
-
     public void testError() {
+
         throw new EmptyStackException();
     }
 
@@ -756,7 +643,6 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             int i = 0;
-            int y = 0;
             if (bstart) return;
             fingerprintSensor.open(0);
 
@@ -768,7 +654,6 @@ public class MainActivity extends AppCompatActivity {
                 if (user.getFore_fingerprint() != null) {
                     byte[] byte3 = Base64.decode(user.getFore_fingerprint(), Base64.NO_WRAP);
                     ZKFingerService.save(byte3, "00" + i);
-                    y++;
                 }
                 i++;
             }
@@ -869,7 +754,7 @@ public class MainActivity extends AppCompatActivity {
 //                                    textView.setText("identify succ, userid:" + strRes[0] + ", score:" + strRes[1]);
                                         textView.setText("สแกนเสร็จสิ้น,ความชัด " + strRes[1] + " %");
                                         try {
-                                            getPosts();
+                                            getUsers();
                                         } catch (Exception e) {
                                             textView.setText("server Error" + e.getMessage());
                                         }
@@ -1028,4 +913,55 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void loadErrorAlert(){
+        SweetAlertDialog loading = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE);
+        loading.setTitleText("เกิดข้อผิดพลาดเกี่ยวกับ Internet");
+        loading.setContentText("กรุณาเปิดแอพใหม่อีกครั้ง");
+        loading.getProgressHelper().setBarColor(MainActivity.this.getResources().getColor(R.color.greentea));
+        loading.setOnShowListener((DialogInterface.OnShowListener) dialog -> {
+            SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
+            Typeface face = ResourcesCompat.getFont(MainActivity.this, R.font.kanit_light);
+            TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
+            TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
+            textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+            textCon.setTextColor(getResources().getColor(R.color.black));
+            textCon.setTypeface(face);
+            textCon.setGravity(Gravity.CENTER);
+            text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+            text.setTextColor(getResources().getColor(R.color.red25));
+            text.setTypeface(face);
+            text.setGravity(Gravity.CENTER);
+
+        });
+
+        loading.show();
+    }
+
 }
+//        main.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                try {
+////                    testError();
+////                    Intent intent = new Intent(MainActivity.this, RegisterActivity2.class);
+////                    startActivity(intent);
+//                } catch (Exception exception) {
+//                    com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("MainActivity", "mainTEST", "can't touch this");
+//                    Call<com.example.fingerprinttest.model.Log> call = api.createLog(log);
+//                    call.enqueue(new Callback<com.example.fingerprinttest.model.Log>() {
+//                        @Override
+//                        public void onResponse(Call<com.example.fingerprinttest.model.Log> call, Response<com.example.fingerprinttest.model.Log> response) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onFailure(Call<com.example.fingerprinttest.model.Log> call, Throwable t) {
+//
+//                        }
+//                    });
+//                    Toast.makeText(MainActivity.this, "DONT DO THIS ", Toast.LENGTH_SHORT).show();
+//                }
+//
+//            }
+//        });

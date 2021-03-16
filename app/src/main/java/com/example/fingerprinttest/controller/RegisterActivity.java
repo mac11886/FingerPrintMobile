@@ -266,7 +266,7 @@ RegisterActivity extends AppCompatActivity {
                     loading.show();
                 } else {
                     //sent data to post on API
-                    num_group += 1;
+//                    num_group += 1;
                     String id_group = String.valueOf(num_group);
 
                     String imageBase64 = encoded;

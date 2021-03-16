@@ -7,4 +7,8 @@
     <string name="warning_title">แจ้งเตือน</string>
     <string name="show_warning">กรุณาใส่รูปให้เรียบร้อย</string>
     <string name="bad_config">Please configure global_tracker.xml, see README.</string>
+    <string name="email">E-mail</string>
+    <string name="password">Password</string>
+    <string name="login">เข้าสู่ระบบ</string>
+    <string name="signUp">สมัครสมาชิก</string>
 </resources>

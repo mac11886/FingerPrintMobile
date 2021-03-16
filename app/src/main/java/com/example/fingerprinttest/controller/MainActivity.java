@@ -470,8 +470,8 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
 //                    testError();
-//                    Intent intent = new Intent(MainActivity.this, RegisterActivity2.class);
-//                    startActivity(intent);
+                    Intent intent = new Intent(MainActivity.this, FirstLoginActivity.class);
+                    startActivity(intent);
                 } catch (Exception exception) {
                     com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("MainActivity", "mainTEST", "can't touch this");
                     Call<com.example.fingerprinttest.model.Log> call = api.createLog(log);

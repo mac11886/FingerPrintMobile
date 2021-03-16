@@ -31,7 +31,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FingerprintTEST"
         android:usesCleartextTraffic="true">
-        <activity android:name=".controller.FirstLoginActivity"></activity>
+        <activity android:name=".controller.SignUpActivity"></activity>
+        <activity android:name=".controller.FirstLoginActivity" />
         <activity android:name=".controller.EditFingerprintActivity" />
         <activity android:name=".controller.ListUserActivity" />
         <activity android:name=".controller.WebActivity" />

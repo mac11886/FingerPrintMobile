@@ -5,87 +5,92 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:fitsSystemWindows="true"
-    tools:context=".controller.FirstLoginActivity">
+    tools:context=".controller.SignUpActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="160dp"
         android:orientation="vertical"
         android:paddingLeft="24dp"
         android:paddingTop="56dp"
         android:paddingRight="24dp">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="170dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="24dp"
-            android:src="@drawable/ic_attendance" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/timeText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:fontFamily="@font/kanit_light"
-            android:gravity="center"
-            android:text="Time Attendance"
-            android:textColor="@color/black"
-            android:textSize="20dp" />
+            <EditText
+                android:inputType="textPersonName"
+                android:id="@+id/inputNameSignUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:hint="Name" />
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/inputEmail"
                 android:inputType="textEmailAddress"
+                android:id="@+id/inputEmailSignUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:hint="@string/email" />
         </com.google.android.material.textfield.TextInputLayout>
 
+
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/inputPassword"
-                android:inputType="textPassword"
+                android:id="@+id/inputPasswordSignUp"
                 android:layout_width="match_parent"
+                android:inputType="textPassword"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:imeOptions="actionDone"
                 android:hint="@string/password" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/inputRePasswordSignUp"
+                android:layout_width="match_parent"
+                android:inputType="textPassword"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:imeOptions="actionDone"
+                android:hint="Re-enter Password" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/loginBtn"
+            android:id="@+id/signUpBtn"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-
             android:layout_marginBottom="24dp"
             android:fontFamily="@font/kanit_light"
             android:padding="12dp"
-            android:text="@string/login"></androidx.appcompat.widget.AppCompatButton>
+            android:text="@string/signUp"></androidx.appcompat.widget.AppCompatButton>
 
         <TextView
-            android:id="@+id/signupText"
+            android:id="@+id/loginText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
-            android:fontFamily="@font/kanit_light"
             android:gravity="center"
-            android:text="ยังไม่มีบัญชีหรอ กดสมัครตรงนี้สิ"
+            android:text="มีบัญชีแล้ว Login เลย"
+            android:textColor="@color/black"
+            android:fontFamily="@font/kanit_light"
             android:textSize="16dip" />
 
     </LinearLayout>
-
 </ScrollView>

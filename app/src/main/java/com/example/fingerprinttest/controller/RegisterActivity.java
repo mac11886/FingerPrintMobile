@@ -146,8 +146,9 @@ RegisterActivity extends AppCompatActivity {
                             .setAction("error")
                             .setLabel("ValidName")
                             .build());
-                    nameText.setError("กรุณาใส่ชื่อ");
-                    nameText.requestFocus();
+//                    nameText.setError("กรุณาใส่ชื่อ");
+//                    nameText.requestFocus();
+                    loadAlert("กรุณาใส่ชื่อ");
                 } else if (detectValid() == 3) {
                     Tracker t = ((AnalyticsApplication) getApplication()).getDefaultTracker();
                     t.send(new HitBuilders.EventBuilder()
@@ -155,115 +156,15 @@ RegisterActivity extends AppCompatActivity {
                             .setAction("error")
                             .setLabel("ValidImage")
                             .build());
-                    SweetAlertDialog loading = new SweetAlertDialog(RegisterActivity.this, SweetAlertDialog.WARNING_TYPE);
-                    loading.setTitleText("แจ้งเตือน");
-                    loading.setContentText("กรุณาใส่รูปภาพ");
-                    loading.getProgressHelper().setBarColor(RegisterActivity.this.getResources().getColor(R.color.greentea));
-                    loading.setOnShowListener(new DialogInterface.OnShowListener() {
-                        @Override
-                        public void onShow(DialogInterface dialog) {
-                            SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
-                            Typeface face = ResourcesCompat.getFont(RegisterActivity.this, R.font.kanit_light);
-                            TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
-                            TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
-                            textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                            textCon.setTextColor(getResources().getColor(R.color.black));
-                            textCon.setTypeface(face);
-//                                              title
-                            textCon.setGravity(Gravity.CENTER);
-                            text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
-                            text.setTextColor(getResources().getColor(R.color.red25));
-                            text.setTypeface(face);
-
-                            text.setGravity(Gravity.CENTER);
-
-                        }
-                    });
-
-                    loading.show();
+                    loadAlert("กรุณาใส่รูปภาพ");
 
 
                 } else if (detectValid() == 2) {
-                    SweetAlertDialog loading = new SweetAlertDialog(RegisterActivity.this, SweetAlertDialog.WARNING_TYPE);
-                    loading.setTitleText("แจ้งเตือน");
-                    loading.setContentText("กรุณาเลือกวันเกิด");
-                    loading.getProgressHelper().setBarColor(RegisterActivity.this.getResources().getColor(R.color.greentea));
-                    loading.setOnShowListener(new DialogInterface.OnShowListener() {
-                        @Override
-                        public void onShow(DialogInterface dialog) {
-                            SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
-                            Typeface face = ResourcesCompat.getFont(RegisterActivity.this, R.font.kanit_light);
-                            TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
-                            TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
-                            textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                            textCon.setTextColor(getResources().getColor(R.color.black));
-                            textCon.setTypeface(face);
-//                                              title
-                            textCon.setGravity(Gravity.CENTER);
-                            text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
-                            text.setTextColor(getResources().getColor(R.color.red25));
-                            text.setTypeface(face);
-
-                            text.setGravity(Gravity.CENTER);
-
-                        }
-                    });
-
-                    loading.show();
+                    loadAlert("กรุณาเลือกวันเกิด");
                 } else if (detectValid() == 4) {
-                    SweetAlertDialog loading = new SweetAlertDialog(RegisterActivity.this, SweetAlertDialog.WARNING_TYPE);
-                    loading.setTitleText("แจ้งเตือน");
-                    loading.setContentText("กรุณาเลือกแผนก");
-                    loading.getProgressHelper().setBarColor(RegisterActivity.this.getResources().getColor(R.color.greentea));
-                    loading.setOnShowListener(new DialogInterface.OnShowListener() {
-                        @Override
-                        public void onShow(DialogInterface dialog) {
-                            SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
-                            Typeface face = ResourcesCompat.getFont(RegisterActivity.this, R.font.kanit_light);
-                            TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
-                            TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
-                            textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                            textCon.setTextColor(getResources().getColor(R.color.black));
-                            textCon.setTypeface(face);
-//                                              title
-                            textCon.setGravity(Gravity.CENTER);
-                            text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
-                            text.setTextColor(getResources().getColor(R.color.red25));
-                            text.setTypeface(face);
-
-                            text.setGravity(Gravity.CENTER);
-
-                        }
-                    });
-
-                    loading.show();
+                    loadAlert("กรุณาเลือกแผนก");
                 } else if (detectValid() == 5) {
-                    SweetAlertDialog loading = new SweetAlertDialog(RegisterActivity.this, SweetAlertDialog.WARNING_TYPE);
-                    loading.setTitleText("แจ้งเตือน");
-                    loading.setContentText("กรุณาเลือกตำแหน่ง");
-                    loading.getProgressHelper().setBarColor(RegisterActivity.this.getResources().getColor(R.color.greentea));
-                    loading.setOnShowListener(new DialogInterface.OnShowListener() {
-                        @Override
-                        public void onShow(DialogInterface dialog) {
-                            SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
-                            Typeface face = ResourcesCompat.getFont(RegisterActivity.this, R.font.kanit_light);
-                            TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
-                            TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
-                            textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                            textCon.setTextColor(getResources().getColor(R.color.black));
-                            textCon.setTypeface(face);
-//                                              title
-                            textCon.setGravity(Gravity.CENTER);
-                            text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
-                            text.setTextColor(getResources().getColor(R.color.red25));
-                            text.setTypeface(face);
-
-                            text.setGravity(Gravity.CENTER);
-
-                        }
-                    });
-
-                    loading.show();
+                    loadAlert("กรุณาเลือกตำแหน่ง");
                 } else {
                     //sent data to post on API
 //                    num_group += 1;
@@ -727,6 +628,35 @@ RegisterActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void loadAlert(String content){
+        SweetAlertDialog loading = new SweetAlertDialog(RegisterActivity.this, SweetAlertDialog.WARNING_TYPE);
+        loading.setTitleText("แจ้งเตือน");
+        loading.setContentText(content);
+        loading.getProgressHelper().setBarColor(RegisterActivity.this.getResources().getColor(R.color.greentea));
+        loading.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                SweetAlertDialog alertDialog = (SweetAlertDialog) dialog;
+                Typeface face = ResourcesCompat.getFont(RegisterActivity.this, R.font.kanit_light);
+                TextView text = (TextView) alertDialog.findViewById(R.id.title_text);
+                TextView textCon = (TextView) alertDialog.findViewById(R.id.content_text);
+                textCon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                textCon.setTextColor(getResources().getColor(R.color.black));
+                textCon.setTypeface(face);
+//                                              title
+                textCon.setGravity(Gravity.CENTER);
+                text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
+                text.setTextColor(getResources().getColor(R.color.red25));
+                text.setTypeface(face);
+
+                text.setGravity(Gravity.CENTER);
+
+            }
+        });
+
+        loading.show();
     }
 
 }

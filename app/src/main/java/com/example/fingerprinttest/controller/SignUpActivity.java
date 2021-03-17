@@ -63,6 +63,8 @@ public class SignUpActivity extends AppCompatActivity {
         String secondPassword = secondPasswordText.getText().toString();
 
 
+
+
     }
 
 

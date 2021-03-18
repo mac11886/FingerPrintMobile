@@ -11,4 +11,6 @@
     <string name="password">Password</string>
     <string name="login">เข้าสู่ระบบ</string>
     <string name="signUp">สมัครสมาชิก</string>
+    <string name="company">Company</string>
+
 </resources>

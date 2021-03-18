@@ -62,6 +62,11 @@ public class SignUpActivity extends AppCompatActivity {
         String password = passwordText.getText().toString();
         String secondPassword = secondPasswordText.getText().toString();
 
+        Intent intent = new Intent(SignUpActivity.this,FirstLoginActivity.class);
+        Bundle bundle =  new Bundle();
+        bundle.putStringArray("signUp",new String[]{name,email,password,secondPassword});
+        intent.putExtras(bundle);
+        startActivity(intent);
 
 
 

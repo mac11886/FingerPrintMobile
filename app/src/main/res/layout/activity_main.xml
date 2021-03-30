@@ -86,7 +86,7 @@
                android:layout_marginLeft="40dp"
                 android:layout_weight="2"
                 android:id="@+id/outBtn"
-                android:layout_width="@dimen/buttonSizeW"
+                android:layout_width="wrap_content"
                 android:layout_height="@dimen/buttonSizeH"
                 android:fontFamily="@font/kanit_light"
                 android:text="ออกงาน"

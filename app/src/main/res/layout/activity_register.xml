@@ -93,19 +93,6 @@
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp" />
 
-            <Spinner
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="15dp"
-                android:id="@+id/spinnerCorp"
-                android:layout_width="143dp"
-                android:layout_height="43dp"
-                android:layout_weight="3"
-                android:background="@color/gray"
-                android:fontFamily="@font/kanit_light"
-                android:translationZ="5dp"
-                tools:layout_editor_absoluteX="35dp"
-                tools:layout_editor_absoluteY="539dp" />
-
         </LinearLayout>
 
 

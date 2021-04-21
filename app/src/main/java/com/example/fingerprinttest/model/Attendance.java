@@ -6,6 +6,7 @@ public class Attendance {
         this.date = date;
         this.time = time;
         this.status = status;
+
     }
 
     public int getId() {
@@ -28,6 +29,16 @@ public class Attendance {
     private String date ;
     private String time;
     private String status;
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    private String location;
 
 
 

@@ -85,7 +85,7 @@ public class RegisterActivity3 extends AppCompatActivity {
         android.util.Log.e("2Finger",""+secondFinger);
         //connectApi
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://ta.kisrateam.com/")
+                .baseUrl("https://ta.ksta.co/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         api = retrofit.create(Api.class);

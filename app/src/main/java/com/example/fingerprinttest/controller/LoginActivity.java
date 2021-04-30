@@ -81,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://ta.kisrateam.com/")
+                .baseUrl("https://ta.ksta.co/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         api = retrofit.create(Api.class);

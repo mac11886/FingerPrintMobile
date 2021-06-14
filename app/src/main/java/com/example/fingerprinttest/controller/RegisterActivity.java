@@ -108,7 +108,7 @@ RegisterActivity extends AppCompatActivity {
         builder = new AlertDialog.Builder(this);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://ta.ksta.co/")
+                .baseUrl("https://asq.ksta.co/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         api = retrofit.create(Api.class);

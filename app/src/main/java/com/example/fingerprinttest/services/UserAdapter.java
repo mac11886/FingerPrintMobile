@@ -48,7 +48,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.nameText.setText(users.get(position).getName());
-        byte[] decodedString = Base64.decode(users.get(position).getImguser(), Base64.DEFAULT);
+        User user = users.get(position);
+        if (user.getImguser().length() >10000){
+
+        }
+        
+        byte[] decodedString = Base64.decode(users.get(position).getImguser(), Base64.NO_WRAP);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
         RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(context.getResources(), decodedByte);
         roundedBitmapDrawable.setCornerRadius(50.0f);
@@ -58,7 +63,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, EditFingerprintActivity.class);
-                User user = users.get(position);
+
 //                    String finger = "นิ้วชี้ขวา";
 //                    intent.putExtra("users",user.getImguser());
 //                    intent.putExtra("name",user.getName());

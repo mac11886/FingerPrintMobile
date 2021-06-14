@@ -45,7 +45,7 @@ public class ListUserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list_user);
         editFingerText = findViewById(R.id.editFingerText);
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://ta.ksta.co/")
+                .baseUrl("https://asq.ksta.co/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         api = retrofit.create(Api.class);

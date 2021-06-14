@@ -85,7 +85,7 @@ public class RegisterActivity3 extends AppCompatActivity {
         android.util.Log.e("2Finger",""+secondFinger);
         //connectApi
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://ta.ksta.co/")
+                .baseUrl("https://asq.ksta.co/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         api = retrofit.create(Api.class);
@@ -210,8 +210,7 @@ public class RegisterActivity3 extends AppCompatActivity {
     //save API
     public void createPost() {
         try {
-//            int num_group = Integer.parseInt(group);
-//            Toast.makeText(RegisterActivity3.this,"name:"+name +"birthday:"+birthday+"group:"+group +"job"+job,Toast.LENGTH_SHORT).show();
+
             user = new User( name, birthday, group, job,  adapter.getSentdata(),  imgUser,
                      finger,secondFinger);
             Call<User> call = api.createPost(user);
@@ -219,10 +218,10 @@ public class RegisterActivity3 extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<User> call, Response<User> response) {
                     if (!response.isSuccessful()) {
-//                    textLog.setText("Code ERROR : " + response.code());
+
                         return;
                     }
-                    //
+
                     User userPost = response.body();
 
                 }

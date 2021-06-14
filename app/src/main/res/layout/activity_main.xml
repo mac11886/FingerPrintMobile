@@ -73,6 +73,7 @@
 
                 android:layout_weight="1"
                 android:id="@+id/inBtn"
+
                 android:layout_width="@dimen/buttonSizeW"
                 android:layout_height="@dimen/buttonSizeH"
                 android:fontFamily="@font/kanit_light"
@@ -84,9 +85,9 @@
 
             <Button
                android:layout_marginLeft="40dp"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:id="@+id/outBtn"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/buttonSizeW"
                 android:layout_height="@dimen/buttonSizeH"
                 android:fontFamily="@font/kanit_light"
                 android:text="ออกงาน"

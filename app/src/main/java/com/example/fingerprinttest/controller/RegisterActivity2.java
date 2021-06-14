@@ -57,6 +57,7 @@ public class RegisterActivity2 extends AppCompatActivity {
     ImageView firstImage, secondImage, thridImage, scanbtn, pongFirst, pongSecond, pongThird;
     TextView scanText, textDebug;
     String token;
+    User user;
     List<User> users;
     public static final int COLOR_PALEGOLDENROD = 0xff000000;
     String name;
@@ -104,7 +105,7 @@ public class RegisterActivity2 extends AppCompatActivity {
 
    // comment check branch
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://ta.ksta.co/")
+                .baseUrl("https://asq.ksta.co/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         api = retrofit.create(Api.class);
@@ -118,7 +119,6 @@ public class RegisterActivity2 extends AppCompatActivity {
         group = getIntent().getStringExtra("group");
         job = getIntent().getStringExtra("job");
 //        Toast.makeText(RegisterActivity2.this, "job" + job, Toast.LENGTH_SHORT).show();
-
         imgUser = getIntent().getStringExtra("imgUser");
         token = getIntent().getStringExtra("token");
 //        Toast.makeText(this, "token:" + birthday, Toast.LENGTH_SHORT).show();
@@ -521,15 +521,20 @@ public class RegisterActivity2 extends AppCompatActivity {
                                                 loading.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                                     @Override
                                                     public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                                        Intent intent = new Intent(RegisterActivity2.this, RegisterActivity3.class);
-                                                        intent.putExtra("nameUser", name);
-                                                        intent.putExtra("birthday", birthday);
-                                                        intent.putExtra("group", group);
-                                                        intent.putExtra("job", job);
-                                                        intent.putExtra("imgUser", imgUser);
-                                                        intent.putExtra("fingerprint", strBase64);
-                                                        intent.putExtra("token", token);
-                                                        intent.putExtra("secondFinger", Secondfinger);
+                                                        Intent intent = new Intent(RegisterActivity2.this, MainActivity.class);
+//                                                        intent.putExtra("nameUser", name);
+//                                                        intent.putExtra("birthday", birthday);
+//                                                        intent.putExtra("group", group);
+//                                                        intent.putExtra("job", job);
+//                                                        intent.putExtra("imgUser", imgUser);
+//                                                        intent.putExtra("fingerprint", strBase64);
+//                                                        intent.putExtra("token", token);
+//                                                        intent.putExtra("secondFinger", Secondfinger);
+                                                        try {
+                                                            createPost();
+                                                        }catch (Exception exception){
+                                                            Toast.makeText(RegisterActivity2.this,"กรุณาลองใหม่อีกครั้ง",Toast.LENGTH_LONG).show();
+                                                        }
                                                         startActivity(intent);
                                                         try {
                                                             OnBnStop();
@@ -800,4 +805,48 @@ public class RegisterActivity2 extends AppCompatActivity {
             scanText.setText("stop fail, errno=" + e.getErrorCode() + "\nmessage=" + e.getMessage());
         }
     }
+
+    //save API
+    public void createPost() {
+        try {
+            user = new User( name, birthday, group, job,  "",  imgUser,
+                    strBase64,Secondfinger);
+            Call<User> call = api.createPost(user);
+
+            call.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    if (!response.isSuccessful()) {
+                        Toast.makeText(RegisterActivity2.this,"!!!!!!post",Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    Toast.makeText(RegisterActivity2.this,"createpost",Toast.LENGTH_LONG).show();
+                    User userPost = response.body();
+
+                }
+
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    Toast.makeText(RegisterActivity2.this,t.getMessage(),Toast.LENGTH_LONG).show();
+                }
+
+
+            });
+        } catch (Exception e) {
+            com.example.fingerprinttest.model.Log log = new com.example.fingerprinttest.model.Log("RegisterActivity3", "createPost", "can't save to API");
+            Call<com.example.fingerprinttest.model.Log> call = api.createLog(log);
+            call.enqueue(new Callback<com.example.fingerprinttest.model.Log>() {
+                @Override
+                public void onResponse(Call<com.example.fingerprinttest.model.Log> call, Response<com.example.fingerprinttest.model.Log> response) {
+
+                }
+
+                @Override
+                public void onFailure(Call<com.example.fingerprinttest.model.Log> call, Throwable t) {
+
+                }
+            });
+        }
+    }
+
 }

@@ -66,7 +66,7 @@ public class WebActivity extends AppCompatActivity {
         myWebView.getSettings().setAllowFileAccess(true);
         myWebView.setWebViewClient(new PQClient());
         myWebView.setWebChromeClient(new PQChromeClient());
-        myWebView.loadUrl("https://ta.kisrateam.com/login?token=" + token);
+        myWebView.loadUrl("https://ta.ksta.co/login?token=" + token);
         setContentView(myWebView);
         System.out.println("token :" + token);
 

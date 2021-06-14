@@ -108,15 +108,15 @@ RegisterActivity extends AppCompatActivity {
         builder = new AlertDialog.Builder(this);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://ta.kisrateam.com/")
+                .baseUrl("https://ta.ksta.co/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         api = retrofit.create(Api.class);
 
         try {
             getGroup();
-        } catch (Exception e){
-            Log.e("ERROR","getGroup is null");
+        } catch (Exception e) {
+            Log.e("ERROR", "getGroup is null");
         }
 
         chooseDatePicker();
@@ -266,7 +266,7 @@ RegisterActivity extends AppCompatActivity {
                     loading.show();
                 } else {
                     //sent data to post on API
-                    num_group += 1;
+//                    num_group += 1;
                     String id_group = String.valueOf(num_group);
 
                     String imageBase64 = encoded;
@@ -716,9 +716,9 @@ RegisterActivity extends AppCompatActivity {
                 GroupData groupData = response.body();
 //                Log.e("test" ,groupData.getGroupData().get(0).getName());
                 try {
-                createSpinnerRoot(groupData.getGroupData(), groupData.getJobData());
-                }catch (Exception e){
-                    Log.e("GETGROUP","getGroup is null");
+                    createSpinnerRoot(groupData.getGroupData(), groupData.getJobData());
+                } catch (Exception e) {
+                    Log.e("GETGROUP", "getGroup is null");
                 }
             }
 

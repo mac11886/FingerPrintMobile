@@ -52,7 +52,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         if (user.getImguser().length() >10000){
 
         }
-        
+
         byte[] decodedString = Base64.decode(users.get(position).getImguser(), Base64.NO_WRAP);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
         RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(context.getResources(), decodedByte);
